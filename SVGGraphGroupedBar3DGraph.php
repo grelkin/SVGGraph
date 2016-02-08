@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2012-2015 Graham Breach
+ * Copyright (C) 2012-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -27,11 +27,11 @@ class GroupedBar3DGraph extends Bar3DGraph {
 
   protected function Draw()
   {
-    $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
+    $body = $this->Grid() . $this->UnderShapes();
 
     $chunk_count = count($this->multi_graph);
     list($chunk_width, $bspace, $chunk_unit_width) =
-      GroupedBarGraph::BarPosition($this->bar_width, 
+      GroupedBarGraph::BarPosition($this->bar_width, $this->bar_width_min,
       $this->x_axes[$this->main_x_axis]->Unit(), $chunk_count, $this->bar_space,
       $this->group_space);
 
@@ -91,7 +91,8 @@ class GroupedBar3DGraph extends Bar3DGraph {
     if(count($all_group))
       $bars = $this->Element('g', $all_group, NULL, $bars);
     $body .= $bars;
-    $body .= $this->Guidelines(SVGG_GUIDELINE_ABOVE) . $this->Axes();
+    $body .= $this->OverShapes();
+    $body .= $this->Axes();
     return $body;
   }
 

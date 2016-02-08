@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2013-2015 Graham Breach
+ * Copyright (C) 2013-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,7 @@ class BoxAndWhiskerGraph extends PointGraph {
 
   protected function Draw()
   {
-    $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
+    $body = $this->Grid() . $this->UnderShapes();
 
     $bar_width = $this->BarWidth();
     $x_axis = $this->x_axes[$this->main_x_axis];
@@ -81,7 +81,9 @@ class BoxAndWhiskerGraph extends PointGraph {
 
     if($this->semantic_classes)
       $series = $this->Element('g', array('class' => 'series'), NULL, $series);
-    $body .= $series . $this->Guidelines(SVGG_GUIDELINE_ABOVE) . $this->Axes();
+    $body .= $series;
+    $body .= $this->OverShapes();
+    $body .= $this->Axes();
     $body .= $this->DrawMarkers();
     return $body;
   }
@@ -94,7 +96,8 @@ class BoxAndWhiskerGraph extends PointGraph {
     if(is_numeric($this->bar_width) && $this->bar_width >= 1)
       return $this->bar_width;
     $unit_w = $this->x_axes[$this->main_x_axis]->Unit();
-    return $this->bar_space >= $unit_w ? '1' : $unit_w - $this->bar_space;
+    $bw = $this->bar_space >= $unit_w ? 1 : $unit_w - $this->bar_space;
+    return max($bw, $this->bar_width_min);
   }
 
   /**

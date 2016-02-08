@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011-2015 Graham Breach
+ * Copyright (C) 2011-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -30,11 +30,11 @@ class HorizontalGroupedBarGraph extends HorizontalBarGraph {
 
   protected function Draw()
   {
-    $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
+    $body = $this->Grid() . $this->UnderShapes();
 
     $chunk_count = count($this->multi_graph);
     list($chunk_height, $bspace, $chunk_unit_height) =
-      GroupedBarGraph::BarPosition($this->bar_width, 
+      GroupedBarGraph::BarPosition($this->bar_width, $this->bar_width_min,
       $this->y_axes[$this->main_y_axis]->Unit(), $chunk_count, $this->bar_space,
       $this->group_space);
     $bar_style = array();
@@ -86,7 +86,8 @@ class HorizontalGroupedBarGraph extends HorizontalBarGraph {
     if($this->semantic_classes)
       $bars = $this->Element('g', array('class' => 'series'), NULL, $bars);
     $body .= $bars;
-    $body .= $this->Guidelines(SVGG_GUIDELINE_ABOVE) . $this->Axes();
+    $body .= $this->OverShapes();
+    $body .= $this->Axes();
     return $body;
   }
 
