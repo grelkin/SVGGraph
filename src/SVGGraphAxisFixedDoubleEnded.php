@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2013-2015 Graham Breach
+ * Copyright (C) 2013-2015 Graham Breach.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -16,58 +16,59 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 /**
- * For more information, please contact <graham@goat1000.com>
+ * For more information, please contact <graham@goat1000.com>.
  */
-
 require_once 'SVGGraphAxisDoubleEnded.php';
 
 /**
- * Axis with fixed measurements
+ * Axis with fixed measurements.
  */
-class AxisFixedDoubleEnded extends AxisDoubleEnded { 
+class AxisFixedDoubleEnded extends AxisDoubleEnded
+{
+    protected $step;
 
-  protected $step;
-
-  public function __construct($length, $max_val, $min_val, $step,
+    public function __construct($length, $max_val, $min_val, $step,
     $units_before, $units_after, $decimal_digits, $label_callback)
-  {
-    parent::__construct($length, $max_val, $min_val, 1, false, $units_before,
+    {
+        parent::__construct($length, $max_val, $min_val, 1, false, $units_before,
       $units_after, $decimal_digits, $label_callback);
-    $this->step = $step;
-  }
+        $this->step = $step;
+    }
 
   /**
    * Calculates a grid based on min, max and step
-   * min and max will be adjusted to fit step
+   * min and max will be adjusted to fit step.
    */
   protected function Grid($min, $round_up = false)
   {
-    // if min and max are the same side of 0, only adjust one of them
-    if($this->max_value * $this->min_value >= 0) {
-      $count = $this->max_value - $this->min_value;
+      // if min and max are the same side of 0, only adjust one of them
+    if ($this->max_value * $this->min_value >= 0) {
+        $count = $this->max_value - $this->min_value;
       // $round_up means bars, so add space for the bar
-      if($round_up)
-        ++$count;
-      if(abs($this->max_value) >= abs($this->min_value)) {
-        $this->max_value = $this->min_value +
-          $this->step * ceil($count / $this->step);
-      } else {
-        $this->min_value = $this->max_value -
-          $this->step * ceil($count / $this->step);
+      if ($round_up) {
+          ++$count;
       }
+        if (abs($this->max_value) >= abs($this->min_value)) {
+            $this->max_value = $this->min_value +
+          $this->step * ceil($count / $this->step);
+        } else {
+            $this->min_value = $this->max_value -
+          $this->step * ceil($count / $this->step);
+        }
     } else {
-      $this->max_value = $this->step * ceil($this->max_value / $this->step);
-      $this->min_value = $this->step * floor($this->min_value / $this->step);
+        $this->max_value = $this->step * ceil($this->max_value / $this->step);
+        $this->min_value = $this->step * floor($this->min_value / $this->step);
     }
 
-    $count = ($this->max_value - $this->min_value) / $this->step;
-    $ulen = $this->max_value - $this->min_value;
-    if($ulen == 0)
-      throw new Exception("Zero length axis");
-    $this->unit_size = $this->length / $ulen;
-    $grid = $this->length / $count;
-    $this->zero = (-$this->min_value / $this->step) * $grid;
-    return $grid;
+      $count = ($this->max_value - $this->min_value) / $this->step;
+      $ulen = $this->max_value - $this->min_value;
+      if ($ulen == 0) {
+          throw new Exception('Zero length axis');
+      }
+      $this->unit_size = $this->length / $ulen;
+      $grid = $this->length / $count;
+      $this->zero = (-$this->min_value / $this->step) * $grid;
+
+      return $grid;
   }
 }
-
