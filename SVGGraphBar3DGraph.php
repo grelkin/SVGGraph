@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2009-2015 Graham Breach
+ * Copyright (C) 2009-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,7 @@ class Bar3DGraph extends ThreeDGraph {
 
   protected function Draw()
   {
-    $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
+    $body = $this->Grid() . $this->UnderShapes();
     $bar_width = $this->block_width = $this->BarWidth();
 
     // make the top parallelogram, set it as a symbol for re-use
@@ -89,7 +89,8 @@ class Bar3DGraph extends ThreeDGraph {
     if(count($all_group))
       $bars = $this->Element('g', $all_group, NULL, $bars);
     $body .= $bars;
-    $body .= $this->Guidelines(SVGG_GUIDELINE_ABOVE) . $this->Axes();
+    $body .= $this->OverShapes();
+    $body .= $this->Axes();
     return $body;
   }
 
@@ -101,7 +102,8 @@ class Bar3DGraph extends ThreeDGraph {
     if(is_numeric($this->bar_width) && $this->bar_width >= 1)
       return $this->bar_width;
     $unit_w = $this->x_axes[$this->main_x_axis]->Unit();
-    return $this->bar_space >= $unit_w ? '1' : $unit_w - $this->bar_space;
+    $bw = $unit_w - $this->bar_space;
+    return max(1, $bw, $this->bar_width_min);
   }
 
   /**

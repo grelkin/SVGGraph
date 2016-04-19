@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2009-2015 Graham Breach
+ * Copyright (C) 2009-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -19,7 +19,7 @@
  * For more information, please contact <graham@goat1000.com>
  */
 
-define('SVGGRAPH_VERSION', 'SVGGraph 2.19.2');
+define('SVGGRAPH_VERSION', 'SVGGraph 2.21');
 
 require_once 'SVGGraphColours.php';
 
@@ -910,22 +910,25 @@ abstract class Graph {
   }
 
   /**
-   * Returns a text element, with tspans for subsequent lines
+   * Returns a text element, with tspans for multiple lines
    */
   public function Text($text, $line_spacing, $attribs, $styles = NULL)
   {
-    $lines = explode("\n", $text);
-    $content = array_shift($lines);
-    $content = ($content == '' ? ' ' : htmlspecialchars($content,
-      ENT_COMPAT, $this->encoding));
+    if(strpos($text, "\n") === FALSE) {
+      $content = ($text == '' ? ' ' : htmlspecialchars($text,
+        ENT_COMPAT, $this->encoding));
+    } else {
+      $lines = explode("\n", $text);
+      $content = '';
+      $tspan = array('x' => $attribs['x'], 'dy' => 0);
+      foreach($lines as $line) {
+        // blank tspan elements collapse to nothing, so insert a space
+        $line = ($line == '' ? ' ' : htmlspecialchars($line, ENT_COMPAT,
+          $this->encoding));
 
-    foreach($lines as $line) {
-      // blank tspan elements collapse to nothing, so insert a space
-      $line = ($line == '' ? ' ' : htmlspecialchars($line, ENT_COMPAT,
-        $this->encoding));
-      $content .= $this->Element('tspan',
-        array('x' => $attribs['x'], 'dy' => $line_spacing),
-        NULL, $line);
+        $content .= $this->Element('tspan', $tspan, NULL, $line);
+        $tspan['dy'] = $line_spacing;
+      }
     }
     return $this->Element('text', $attribs, $styles, $content); 
   }
@@ -1142,7 +1145,7 @@ abstract class Graph {
     if(is_array($colour)) {
       if(!isset($colour['pattern']))
         $allow_pattern = FALSE;
-      if($no_gradient && !$allow_pattern) {
+      if(count($colour) < 2 || ($no_gradient && !$allow_pattern)) {
         $colour = $this->SolidColour($colour);
       } elseif(isset($colour['pattern'])) {
         $pattern_id = $this->AddPattern($colour);
@@ -1545,6 +1548,13 @@ abstract class Graph {
    */
   protected function DrawDataLabels()
   {
+    if(isset($this->settings['label'])) {
+      if(!isset($this->data_labels)) {
+        include_once 'SVGGraphDataLabels.php';
+        $this->data_labels = new DataLabels($this);
+      }
+      $this->data_labels->Load($this->settings);
+    }
     if(isset($this->data_labels))
       return $this->data_labels->GetLabels();
     return '';
@@ -1562,6 +1572,27 @@ abstract class Graph {
     return $pos;
   }
 
+
+  public function LoadShapes()
+  {
+    include_once 'SVGGraphShape.php';
+    $this->shapes = new SVGGraphShapeList($this);
+
+    $this->shapes->Load($this->settings);
+  }
+
+  public function UnderShapes()
+  {
+    if(!isset($this->shapes) && isset($this->settings['shape'])) {
+      $this->LoadShapes();
+    }
+    return isset($this->shapes) ? $this->shapes->Draw(SVGG_SHAPE_BELOW) : '';
+  }
+
+  public function OverShapes()
+  {
+    return isset($this->shapes) ? $this->shapes->Draw(SVGG_SHAPE_ABOVE) : '';
+  }
 
   /**
    * Returns TRUE if the position is inside the item
@@ -1684,6 +1715,8 @@ abstract class Graph {
       $svg['viewBox'] = "0 0 {$this->width} {$this->height}";
       $svg['width'] = $svg['height'] = '100%';
     }
+    if($this->svg_class)
+      $svg['class'] = $this->svg_class;
 
     if(!$defer_javascript) {
       $js = $this->FetchJavascript();

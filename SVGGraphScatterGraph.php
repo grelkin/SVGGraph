@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2010-2015 Graham Breach
+ * Copyright (C) 2010-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,7 @@ class ScatterGraph extends PointGraph {
 
   protected function Draw()
   {
-    $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
+    $body = $this->Grid() . $this->UnderShapes();
 
     // a scatter graph without markers is empty!
     if($this->marker_size == 0)
@@ -52,25 +52,9 @@ class ScatterGraph extends PointGraph {
       ++$bnum;
     }
 
-    $best_fit_above = $best_fit_below = '';
-    if($this->best_fit) {
-      $bftype = $this->ArrayOption($this->best_fit, 0);
-      $colour = $this->ArrayOption($this->best_fit_colour, 0);
-      $stroke_width = $this->ArrayOption($this->best_fit_width, 0);
-      $dash = $this->ArrayOption($this->best_fit_dash, 0);
-      $opacity = $this->ArrayOption($this->best_fit_opacity, 0);
-      $best_fit = $this->BestFit($bftype, 0, $colour, $stroke_width, $dash,
-        $opacity);
-      if($this->semantic_classes)
-        $best_fit = $this->Element('g', array('class' => 'bestfit'), NULL,
-          $best_fit);
-      if($this->ArrayOption($this->best_fit_above, 0))
-        $best_fit_above = $best_fit;
-      else
-        $best_fit_below = $best_fit;
-    }
+    list($best_fit_above, $best_fit_below) = $this->BestFitLines();
     $body .= $best_fit_below;
-    $body .= $this->Guidelines(SVGG_GUIDELINE_ABOVE);
+    $body .= $this->OverShapes();
     $body .= $this->Axes();
     $body .= $this->CrossHairs();
     $body .= $this->DrawMarkers();

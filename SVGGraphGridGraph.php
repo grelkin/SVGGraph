@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2009-2015 Graham Breach
+ * Copyright (C) 2009-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -62,6 +62,7 @@ abstract class GridGraph extends Graph {
   private $label_right_offset;
   private $label_top_offset;
   private $grid_limit;
+  private $grid_clip_id;
 
   /**
    * Modifies the graph padding to allow room for labels
@@ -485,7 +486,7 @@ abstract class GridGraph extends Graph {
       if($this->DatasetYAxis($i) == $axis)
         $min[] = $this->values->GetMinValue($i);
     }
-    return min($min);
+    return empty($min) ? NULL : min($min);
   }
 
   /**
@@ -503,7 +504,7 @@ abstract class GridGraph extends Graph {
       if($this->DatasetYAxis($i) == $axis)
         $max[] = $this->values->GetMaxValue($i);
     }
-    return max($max);
+    return empty($max) ? NULL : max($max);
   }
 
   /**
@@ -1754,10 +1755,22 @@ XML;
   }
 
   /**
-   * Returns a clipping path for the grid
+   * Sets the clipping path for the grid
    */
   protected function ClipGrid(&$attr)
   {
+    $clip_id = $this->GridClipPath();
+    $attr['clip-path'] = "url(#{$clip_id})";
+  }
+
+  /**
+   * Returns the ID of the grid clipping path
+   */
+  public function GridClipPath()
+  {
+    if(isset($this->grid_clip_id))
+      return $this->grid_clip_id;
+
     $rect = array(
       'x' => $this->pad_left, 'y' => $this->pad_top,
       'width' => $this->width - $this->pad_left - $this->pad_right,
@@ -1766,7 +1779,7 @@ XML;
     $clip_id = $this->NewID();
     $this->defs[] = $this->Element('clipPath', array('id' => $clip_id),
       NULL, $this->Element('rect', $rect));
-    $attr['clip-path'] = "url(#{$clip_id})";
+    return ($this->grid_clip_id = $clip_id);
   }
 
   /**
@@ -1792,14 +1805,33 @@ XML;
   }
 
   /**
-   * Returns the $x value as a grid position
+   * Returns an X unit value as a SVG distance
    */
-  protected function GridX($x, $axis_no = NULL)
+  public function UnitsX($x, $axis_no = NULL)
   {
     if(is_null($axis_no) || is_null($this->x_axes[$axis_no]))
       $axis_no = $this->main_x_axis;
     $axis = $this->x_axes[$axis_no];
-    $p = $axis->Position($x);
+    return $axis->Position($x);
+  }
+
+  /**
+   * Returns a Y unit value as a SVG distance
+   */
+  public function UnitsY($y, $axis_no = NULL)
+  {
+    if(is_null($axis_no) || is_null($this->y_axes[$axis_no]))
+      $axis_no = $this->main_y_axis;
+    $axis = $this->y_axes[$axis_no];
+    return $axis->Position($y);
+  }
+
+  /**
+   * Returns the $x value as a grid position
+   */
+  public function GridX($x, $axis_no = NULL)
+  {
+    $p = $this->UnitsX($x, $axis_no);
     if(!is_null($p))
       return $this->pad_left + $p;
     return null;
@@ -1808,12 +1840,9 @@ XML;
   /**
    * Returns the $y value as a grid position
    */
-  protected function GridY($y, $axis_no = NULL)
+  public function GridY($y, $axis_no = NULL)
   {
-    if(is_null($axis_no) || is_null($this->y_axes[$axis_no]))
-      $axis_no = $this->main_y_axis;
-    $axis = $this->y_axes[$axis_no];
-    $p = $axis->Position($y);
+    $p = $this->UnitsY($y, $axis_no);
     if(!is_null($p))
       return $this->height - $this->pad_bottom - $p;
     return null;
@@ -2084,6 +2113,18 @@ XML;
       $h = 0;
       return "M$x {$y}h$w";
     }
+  }
+
+  public function UnderShapes()
+  {
+    $content = parent::UnderShapes();
+    return $content . $this->Guidelines(SVGG_GUIDELINE_BELOW);
+  }
+
+  public function OverShapes()
+  {
+    $content = parent::OverShapes();
+    return $content . $this->Guidelines(SVGG_GUIDELINE_ABOVE);
   }
 
   /**

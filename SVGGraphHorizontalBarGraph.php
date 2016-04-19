@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011-2015 Graham Breach
+ * Copyright (C) 2011-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -39,7 +39,7 @@ class HorizontalBarGraph extends GridGraph {
 
   protected function Draw()
   {
-    $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
+    $body = $this->Grid() . $this->UnderShapes();
     $bar_height = $this->BarHeight();
     $bspace = max(0, ($this->y_axes[$this->main_y_axis]->Unit() - $bar_height) / 2);
     $this->ColourSetup($this->values->ItemsCount());
@@ -78,7 +78,9 @@ class HorizontalBarGraph extends GridGraph {
 
     if($this->semantic_classes)
       $series = $this->Element('g', array('class' => 'series'), NULL, $series);
-    $body .= $series . $this->Guidelines(SVGG_GUIDELINE_ABOVE) . $this->Axes();
+    $body .= $series;
+    $body .= $this->OverShapes();
+    $body .= $this->Axes();
     return $body;
   }
 
@@ -90,7 +92,8 @@ class HorizontalBarGraph extends GridGraph {
     if(is_numeric($this->bar_width) && $this->bar_width >= 1)
       return $this->bar_width;
     $unit_h = $this->y_axes[$this->main_y_axis]->Unit();
-    return $this->bar_space >= $unit_h ? '1' : $unit_h - $this->bar_space;
+    $bh = $unit_h - $this->bar_space;
+    return max(1, $bh, $this->bar_width_min);
   }
 
   /**

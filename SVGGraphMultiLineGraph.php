@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2011-2015 Graham Breach
+ * Copyright (C) 2011-2016 Graham Breach
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as published by
@@ -31,7 +31,7 @@ class MultiLineGraph extends LineGraph {
 
   protected function Draw()
   {
-    $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
+    $body = $this->Grid() . $this->UnderShapes();
 
     $plots = '';
     $y_axis_pos = $this->height - $this->pad_bottom - 
@@ -64,11 +64,14 @@ class MultiLineGraph extends LineGraph {
     $group = array();
     $this->ClipGrid($group);
 
+    list($best_fit_above, $best_fit_below) = $this->BestFitLines();
+    $body .= $best_fit_below;
     $body .= $this->Element('g', $group, NULL, $plots);
-    $body .= $this->Guidelines(SVGG_GUIDELINE_ABOVE);
+    $body .= $this->OverShapes();
     $body .= $this->Axes();
     $body .= $this->CrossHairs();
     $body .= $this->DrawMarkers();
+    $body .= $best_fit_above;
     return $body;
   }
 
