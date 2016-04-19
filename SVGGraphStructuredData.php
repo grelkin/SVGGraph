@@ -80,6 +80,7 @@ class SVGGraphStructuredData implements Countable, ArrayAccess, Iterator {
             array_search($key, $this->dataset_fields) === FALSE)
             $this->dataset_fields[] = $key;
       }
+      sort( $this->dataset_fields, SORT_NUMERIC );
 
       // default structure
       $structure = array(
