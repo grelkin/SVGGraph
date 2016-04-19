@@ -8,7 +8,7 @@
     "lib-pcre": "*"
   },
   "autoload": {
-    "classmap": ["SVGGraph.php"]
+    "classmap": ["src/SVGGraph.php"]
   },
   "require-dev": {
     "phpunit/phpunit": "^4.6"
