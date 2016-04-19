@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,27 +28,27 @@ class MultiRadarGraph extends RadarGraph
 {
     protected function Draw()
     {
-        $body = $this->Grid().$this->UnderShapes();
+        $body = $this->Grid() . $this->UnderShapes();
 
-        $plots = '';
-        $y_axis = $this->y_axes[$this->main_y_axis];
+        $plots       = '';
+        $y_axis      = $this->y_axes[$this->main_y_axis];
         $chunk_count = count($this->multi_graph);
         $this->ColourSetup($this->multi_graph->ItemsCount(-1), $chunk_count);
         for ($i = 0; $i < $chunk_count; ++$i) {
-            $bnum = 0;
-            $cmd = 'M';
-            $path = '';
-            $attr = array('fill' => 'none');
-            $fill = $this->ArrayOption($this->fill_under, $i);
-            $dash = $this->ArrayOption($this->line_dash, $i);
+            $bnum         = 0;
+            $cmd          = 'M';
+            $path         = '';
+            $attr         = array('fill' => 'none');
+            $fill         = $this->ArrayOption($this->fill_under, $i);
+            $dash         = $this->ArrayOption($this->line_dash, $i);
             $stroke_width = $this->ArrayOption($this->line_stroke_width, $i);
-            $fill_style = null;
+            $fill_style   = null;
             if ($fill) {
                 $attr['fill'] = $this->GetColour(null, 0, $i);
-                $fill_style = array('fill' => $attr['fill']);
-                $opacity = $this->ArrayOption($this->fill_opacity, $i);
+                $fill_style   = array('fill' => $attr['fill']);
+                $opacity      = $this->ArrayOption($this->fill_opacity, $i);
                 if ($opacity < 1.0) {
-                    $attr['fill-opacity'] = $opacity;
+                    $attr['fill-opacity']       = $opacity;
                     $fill_style['fill-opacity'] = $opacity;
                 }
             }
@@ -63,15 +63,15 @@ class MultiRadarGraph extends RadarGraph
                     $val = $y_axis->Position($item->value);
                     if (!is_null($val)) {
                         $angle = $this->arad + $point_pos / $this->g_height;
-                        $x = $this->xc + ($val * sin($angle));
-                        $y = $this->yc + ($val * cos($angle));
+                        $x     = $this->xc + ($val * sin($angle));
+                        $y     = $this->yc + ($val * cos($angle));
 
                         $path .= "$cmd$x $y ";
 
-            // no need to repeat same L command
-            $cmd = $cmd == 'M' ? 'L' : '';
+                        // no need to repeat same L command
+                        $cmd       = $cmd == 'M' ? 'L' : '';
                         $marker_id = $this->MarkerLabel($i, $bnum, $item, $x, $y);
-                        $extra = empty($marker_id) ? null : array('id' => $marker_id);
+                        $extra     = empty($marker_id) ? null : array('id' => $marker_id);
                         $this->AddMarker($x, $y, $item, $extra, $i);
                     }
                 }
@@ -79,7 +79,7 @@ class MultiRadarGraph extends RadarGraph
             }
 
             if ($path != '') {
-                $attr['stroke'] = $this->GetColour(null, 0, $i, true);
+                $attr['stroke']      = $this->GetColour(null, 0, $i, true);
                 $this->line_styles[] = $attr;
                 $this->fill_styles[] = $fill_style;
                 $path .= 'z';
@@ -105,15 +105,17 @@ class MultiRadarGraph extends RadarGraph
         return $body;
     }
 
-  /**
-   * construct multigraph.
-   */
-  public function Values($values)
-  {
-      parent::Values($values);
-      if (!$this->values->error) {
-          $this->multi_graph = new MultiGraph($this->values, $this->force_assoc,
-        $this->require_integer_keys);
-      }
-  }
+    /**
+     * construct multigraph.
+     */
+    public function Values($values)
+    {
+        parent::Values($values);
+        if (!$this->values->error) {
+            $this->multi_graph = new MultiGraph(
+                $this->values, $this->force_assoc,
+                $this->require_integer_keys
+            );
+        }
+    }
 }

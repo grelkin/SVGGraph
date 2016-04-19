@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -29,29 +29,34 @@ class HorizontalGroupedBarGraph extends HorizontalBarGraph
 
     protected function Draw()
     {
-        $body = $this->Grid().$this->UnderShapes();
+        $body = $this->Grid() . $this->UnderShapes();
 
         $chunk_count = count($this->multi_graph);
         list($chunk_height, $bspace, $chunk_unit_height) =
-      GroupedBarGraph::BarPosition($this->bar_width, $this->bar_width_min,
-      $this->y_axes[$this->main_y_axis]->Unit(), $chunk_count, $this->bar_space,
-      $this->group_space);
+            GroupedBarGraph::BarPosition(
+                $this->bar_width,
+                $this->bar_width_min,
+                $this->y_axes[$this->main_y_axis]->Unit(),
+                $chunk_count,
+                $this->bar_space,
+                $this->group_space
+            );
         $bar_style = array();
-        $bar = array('height' => $chunk_height);
+        $bar       = array('height' => $chunk_height);
         $this->ColourSetup($this->multi_graph->ItemsCount(-1), $chunk_count);
 
-        $bnum = 0;
+        $bnum       = 0;
         $bars_shown = array_fill(0, $chunk_count, 0);
-        $bars = '';
+        $bars       = '';
         foreach ($this->multi_graph as $itemlist) {
-            $k = $itemlist[0]->key;
+            $k       = $itemlist[0]->key;
             $bar_pos = $this->GridPosition($k, $bnum);
 
             if (!is_null($bar_pos)) {
                 for ($j = 0; $j < $chunk_count; ++$j) {
                     $bar['y'] = $bar_pos - $bspace - $chunk_height -
-            ($j * $chunk_unit_height);
-                    $item = $itemlist[$j];
+                                ($j * $chunk_unit_height);
+                    $item     = $itemlist[$j];
                     $this->SetStroke($bar_style, $item, $j);
                     $bar_style['fill'] = $this->GetColour($item, $bnum, $j);
                     $this->Bar($item->value, $bar);
@@ -59,11 +64,25 @@ class HorizontalGroupedBarGraph extends HorizontalBarGraph
                     if ($bar['width'] > 0) {
                         ++$bars_shown[$j];
 
-                        $show_label = $this->AddDataLabel($j, $bnum, $bar, $item,
-              $bar['x'], $bar['y'], $bar['width'], $bar['height']);
+                        $show_label = $this->AddDataLabel(
+                            $j,
+                            $bnum,
+                            $bar,
+                            $item,
+                            $bar['x'],
+                            $bar['y'],
+                            $bar['width'],
+                            $bar['height']
+                        );
                         if ($this->show_tooltips) {
-                            $this->SetTooltip($bar, $item, $j, $item->key, $item->value,
-                !$this->compat_events && $show_label);
+                            $this->SetTooltip(
+                                $bar,
+                                $item,
+                                $j,
+                                $item->key,
+                                $item->value,
+                                !$this->compat_events && $show_label
+                            );
                         }
                         if ($this->semantic_classes) {
                             $bar['class'] = "series{$j}";
@@ -95,15 +114,17 @@ class HorizontalGroupedBarGraph extends HorizontalBarGraph
         return $body;
     }
 
-  /**
-   * construct multigraph.
-   */
-  public function Values($values)
-  {
-      parent::Values($values);
-      if (!$this->values->error) {
-          $this->multi_graph = new MultiGraph($this->values, $this->force_assoc,
-        $this->require_integer_keys);
-      }
-  }
+    /**
+     * construct multigraph.
+     */
+    public function Values($values)
+    {
+        parent::Values($values);
+        if (!$this->values->error) {
+            $this->multi_graph = new MultiGraph(
+                $this->values, $this->force_assoc,
+                $this->require_integer_keys
+            );
+        }
+    }
 }

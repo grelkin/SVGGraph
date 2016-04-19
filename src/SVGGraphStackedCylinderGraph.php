@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -32,23 +32,23 @@ class StackedCylinderGraph extends CylinderGraph
             throw new Exception('log_axis_y not supported by StackedCylinderGraph');
         }
 
-        $body = $this->Grid().$this->UnderShapes();
+        $body = $this->Grid() . $this->UnderShapes();
 
         $bar_width = $this->block_width = $this->BarWidth();
-        $bar = array('width' => $bar_width);
+        $bar       = array('width' => $bar_width);
 
-    // make the top ellipse, set it as a symbol for re-use
-    list($this->bx, $this->by) = $this->Project(0, 0, $bar_width);
+        // make the top ellipse, set it as a symbol for re-use
+        list($this->bx, $this->by) = $this->Project(0, 0, $bar_width);
         $top = $this->BarTop();
 
-        $bspace = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
-        $bnum = 0;
+        $bspace      = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
+        $bnum        = 0;
         $chunk_count = count($this->multi_graph);
-        $groups = array_fill(0, $chunk_count, '');
+        $groups      = array_fill(0, $chunk_count, '');
         $this->ColourSetup($this->multi_graph->ItemsCount(-1), $chunk_count);
 
-    // get the translation for the whole bar
-    list($tx, $ty) = $this->Project(0, 0, $bspace);
+        // get the translation for the whole bar
+        list($tx, $ty) = $this->Project(0, 0, $bspace);
         $all_group = array();
         if ($tx || $ty) {
             $all_group['transform'] = "translate($tx,$ty)";
@@ -56,17 +56,17 @@ class StackedCylinderGraph extends CylinderGraph
         if ($this->semantic_classes) {
             $all_group['class'] = 'series';
         }
-        $bars = '';
+        $bars  = '';
         $group = array();
         foreach ($this->multi_graph as $itemlist) {
-            $k = $itemlist[0]->key;
+            $k       = $itemlist[0]->key;
             $bar_pos = $this->GridPosition($k, $bnum);
 
             if (!is_null($bar_pos)) {
                 $bar['x'] = $bspace + $bar_pos;
 
-        // sort the values from bottom to top, assigning position
-        $ypos = $yplus = $yminus = 0;
+                // sort the values from bottom to top, assigning position
+                $ypos         = $yplus = $yminus = 0;
                 $chunk_values = array();
                 for ($j = 0; $j < $chunk_count; ++$j) {
                     $item = $itemlist[$j];
@@ -82,16 +82,24 @@ class StackedCylinderGraph extends CylinderGraph
                 }
 
                 $bar_count = count($chunk_values);
-                $b = 0;
+                $b         = 0;
                 foreach ($chunk_values as $chunk) {
-                    $j = $chunk[0];
-                    $value = $chunk[1];
-                    $item = $chunk[3];
-                    $v = abs($value);
-                    $t = ++$b == $bar_count ? $top : null;
+                    $j            = $chunk[0];
+                    $value        = $chunk[1];
+                    $item         = $chunk[3];
+                    $v            = abs($value);
+                    $t            = ++$b == $bar_count ? $top : null;
                     $bar_sections = $this->Bar3D($item, $bar, $t, $bnum, $j, $chunk[2]);
-                    $show_label = $this->AddDataLabel($j, $bnum, $group, $item,
-            $bar['x'] + $tx, $bar['y'] + $ty, $bar['width'], $bar['height']);
+                    $show_label   = $this->AddDataLabel(
+                        $j,
+                        $bnum,
+                        $group,
+                        $item,
+                        $bar['x'] + $tx,
+                        $bar['y'] + $ty,
+                        $bar['width'],
+                        $bar['height']
+                    );
 
                     if ($this->show_tooltips) {
                         $this->SetTooltip($group, $item, $j, $k, $value);
@@ -121,31 +129,33 @@ class StackedCylinderGraph extends CylinderGraph
         return $body;
     }
 
-  /**
-   * construct multigraph.
-   */
-  public function Values($values)
-  {
-      parent::Values($values);
-      if (!$this->values->error) {
-          $this->multi_graph = new MultiGraph($this->values, $this->force_assoc,
-        $this->require_integer_keys);
-      }
-  }
+    /**
+     * construct multigraph.
+     */
+    public function Values($values)
+    {
+        parent::Values($values);
+        if (!$this->values->error) {
+            $this->multi_graph = new MultiGraph(
+                $this->values, $this->force_assoc,
+                $this->require_integer_keys
+            );
+        }
+    }
 
-  /**
-   * Returns the maximum (stacked) value.
-   */
-  protected function GetMaxValue()
-  {
-      return $this->multi_graph->GetMaxSumValue();
-  }
+    /**
+     * Returns the maximum (stacked) value.
+     */
+    protected function GetMaxValue()
+    {
+        return $this->multi_graph->GetMaxSumValue();
+    }
 
-  /**
-   * Returns the minimum (stacked) value.
-   */
-  protected function GetMinValue()
-  {
-      return $this->multi_graph->GetMinSumValue();
-  }
+    /**
+     * Returns the minimum (stacked) value.
+     */
+    protected function GetMinValue()
+    {
+        return $this->multi_graph->GetMinSumValue();
+    }
 }

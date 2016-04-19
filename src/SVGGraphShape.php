@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,79 +36,80 @@ class SVGGraphShapeList
         $this->graph = $graph;
     }
 
-  /**
-   * Load shapes from options list.
-   */
-  public function Load(&$settings)
-  {
-      if (!isset($settings['shape'])) {
-          return;
-      }
+    /**
+     * Load shapes from options list.
+     */
+    public function Load(&$settings)
+    {
+        if (!isset($settings['shape'])) {
+            return;
+        }
 
-      if (!is_array($settings['shape']) || !isset($settings['shape'][0])) {
-          throw new Exception('Malformed shape option');
-      }
+        if (!is_array($settings['shape']) || !isset($settings['shape'][0])) {
+            throw new Exception('Malformed shape option');
+        }
 
-      if (!is_array($settings['shape'][0])) {
-          $this->AddShape($settings['shape']);
-      } else {
-          foreach ($settings['shape'] as $shape) {
-              $this->AddShape($shape);
-          }
-      }
-  }
+        if (!is_array($settings['shape'][0])) {
+            $this->AddShape($settings['shape']);
+        } else {
+            foreach ($settings['shape'] as $shape) {
+                $this->AddShape($shape);
+            }
+        }
+    }
 
-  /**
-   * Draw all the shapes for the selected depth.
-   */
-  public function Draw($depth)
-  {
-      $content = array();
-      foreach ($this->shapes as $shape) {
-          if ($shape->Depth($depth)) {
-              $content[] = $shape->Draw($this->graph);
-          }
-      }
+    /**
+     * Draw all the shapes for the selected depth.
+     */
+    public function Draw($depth)
+    {
+        $content = array();
+        foreach ($this->shapes as $shape) {
+            if ($shape->Depth($depth)) {
+                $content[] = $shape->Draw($this->graph);
+            }
+        }
 
-      return implode($content);
-  }
+        return implode($content);
+    }
 
-  /**
-   * Adds a shape from config array.
-   */
-  private function AddShape(&$shape_array)
-  {
-      $shape = $shape_array[0];
-      unset($shape_array[0]);
+    /**
+     * Adds a shape from config array.
+     */
+    private function AddShape(&$shape_array)
+    {
+        $shape = $shape_array[0];
+        unset($shape_array[0]);
 
-      $class_map = array(
-      'circle' => 'SVGGraphCircle',
-      'ellipse' => 'SVGGraphEllipse',
-      'rect' => 'SVGGraphRect',
-      'line' => 'SVGGraphLine',
-      'polyline' => 'SVGGraphPolyLine',
-      'polygon' => 'SVGGraphPolygon',
-      'path' => 'SVGGraphPath',
-    );
+        $class_map = array(
+            'circle'   => 'SVGGraphCircle',
+            'ellipse'  => 'SVGGraphEllipse',
+            'rect'     => 'SVGGraphRect',
+            'line'     => 'SVGGraphLine',
+            'polyline' => 'SVGGraphPolyLine',
+            'polygon'  => 'SVGGraphPolygon',
+            'path'     => 'SVGGraphPath',
+        );
 
-      if (isset($class_map[$shape]) && class_exists($class_map[$shape])) {
-          $depth = SVGG_SHAPE_BELOW;
-          if (isset($shape_array['depth'])) {
-              if ($shape_array['depth'] == 'above') {
-                  $depth = SVGG_SHAPE_ABOVE;
-              }
-          }
-          if (isset($shape_array['clip_to_grid']) && $shape_array['clip_to_grid'] &&
-        method_exists($this->graph, 'GridClipPath')) {
-              $clip_id = $this->graph->GridClipPath();
-              $shape_array['clip-path'] = "url(#{$clip_id})";
-          }
-          unset($shape_array['depth'], $shape_array['clip_to_grid']);
-          $this->shapes[] = new $class_map[$shape]($shape_array, $depth);
-      } else {
-          throw new Exception("Unknown shape [{$shape}]");
-      }
-  }
+        if (isset($class_map[$shape]) && class_exists($class_map[$shape])) {
+            $depth = SVGG_SHAPE_BELOW;
+            if (isset($shape_array['depth'])) {
+                if ($shape_array['depth'] == 'above') {
+                    $depth = SVGG_SHAPE_ABOVE;
+                }
+            }
+            if (isset($shape_array['clip_to_grid']) && $shape_array['clip_to_grid'] &&
+                method_exists($this->graph, 'GridClipPath')
+            ) {
+                $clip_id                  = $this->graph->GridClipPath();
+                $shape_array['clip-path'] = "url(#{$clip_id})";
+            }
+            unset($shape_array['depth'], $shape_array['clip_to_grid']);
+            $this->shapes[] = new $class_map[$shape]($shape_array, $depth);
+        } else {
+            throw new Exception("Unknown shape [{$shape}]");
+        }
+    }
 }
 
 abstract class SVGGraphShape
@@ -119,37 +120,37 @@ abstract class SVGGraphShape
     protected $link_target = '_blank';
     protected $coords = null;
 
-  /**
-   * attributes required to draw shape.
-   */
-  protected $required = array();
+    /**
+     * attributes required to draw shape.
+     */
+    protected $required = array();
 
-  /**
-   * attributes that support coordinate transformation.
-   */
-  protected $transform = array();
+    /**
+     * attributes that support coordinate transformation.
+     */
+    protected $transform = array();
 
-  /**
-   * coordinate pairs for dependent transforns - don't include them in
-   * $transform or they will be transformed twice.
-   */
-  protected $transform_pairs = array();
+    /**
+     * coordinate pairs for dependent transforns - don't include them in
+     * $transform or they will be transformed twice.
+     */
+    protected $transform_pairs = array();
 
-  /**
-   * colour gradients/patterns, and whether to allow gradients.
-   */
-  private $colour_convert = array(
-    'stroke' => true,
-    'fill' => false,
-  );
+    /**
+     * colour gradients/patterns, and whether to allow gradients.
+     */
+    private $colour_convert = array(
+        'stroke' => true,
+        'fill'   => false,
+    );
 
-  /**
-   * default attributes for all shapes.
-   */
-  protected $attrs = array(
-    'stroke' => '#000',
-    'fill' => 'none',
-  );
+    /**
+     * default attributes for all shapes.
+     */
+    protected $attrs = array(
+        'stroke' => '#000',
+        'fill'   => 'none',
+    );
 
     public function __construct(&$attrs, $depth)
     {
@@ -164,8 +165,10 @@ abstract class SVGGraphShape
         }
 
         if (count($missing)) {
-            throw new Exception("{$this->element} attribute(s) not found: ".
-        implode(', ', $missing));
+            throw new Exception(
+                "{$this->element} attribute(s) not found: " .
+                implode(', ', $missing)
+            );
         }
 
         if (isset($this->attrs['href'])) {
@@ -178,94 +181,98 @@ abstract class SVGGraphShape
             $this->link_target = $this->attrs['target'];
         }
         unset($this->attrs['href'], $this->attrs['xlink:href'],
-      $this->attrs['target']);
+            $this->attrs['target']);
     }
 
-  /**
-   * returns true if the depth is correct.
-   */
-  public function Depth($d)
-  {
-      return $this->depth == $d;
-  }
+    /**
+     * returns true if the depth is correct.
+     */
+    public function Depth($d)
+    {
+        return $this->depth == $d;
+    }
 
-  /**
-   * draws the shape.
-   */
-  public function Draw(&$graph)
-  {
-      $this->coords = new SVGGraphCoords($graph);
+    /**
+     * draws the shape.
+     */
+    public function Draw(&$graph)
+    {
+        $this->coords = new SVGGraphCoords($graph);
 
-      $attributes = array();
-      foreach ($this->attrs as $attr => $value) {
-          if (!is_null($value)) {
-              if (isset($this->transform[$attr])) {
-                  $val = $this->coords->Transform($value, $this->transform[$attr]);
-              } else {
-                  $val = isset($this->colour_convert[$attr]) ?
-            $graph->ParseColour($value, null, $this->colour_convert[$attr]) :
-            $value;
-              }
-              $attr = str_replace('_', '-', $attr);
-              $attributes[$attr] = $val;
-          }
-      }
-      $this->TransformCoordinates($attributes);
-      $element = $this->DrawElement($graph, $attributes);
-      if (!is_null($this->link)) {
-          $link = array('xlink:href' => $this->link);
-          if (!is_null($this->link_target)) {
-              $link['target'] = $this->link_target;
-          }
-          $element = $graph->Element('a', $link, null, $element);
-      }
+        $attributes = array();
+        foreach ($this->attrs as $attr => $value) {
+            if (!is_null($value)) {
+                if (isset($this->transform[$attr])) {
+                    $val = $this->coords->Transform($value, $this->transform[$attr]);
+                } else {
+                    $val = isset($this->colour_convert[$attr])
+                        ?
+                        $graph->ParseColour($value, null, $this->colour_convert[$attr])
+                        :
+                        $value;
+                }
+                $attr              = str_replace('_', '-', $attr);
+                $attributes[$attr] = $val;
+            }
+        }
+        $this->TransformCoordinates($attributes);
+        $element = $this->DrawElement($graph, $attributes);
+        if (!is_null($this->link)) {
+            $link = array('xlink:href' => $this->link);
+            if (!is_null($this->link_target)) {
+                $link['target'] = $this->link_target;
+            }
+            $element = $graph->Element('a', $link, null, $element);
+        }
 
-      return $element;
-  }
+        return $element;
+    }
 
-  /**
-   * Transform coordinate pairs.
-   */
-  protected function TransformCoordinates(&$attributes)
-  {
-      if (count($this->transform_pairs)) {
-          foreach ($this->transform_pairs as $pair) {
-              $coords = $this->coords->TransformCoords($attributes[$pair[0]],
-          $attributes[$pair[1]]);
-              $attributes[$pair[0]] = $coords[0];
-              $attributes[$pair[1]] = $coords[1];
-          }
-      }
-  }
+    /**
+     * Transform coordinate pairs.
+     */
+    protected function TransformCoordinates(&$attributes)
+    {
+        if (count($this->transform_pairs)) {
+            foreach ($this->transform_pairs as $pair) {
+                $coords               = $this->coords->TransformCoords(
+                    $attributes[$pair[0]],
+                    $attributes[$pair[1]]
+                );
+                $attributes[$pair[0]] = $coords[0];
+                $attributes[$pair[1]] = $coords[1];
+            }
+        }
+    }
 
-  /**
-   * Performs the conversion to SVG fragment.
-   */
-  protected function DrawElement(&$graph, &$attributes)
-  {
-      return $graph->Element($this->element, $attributes);
-  }
+    /**
+     * Performs the conversion to SVG fragment.
+     */
+    protected function DrawElement(&$graph, &$attributes)
+    {
+        return $graph->Element($this->element, $attributes);
+    }
 
-  /**
-   * splits $value, removing leading char and updating $axis.
-   */
-  private function ValueAxis(&$value, &$axis)
-  {
-      // strip leading u or g
-    $value = substr($value, 1);
-      $last = substr($value, -1);
-      if ($last == 'x' || $last == 'y') {
-          // axis given, strip last char
-      $axis = $last;
-          $value = substr($value, 0, -1);
-      }
-  }
+    /**
+     * splits $value, removing leading char and updating $axis.
+     */
+    private function ValueAxis(&$value, &$axis)
+    {
+        // strip leading u or g
+        $value = substr($value, 1);
+        $last  = substr($value, -1);
+        if ($last == 'x' || $last == 'y') {
+            // axis given, strip last char
+            $axis  = $last;
+            $value = substr($value, 0, -1);
+        }
+    }
 }
 
 class SVGGraphCircle extends SVGGraphShape
 {
     protected $element = 'circle';
-    protected $required = array('cx','cy','r');
+    protected $required = array('cx', 'cy', 'r');
     protected $transform = array('r' => 'y');
     protected $transform_pairs = array(array('cx', 'cy'));
 }
@@ -273,7 +280,7 @@ class SVGGraphCircle extends SVGGraphShape
 class SVGGraphEllipse extends SVGGraphShape
 {
     protected $element = 'ellipse';
-    protected $required = array('cx','cy','rx','ry');
+    protected $required = array('cx', 'cy', 'rx', 'ry');
     protected $transform = array('rx' => 'x', 'ry' => 'y');
     protected $transform_pairs = array(array('cx', 'cy'));
 }
@@ -281,7 +288,7 @@ class SVGGraphEllipse extends SVGGraphShape
 class SVGGraphRect extends SVGGraphShape
 {
     protected $element = 'rect';
-    protected $required = array('x','y','width','height');
+    protected $required = array('x', 'y', 'width', 'height');
     protected $transform = array('width' => 'x', 'height' => 'y');
     protected $transform_pairs = array(array('x', 'y'));
 }
@@ -289,8 +296,8 @@ class SVGGraphRect extends SVGGraphShape
 class SVGGraphLine extends SVGGraphShape
 {
     protected $element = 'line';
-    protected $required = array('x1','y1','x2','y2');
-    protected $transform_pairs = array(array('x1', 'y1'), array('x2','y2'));
+    protected $required = array('x1', 'y1', 'x2', 'y2');
+    protected $transform_pairs = array(array('x1', 'y1'), array('x2', 'y2'));
 }
 
 class SVGGraphPath extends SVGGraphShape
@@ -316,30 +323,30 @@ class SVGGraphPolyLine extends SVGGraphShape
         }
     }
 
-  /**
-   * Override to transform pairs of points.
-   */
-  protected function TransformCoordinates(&$attributes)
-  {
-      $count = count($attributes['points']);
-      for ($i = 0; $i < $count; $i += 2) {
-          $x = $attributes['points'][$i];
-          $y = $attributes['points'][$i + 1];
-          $coords = $this->coords->TransformCoords($x, $y);
-          $attributes['points'][$i] = $coords[0];
-          $attributes['points'][$i + 1] = $coords[1];
-      }
-  }
+    /**
+     * Override to transform pairs of points.
+     */
+    protected function TransformCoordinates(&$attributes)
+    {
+        $count = count($attributes['points']);
+        for ($i = 0; $i < $count; $i += 2) {
+            $x                            = $attributes['points'][$i];
+            $y                            = $attributes['points'][$i + 1];
+            $coords                       = $this->coords->TransformCoords($x, $y);
+            $attributes['points'][$i]     = $coords[0];
+            $attributes['points'][$i + 1] = $coords[1];
+        }
+    }
 
-  /**
-   * Override to build the points attribute.
-   */
-  protected function DrawElement(&$graph, &$attributes)
-  {
-      $attributes['points'] = implode(' ', $attributes['points']);
+    /**
+     * Override to build the points attribute.
+     */
+    protected function DrawElement(&$graph, &$attributes)
+    {
+        $attributes['points'] = implode(' ', $attributes['points']);
 
-      return parent::DrawElement($graph, $attributes);
-  }
+        return parent::DrawElement($graph, $attributes);
+    }
 }
 
 class SVGGraphPolygon extends SVGGraphPolyLine

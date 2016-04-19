@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -28,14 +28,14 @@ class FloatingBarGraph extends BarGraph
 
     protected function Draw()
     {
-        $body = $this->Grid().$this->UnderShapes();
+        $body = $this->Grid() . $this->UnderShapes();
 
         $bar_width = $this->BarWidth();
         $bar_style = array();
-        $bar = array('width' => $bar_width);
+        $bar       = array('width' => $bar_width);
 
         $bspace = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
-        $bnum = 0;
+        $bnum   = 0;
         $this->ColourSetup($this->values->ItemsCount());
         $series = '';
 
@@ -45,7 +45,7 @@ class FloatingBarGraph extends BarGraph
             if (!is_null($item->value) && !is_null($bar_pos)) {
                 $bar['x'] = $bspace + $bar_pos;
 
-                $end = $item->Data('end');
+                $end   = $item->Data('end');
                 $start = $item->value;
                 $value = $end - $start;
                 $this->Bar($value, $bar, $start);
@@ -53,12 +53,26 @@ class FloatingBarGraph extends BarGraph
                 if ($bar['height'] > 0) {
                     $bar_style['fill'] = $this->GetColour($item, $bnum);
                     $this->SetStroke($bar_style, $item);
-                    $show_label = $this->AddDataLabel(0, $bnum, $bar, $item,
-            $bar['x'], $bar['y'], $bar['width'], $bar['height']);
+                    $show_label = $this->AddDataLabel(
+                        0,
+                        $bnum,
+                        $bar,
+                        $item,
+                        $bar['x'],
+                        $bar['y'],
+                        $bar['width'],
+                        $bar['height']
+                    );
 
                     if ($this->show_tooltips) {
-                        $this->SetTooltip($bar, $item, 0, $item->key, $value,
-              !$this->compat_events && $show_label);
+                        $this->SetTooltip(
+                            $bar,
+                            $item,
+                            0,
+                            $item->key,
+                            $value,
+                            !$this->compat_events && $show_label
+                        );
                     }
                     if ($this->semantic_classes) {
                         $bar['class'] = 'series0';
@@ -67,9 +81,9 @@ class FloatingBarGraph extends BarGraph
                     $series .= $this->GetLink($item, $item->key, $rect);
                     unset($bar['id']); // clear for next value
 
-          if (!isset($this->bar_styles[$bnum])) {
-              $this->bar_styles[$bnum] = $bar_style;
-          }
+                    if (!isset($this->bar_styles[$bnum])) {
+                        $this->bar_styles[$bnum] = $bar_style;
+                    }
                 }
             }
             ++$bnum;
@@ -85,51 +99,51 @@ class FloatingBarGraph extends BarGraph
         return $body;
     }
 
-  /**
-   * Returns the maximum bar end.
-   */
-  protected function GetMaxValue()
-  {
-      if (!is_null($this->max_value)) {
-          return $this->max_value;
-      }
-      $max = null;
-      foreach ($this->values[0] as $item) {
-          $s = $item->value;
-          $e = $item->Data('end');
-          if (is_null($s) || is_null($e)) {
-              continue;
-          }
-          $m = max($s, $e);
-          if (is_null($max) || $m > $max) {
-              $max = $m;
-          }
-      }
+    /**
+     * Returns the maximum bar end.
+     */
+    protected function GetMaxValue()
+    {
+        if (!is_null($this->max_value)) {
+            return $this->max_value;
+        }
+        $max = null;
+        foreach ($this->values[0] as $item) {
+            $s = $item->value;
+            $e = $item->Data('end');
+            if (is_null($s) || is_null($e)) {
+                continue;
+            }
+            $m = max($s, $e);
+            if (is_null($max) || $m > $max) {
+                $max = $m;
+            }
+        }
 
-      return ($this->max_value = $max);
-  }
+        return ($this->max_value = $max);
+    }
 
-  /**
-   * Returns the minimum bar end.
-   */
-  protected function GetMinValue()
-  {
-      if (!is_null($this->min_value)) {
-          return $this->min_value;
-      }
-      $min = null;
-      foreach ($this->values[0] as $item) {
-          $s = $item->value;
-          $e = $item->Data('end');
-          if (is_null($s) || is_null($e)) {
-              continue;
-          }
-          $m = min($s, $e);
-          if (is_null($min) || $m < $min) {
-              $min = $m;
-          }
-      }
+    /**
+     * Returns the minimum bar end.
+     */
+    protected function GetMinValue()
+    {
+        if (!is_null($this->min_value)) {
+            return $this->min_value;
+        }
+        $min = null;
+        foreach ($this->values[0] as $item) {
+            $s = $item->value;
+            $e = $item->Data('end');
+            if (is_null($s) || is_null($e)) {
+                continue;
+            }
+            $m = min($s, $e);
+            if (is_null($min) || $m < $min) {
+                $min = $m;
+            }
+        }
 
-      return ($this->min_value = $min);
-  }
+        return ($this->min_value = $min);
+    }
 }

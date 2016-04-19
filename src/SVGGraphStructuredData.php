@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -44,25 +44,30 @@ class SVGGraphStructuredData implements Countable, ArrayAccess, Iterator
     private $encoding = 'UTF-8';
     public $error = null;
 
-    public function __construct(&$data, $force_assoc, $structure, $repeated_keys,
-    $integer_keys, $requirements)
-    {
+    public function __construct(
+        &$data,
+        $force_assoc,
+        $structure,
+        $repeated_keys,
+        $integer_keys,
+        $requirements
+    ) {
         if (!is_null($structure) && !empty($structure)) {
             // structure provided, is it valid?
-      foreach (array('key', 'value') as $field) {
-          if (!array_key_exists($field, $structure)) {
-              $this->error = $field.' field not set for structured data';
+            foreach (array('key', 'value') as $field) {
+                if (!array_key_exists($field, $structure)) {
+                    $this->error = $field . ' field not set for structured data';
 
-              return;
-          }
-      }
+                    return;
+                }
+            }
 
             if (!is_array($structure['value'])) {
                 $structure['value'] = array($structure['value']);
             }
-            $this->key_field = $structure['key'];
+            $this->key_field      = $structure['key'];
             $this->dataset_fields = is_array($structure['value']) ?
-        $structure['value'] : array($structure['value']);
+                $structure['value'] : array($structure['value']);
             if (isset($structure['_before'])) {
                 $this->before_label = $structure['_before'];
             }
@@ -74,65 +79,67 @@ class SVGGraphStructuredData implements Countable, ArrayAccess, Iterator
             }
         } else {
             // find key and datasets
-      $keys = array_keys($data[0]);
-            $this->key_field = array_shift($keys);
+            $keys                 = array_keys($data[0]);
+            $this->key_field      = array_shift($keys);
             $this->dataset_fields = $keys;
 
-      // check for more datasets
-      foreach ($data as $item) {
-          foreach (array_keys($item) as $key) {
-              if ($key != $this->key_field &&
-            array_search($key, $this->dataset_fields) === false) {
-                  $this->dataset_fields[] = $key;
-              }
-          }
-      }
+            // check for more datasets
+            foreach ($data as $item) {
+                foreach (array_keys($item) as $key) {
+                    if ($key != $this->key_field &&
+                        array_search($key, $this->dataset_fields) === false
+                    ) {
+                        $this->dataset_fields[] = $key;
+                    }
+                }
+            }
             sort($this->dataset_fields, SORT_NUMERIC);
 
-      // default structure
-      $structure = array(
-        'key' => $this->key_field,
-        'value' => $this->dataset_fields,
-      );
+            // default structure
+            $structure = array(
+                'key'   => $this->key_field,
+                'value' => $this->dataset_fields,
+            );
         }
 
-    // check any extra requirements
-    if (is_array($requirements)) {
-        $missing = array();
-        foreach ($requirements as $req) {
-            if (!isset($structure[$req])) {
-                $missing[] = $req;
+        // check any extra requirements
+        if (is_array($requirements)) {
+            $missing = array();
+            foreach ($requirements as $req) {
+                if (!isset($structure[$req])) {
+                    $missing[] = $req;
+                }
+            }
+            if (!empty($missing)) {
+                $missing     = implode(', ', $missing);
+                $this->error = "Required field(s) [{$missing}] not set in data structure";
+
+                return;
             }
         }
-        if (!empty($missing)) {
-            $missing = implode(', ', $missing);
-            $this->error = "Required field(s) [{$missing}] not set in data structure";
-
-            return;
-        }
-    }
 
         $this->structure = $structure;
-    // check if it really has more than one dataset
-    if (isset($structure['datasets']) && $structure['datasets'] &&
-      is_array(current($data)) && is_array(current(current($data)))) {
-        $this->Scatter2DDatasets($data);
-    } else {
-        $this->data = &$data;
-    }
-        $this->datasets = count($this->dataset_fields);
+        // check if it really has more than one dataset
+        if (isset($structure['datasets']) && $structure['datasets'] &&
+            is_array(current($data)) && is_array(current(current($data)))
+        ) {
+            $this->Scatter2DDatasets($data);
+        } else {
+            $this->data = &$data;
+        }
+        $this->datasets    = count($this->dataset_fields);
         $this->force_assoc = $force_assoc;
-        $this->assoc_test = $integer_keys ? 'is_int' : 'is_numeric';
+        $this->assoc_test  = $integer_keys ? 'is_int' : 'is_numeric';
         if (isset($structure['axis_text'])) {
             $this->axis_text_field = $structure['axis_text'];
         }
 
         if ($this->AssociativeKeys()) {
             // reindex the array to 0, 1, 2, ...
-      $this->data = array_values($this->data);
+            $this->data = array_values($this->data);
         } elseif (!is_null($this->key_field)) {
             // if not associative, sort by key field
-      $GLOBALS['SVGGraphFieldSortField'] = $this->key_field;
+            $GLOBALS['SVGGraphFieldSortField'] = $this->key_field;
             usort($this->data, 'SVGGraphFieldSort');
         }
 
@@ -145,379 +152,389 @@ class SVGGraphStructuredData implements Countable, ArrayAccess, Iterator
         }
         if (!$this->error) {
             for ($i = 0; $i < $this->datasets; ++$i) {
-                $this->iterators[$i] = new SVGGraphStructuredDataIterator($this->data,
-          $i, $this->structure);
+                $this->iterators[$i] = new SVGGraphStructuredDataIterator(
+                    $this->data,
+                    $i, $this->structure
+                );
             }
         }
     }
 
-  /**
-   * Sets up normal structured data from scatter_2d datasets.
-   */
-  private function Scatter2DDatasets(&$data)
-  {
-      $newdata = array();
-      $key_field = $this->structure['key'];
-      $value_field = $this->structure['value'][0];
+    /**
+     * Sets up normal structured data from scatter_2d datasets.
+     */
+    private function Scatter2DDatasets(&$data)
+    {
+        $newdata     = array();
+        $key_field   = $this->structure['key'];
+        $value_field = $this->structure['value'][0];
 
-    // update structure
-    $this->structure['key'] = 0;
-      $this->structure['value'] = array();
-      $this->key_field = 0;
-      $this->dataset_fields = array();
-      $set = 1;
-      foreach ($data as $dataset) {
-          foreach ($dataset as $item) {
-              if (isset($item[$key_field]) && isset($item[$value_field])) {
-                  // no need to dedupe keys - no extra data and scatter_2d
-          // only supported by scatter graphs
-          $newdata[] = array(0 => $item[$key_field], $set => $item[$value_field]);
-              }
-          }
-          $this->structure['value'][] = $set;
-          $this->dataset_fields[] = $set;
-          ++$set;
-      }
-      $this->data = $newdata;
-  }
+        // update structure
+        $this->structure['key']   = 0;
+        $this->structure['value'] = array();
+        $this->key_field          = 0;
+        $this->dataset_fields     = array();
+        $set                      = 1;
+        foreach ($data as $dataset) {
+            foreach ($dataset as $item) {
+                if (isset($item[$key_field]) && isset($item[$value_field])) {
+                    // no need to dedupe keys - no extra data and scatter_2d
+                    // only supported by scatter graphs
+                    $newdata[] = array(0 => $item[$key_field], $set => $item[$value_field]);
+                }
+            }
+            $this->structure['value'][] = $set;
+            $this->dataset_fields[]     = $set;
+            ++$set;
+        }
+        $this->data = $newdata;
+    }
 
-  /**
-   * Implement Iterator interface to prevent iteration...
-   */
-  private function notIterator()
-  {
-      throw new Exception('Cannot iterate '.__CLASS__);
-  }
+    /**
+     * Implement Iterator interface to prevent iteration...
+     */
+    private function notIterator()
+    {
+        throw new Exception('Cannot iterate ' . __CLASS__);
+    }
+
     public function current()
     {
         $this->notIterator();
     }
+
     public function key()
     {
         $this->notIterator();
     }
+
     public function next()
     {
         $this->notIterator();
     }
+
     public function rewind()
     {
         $this->notIterator();
     }
+
     public function valid()
     {
         $this->notIterator();
     }
 
-  /**
-   * ArrayAccess methods.
-   */
-  public function offsetExists($offset)
-  {
-      return array_key_exists($offset, $this->dataset_fields);
-  }
+    /**
+     * ArrayAccess methods.
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->dataset_fields);
+    }
 
     public function offsetGet($offset)
     {
         return $this->iterators[$offset];
     }
 
-  /**
-   * Don't allow writing to the data.
-   */
-  public function offsetSet($offset, $value)
-  {
-      throw new Exception('Read-only');
-  }
+    /**
+     * Don't allow writing to the data.
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new Exception('Read-only');
+    }
+
     public function offsetUnset($offset)
     {
         throw new Exception('Read-only');
     }
 
-  /**
-   * Countable method.
-   */
-  public function count()
-  {
-      return $this->datasets;
-  }
+    /**
+     * Countable method.
+     */
+    public function count()
+    {
+        return $this->datasets;
+    }
 
-  /**
-   * Returns minimum data value for a dataset.
-   */
-  public function GetMinValue($dataset = 0)
-  {
-      if (isset($this->min_values[$dataset])) {
-          return $this->min_values[$dataset];
-      }
+    /**
+     * Returns minimum data value for a dataset.
+     */
+    public function GetMinValue($dataset = 0)
+    {
+        if (isset($this->min_values[$dataset])) {
+            return $this->min_values[$dataset];
+        }
 
-      $min = null;
-      $key = $this->dataset_fields[$dataset];
-      foreach ($this->data as $item) {
-          if (isset($item[$key]) && (is_null($min) || $item[$key] < $min)) {
-              $min = $item[$key];
-          }
-      }
+        $min = null;
+        $key = $this->dataset_fields[$dataset];
+        foreach ($this->data as $item) {
+            if (isset($item[$key]) && (is_null($min) || $item[$key] < $min)) {
+                $min = $item[$key];
+            }
+        }
 
-      return ($this->min_values[$dataset] = $min);
-  }
+        return ($this->min_values[$dataset] = $min);
+    }
 
-  /**
-   * Returns maximum data value for a dataset.
-   */
-  public function GetMaxValue($dataset = 0)
-  {
-      if (isset($this->max_values[$dataset])) {
-          return $this->max_values[$dataset];
-      }
+    /**
+     * Returns maximum data value for a dataset.
+     */
+    public function GetMaxValue($dataset = 0)
+    {
+        if (isset($this->max_values[$dataset])) {
+            return $this->max_values[$dataset];
+        }
 
-      $max = null;
-      $key = $this->dataset_fields[$dataset];
-      foreach ($this->data as $item) {
-          if (isset($item[$key]) && (is_null($max) || $item[$key] > $max)) {
-              $max = $item[$key];
-          }
-      }
+        $max = null;
+        $key = $this->dataset_fields[$dataset];
+        foreach ($this->data as $item) {
+            if (isset($item[$key]) && (is_null($max) || $item[$key] > $max)) {
+                $max = $item[$key];
+            }
+        }
 
-      return ($this->max_values[$dataset] = $max);
-  }
+        return ($this->max_values[$dataset] = $max);
+    }
 
-  /**
-   * Returns the minimum key value.
-   */
-  public function GetMinKey($dataset = 0)
-  {
-      if (isset($this->min_keys[$dataset])) {
-          return $this->min_keys[$dataset];
-      }
+    /**
+     * Returns the minimum key value.
+     */
+    public function GetMinKey($dataset = 0)
+    {
+        if (isset($this->min_keys[$dataset])) {
+            return $this->min_keys[$dataset];
+        }
 
-      if ($this->AssociativeKeys()) {
-          return ($this->min_keys[$dataset] = 0);
-      }
+        if ($this->AssociativeKeys()) {
+            return ($this->min_keys[$dataset] = 0);
+        }
 
-      $min = null;
-      $key = $this->key_field;
-      $set = $this->dataset_fields[$dataset];
-      if (is_null($key)) {
-          foreach ($this->data as $k => $item) {
-              if (isset($item[$set]) && (is_null($min) || $k < $min)) {
-                  $min = $k;
-              }
-          }
-      } else {
-          foreach ($this->data as $item) {
-              if (isset($item[$key]) && isset($item[$set]) &&
-          (is_null($min) || $item[$key] < $min)) {
-                  $min = $item[$key];
-              }
-          }
-      }
+        $min = null;
+        $key = $this->key_field;
+        $set = $this->dataset_fields[$dataset];
+        if (is_null($key)) {
+            foreach ($this->data as $k => $item) {
+                if (isset($item[$set]) && (is_null($min) || $k < $min)) {
+                    $min = $k;
+                }
+            }
+        } else {
+            foreach ($this->data as $item) {
+                if (isset($item[$key]) && isset($item[$set]) &&
+                    (is_null($min) || $item[$key] < $min)
+                ) {
+                    $min = $item[$key];
+                }
+            }
+        }
 
-      return ($this->min_keys[$dataset] = $min);
-  }
+        return ($this->min_keys[$dataset] = $min);
+    }
 
-  /**
-   * Returns the maximum key value for a dataset.
-   */
-  public function GetMaxKey($dataset = 0)
-  {
-      if (isset($this->max_keys[$dataset])) {
-          return $this->max_keys[$dataset];
-      }
+    /**
+     * Returns the maximum key value for a dataset.
+     */
+    public function GetMaxKey($dataset = 0)
+    {
+        if (isset($this->max_keys[$dataset])) {
+            return $this->max_keys[$dataset];
+        }
 
-      if ($this->AssociativeKeys()) {
-          return ($this->max_keys[$dataset] = count($this->data) - 1);
-      }
+        if ($this->AssociativeKeys()) {
+            return ($this->max_keys[$dataset] = count($this->data) - 1);
+        }
 
-      $max = null;
-      $key = $this->key_field;
-      $set = $this->dataset_fields[$dataset];
-      if (is_null($key)) {
-          foreach ($this->data as $k => $item) {
-              if (isset($item[$set]) && (is_null($max) || $k > $max)) {
-                  $max = $k;
-              }
-          }
-      } else {
-          foreach ($this->data as $item) {
-              if (isset($item[$key]) && isset($item[$set]) &&
-          (is_null($max) || $item[$key] > $max)) {
-                  $max = $item[$key];
-              }
-          }
-      }
+        $max = null;
+        $key = $this->key_field;
+        $set = $this->dataset_fields[$dataset];
+        if (is_null($key)) {
+            foreach ($this->data as $k => $item) {
+                if (isset($item[$set]) && (is_null($max) || $k > $max)) {
+                    $max = $k;
+                }
+            }
+        } else {
+            foreach ($this->data as $item) {
+                if (isset($item[$key]) && isset($item[$set]) &&
+                    (is_null($max) || $item[$key] > $max)
+                ) {
+                    $max = $item[$key];
+                }
+            }
+        }
 
-      return ($this->max_keys[$dataset] = $max);
-  }
+        return ($this->max_keys[$dataset] = $max);
+    }
 
-  /**
-   * Returns the key (or axis text) at a given index/key.
-   */
-  public function GetKey($index, $dataset = 0)
-  {
-      if (is_null($this->axis_text_field) && !$this->AssociativeKeys()) {
-          return $index;
-      }
-      $index = (int) round($index);
-      if ($this->AssociativeKeys()) {
-          $item = $this->iterators[$dataset]->GetItemByIndex($index);
-      } else {
-          $item = $this->iterators[$dataset]->GetItemByKey($index);
-      }
-      if (is_null($item)) {
-          return;
-      }
-      if ($this->axis_text_field) {
-          return $item->RawData($this->axis_text_field);
-      }
+    /**
+     * Returns the key (or axis text) at a given index/key.
+     */
+    public function GetKey($index, $dataset = 0)
+    {
+        if (is_null($this->axis_text_field) && !$this->AssociativeKeys()) {
+            return $index;
+        }
+        $index = (int)round($index);
+        if ($this->AssociativeKeys()) {
+            $item = $this->iterators[$dataset]->GetItemByIndex($index);
+        } else {
+            $item = $this->iterators[$dataset]->GetItemByKey($index);
+        }
+        if (is_null($item)) {
+            return;
+        }
+        if ($this->axis_text_field) {
+            return $item->RawData($this->axis_text_field);
+        }
 
-      return $item->key;
-  }
+        return $item->key;
+    }
 
-  /**
-   * Returns TRUE if the keys are associative.
-   */
-  public function AssociativeKeys()
-  {
-      if ($this->force_assoc) {
-          return true;
-      }
+    /**
+     * Returns TRUE if the keys are associative.
+     */
+    public function AssociativeKeys()
+    {
+        if ($this->force_assoc) {
+            return true;
+        }
 
-      if (!is_null($this->assoc)) {
-          return $this->assoc;
-      }
+        if (!is_null($this->assoc)) {
+            return $this->assoc;
+        }
 
-    // use either is_int or is_numeric to test
-    $test = $this->assoc_test;
-      if (is_null($this->key_field)) {
-          foreach ($this->data as $k => $item) {
-              if (!$test($k)) {
-                  return ($this->assoc = true);
-              }
-          }
-      } else {
-          foreach ($this->data as $item) {
-              if (isset($item[$this->key_field]) && !$test($item[$this->key_field])) {
-                  return ($this->assoc = true);
-              }
-          }
-      }
+        // use either is_int or is_numeric to test
+        $test = $this->assoc_test;
+        if (is_null($this->key_field)) {
+            foreach ($this->data as $k => $item) {
+                if (!$test($k)) {
+                    return ($this->assoc = true);
+                }
+            }
+        } else {
+            foreach ($this->data as $item) {
+                if (isset($item[$this->key_field]) && !$test($item[$this->key_field])) {
+                    return ($this->assoc = true);
+                }
+            }
+        }
 
-      return ($this->assoc = false);
-  }
+        return ($this->assoc = false);
+    }
 
-  /**
-   * Returns the number of data items in a dataset
-   * If $dataset is -1, returns number of items across all datasets.
-   */
-  public function ItemsCount($dataset = 0)
-  {
-      if ($dataset == -1) {
-          return count($this->data);
-      }
+    /**
+     * Returns the number of data items in a dataset
+     * If $dataset is -1, returns number of items across all datasets.
+     */
+    public function ItemsCount($dataset = 0)
+    {
+        if ($dataset == -1) {
+            return count($this->data);
+        }
 
-      if (!isset($this->dataset_fields[$dataset])) {
-          return 0;
-      }
-      $count = 0;
-      $key = $this->dataset_fields[$dataset];
-      foreach ($this->data as $item) {
-          if (isset($item[$key])) {
-              ++$count;
-          }
-      }
+        if (!isset($this->dataset_fields[$dataset])) {
+            return 0;
+        }
+        $count = 0;
+        $key   = $this->dataset_fields[$dataset];
+        foreach ($this->data as $item) {
+            if (isset($item[$key])) {
+                ++$count;
+            }
+        }
 
-      return $count;
-  }
+        return $count;
+    }
 
-  /**
-   * Returns TRUE if there are repeated keys
-   * (also culls items without key field).
-   */
-  public function RepeatedKeys()
-  {
-      if (!is_null($this->repeated_keys)) {
-          return $this->repeated_keys;
-      }
-      if (is_null($this->key_field)) {
-          return false;
-      }
-      $keys = array();
-      foreach ($this->data as $k => $item) {
-          if (!isset($item[$this->key_field])) {
-              unset($this->data[$k]);
-          } else {
-              $keys[] = $item[$this->key_field];
-          }
-      }
-      $len = count($keys);
-      $ukeys = array_unique($keys);
+    /**
+     * Returns TRUE if there are repeated keys
+     * (also culls items without key field).
+     */
+    public function RepeatedKeys()
+    {
+        if (!is_null($this->repeated_keys)) {
+            return $this->repeated_keys;
+        }
+        if (is_null($this->key_field)) {
+            return false;
+        }
+        $keys = array();
+        foreach ($this->data as $k => $item) {
+            if (!isset($item[$this->key_field])) {
+                unset($this->data[$k]);
+            } else {
+                $keys[] = $item[$this->key_field];
+            }
+        }
+        $len   = count($keys);
+        $ukeys = array_unique($keys);
 
-      return ($this->repeated_keys = ($len != count($ukeys)));
-  }
+        return ($this->repeated_keys = ($len != count($ukeys)));
+    }
 
-  /**
-   * Returns the min and max sum values for some datasets.
-   */
-  public function GetMinMaxSumValues($start = 0, $end = null)
-  {
-      if ($start >= $this->datasets || (!is_null($end) && $end >= $this->datasets)) {
-          throw new Exception('Dataset not found');
-      }
+    /**
+     * Returns the min and max sum values for some datasets.
+     */
+    public function GetMinMaxSumValues($start = 0, $end = null)
+    {
+        if ($start >= $this->datasets || (!is_null($end) && $end >= $this->datasets)) {
+            throw new Exception('Dataset not found');
+        }
 
-      if (is_null($end)) {
-          $end = $this->datasets - 1;
-      }
-      $min_stack = array();
-      $max_stack = array();
+        if (is_null($end)) {
+            $end = $this->datasets - 1;
+        }
+        $min_stack = array();
+        $max_stack = array();
 
-      foreach ($this->data as $item) {
-          $smin = $smax = 0;
-          for ($dataset = $start; $dataset <= $end; ++$dataset) {
-              $vfield = $this->dataset_fields[$dataset];
-              if (!isset($item[$vfield])) {
-                  continue;
-              }
-              $value = $item[$vfield];
-              if (!is_null($value) && !is_numeric($value)) {
-                  throw new Exception('Non-numeric value');
-              }
-              if ($value > 0) {
-                  $smax += $value;
-              } else {
-                  $smin += $value;
-              }
-          }
-          $min_stack[] = $smin;
-          $max_stack[] = $smax;
-      }
-      if (!count($min_stack)) {
-          return array(null, null);
-      }
+        foreach ($this->data as $item) {
+            $smin = $smax = 0;
+            for ($dataset = $start; $dataset <= $end; ++$dataset) {
+                $vfield = $this->dataset_fields[$dataset];
+                if (!isset($item[$vfield])) {
+                    continue;
+                }
+                $value = $item[$vfield];
+                if (!is_null($value) && !is_numeric($value)) {
+                    throw new Exception('Non-numeric value');
+                }
+                if ($value > 0) {
+                    $smax += $value;
+                } else {
+                    $smin += $value;
+                }
+            }
+            $min_stack[] = $smin;
+            $max_stack[] = $smax;
+        }
+        if (!count($min_stack)) {
+            return array(null, null);
+        }
 
-      return array(min($min_stack), max($max_stack));
-  }
+        return array(min($min_stack), max($max_stack));
+    }
 
-  /**
-   * Strips units from before and after label.
-   */
-  protected function StripLabel($label)
-  {
-      $before = $this->before_label;
-      $after = $this->after_label;
-      $enc = $this->encoding;
-      $llen = SVGGraphStrlen($label, $enc);
-      $blen = SVGGraphStrlen($before, $enc);
-      $alen = SVGGraphStrlen($after, $enc);
-      if ($alen > 0 && SVGGraphSubstr($label, $llen - $alen, $alen, $enc) == $after) {
-          $label = SVGGraphSubstr($label, 0, $llen - $alen, $enc);
-      }
-      if ($blen > 0 && SVGGraphSubstr($label, 0, $blen, $enc) == $before) {
-          $label = SVGGraphSubstr($label, $blen, null, $enc);
-      }
+    /**
+     * Strips units from before and after label.
+     */
+    protected function StripLabel($label)
+    {
+        $before = $this->before_label;
+        $after  = $this->after_label;
+        $enc    = $this->encoding;
+        $llen   = SVGGraphStrlen($label, $enc);
+        $blen   = SVGGraphStrlen($before, $enc);
+        $alen   = SVGGraphStrlen($after, $enc);
+        if ($alen > 0 && SVGGraphSubstr($label, $llen - $alen, $alen, $enc) == $after) {
+            $label = SVGGraphSubstr($label, 0, $llen - $alen, $enc);
+        }
+        if ($blen > 0 && SVGGraphSubstr($label, 0, $blen, $enc) == $before) {
+            $label = SVGGraphSubstr($label, $blen, null, $enc);
+        }
 
-      return $label;
-  }
+        return $label;
+    }
 }
 
 /**
@@ -535,12 +552,12 @@ class SVGGraphStructuredDataIterator implements Iterator
 
     public function __construct(&$data, $dataset, $structure)
     {
-        $this->dataset = $dataset;
-        $this->data = &$data;
-        $this->count = count($data);
+        $this->dataset   = $dataset;
+        $this->data      = &$data;
+        $this->count     = count($data);
         $this->structure = $structure;
 
-        $this->key_field = $structure['key'];
+        $this->key_field      = $structure['key'];
         $this->dataset_fields = $structure['value'];
     }
 
@@ -569,43 +586,49 @@ class SVGGraphStructuredDataIterator implements Iterator
         return $this->position < $this->count;
     }
 
-  /**
-   * Returns an item by index.
-   */
-  public function GetItemByIndex($index)
-  {
-      if (isset($this->data[$index])) {
-          $item = $this->data[$index];
-          $key = is_null($this->key_field) ? $index : null;
+    /**
+     * Returns an item by index.
+     */
+    public function GetItemByIndex($index)
+    {
+        if (isset($this->data[$index])) {
+            $item = $this->data[$index];
+            $key  = is_null($this->key_field) ? $index : null;
 
-          return new SVGGraphStructuredDataItem($this->data[$index],
-        $this->structure, $this->dataset, $key);
-      }
+            return new SVGGraphStructuredDataItem(
+                $this->data[$index],
+                $this->structure, $this->dataset, $key
+            );
+        }
 
-      return;
-  }
+        return;
+    }
 
-  /**
-   * Returns an item by key.
-   */
-  public function GetItemByKey($key)
-  {
-      if (is_null($this->key_field)) {
-          if (isset($this->data[$key])) {
-              return new SVGGraphStructuredDataItem($this->data[$key],
-          $this->structure, $this->dataset, $key);
-          }
-      } else {
-          foreach ($this->data as $item) {
-              if (isset($item[$this->key_field]) && $item[$this->key_field] == $key) {
-                  return new SVGGraphStructuredDataItem($item, $this->structure,
-            $this->dataset, $key);
-              }
-          }
-      }
+    /**
+     * Returns an item by key.
+     */
+    public function GetItemByKey($key)
+    {
+        if (is_null($this->key_field)) {
+            if (isset($this->data[$key])) {
+                return new SVGGraphStructuredDataItem(
+                    $this->data[$key],
+                    $this->structure, $this->dataset, $key
+                );
+            }
+        } else {
+            foreach ($this->data as $item) {
+                if (isset($item[$this->key_field]) && $item[$this->key_field] == $key) {
+                    return new SVGGraphStructuredDataItem(
+                        $item, $this->structure,
+                        $this->dataset, $key
+                    );
+                }
+            }
+        }
 
-      return;
-  }
+        return;
+    }
 }
 
 /**
@@ -623,54 +646,57 @@ class SVGGraphStructuredDataItem
 
     public function __construct($item, &$structure, $dataset, $key = null)
     {
-        $this->item = $item;
-        $this->key_field = $structure['key'];
+        $this->item           = $item;
+        $this->key_field      = $structure['key'];
         $this->dataset_fields = $structure['value'];
-        $this->key = is_null($this->key_field) ? $key : $item[$this->key_field];
+        $this->key            = is_null($this->key_field) ? $key : $item[$this->key_field];
         if (isset($this->dataset_fields[$dataset]) &&
-      isset($item[$this->dataset_fields[$dataset]])) {
+            isset($item[$this->dataset_fields[$dataset]])
+        ) {
             $this->value = $item[$this->dataset_fields[$dataset]];
         }
 
-        $this->dataset = $dataset;
+        $this->dataset   = $dataset;
         $this->structure = &$structure;
     }
 
-  /**
-   * Constructs a new data item with a different dataset.
-   */
-  public function NewFrom($dataset)
-  {
-      return new self($this->item, $this->structure,
-      $dataset, $this->key);
-  }
+    /**
+     * Constructs a new data item with a different dataset.
+     */
+    public function NewFrom($dataset)
+    {
+        return new self(
+            $this->item, $this->structure,
+            $dataset, $this->key
+        );
+    }
 
-  /**
-   * Returns some extra data from item.
-   */
-  public function Data($field)
-  {
-      if (!isset($this->structure[$field])) {
-          return;
-      }
-      $item_field = $this->structure[$field];
-      if (is_array($item_field)) {
-          if (!isset($item_field[$this->dataset])) {
-              return;
-          }
-          $item_field = $item_field[$this->dataset];
-      }
+    /**
+     * Returns some extra data from item.
+     */
+    public function Data($field)
+    {
+        if (!isset($this->structure[$field])) {
+            return;
+        }
+        $item_field = $this->structure[$field];
+        if (is_array($item_field)) {
+            if (!isset($item_field[$this->dataset])) {
+                return;
+            }
+            $item_field = $item_field[$this->dataset];
+        }
 
-      return isset($this->item[$item_field]) ? $this->item[$item_field] : null;
-  }
+        return isset($this->item[$item_field]) ? $this->item[$item_field] : null;
+    }
 
-  /**
-   * Returns a value from the item without translating structure.
-   */
-  public function RawData($field)
-  {
-      return isset($this->item[$field]) ? $this->item[$field] : null;
-  }
+    /**
+     * Returns a value from the item without translating structure.
+     */
+    public function RawData($field)
+    {
+        return isset($this->item[$field]) ? $this->item[$field] : null;
+    }
 }
 
 /**
@@ -679,10 +705,10 @@ class SVGGraphStructuredDataItem
 function SVGGraphFieldSort($a, $b)
 {
     $f = $GLOBALS['SVGGraphFieldSortField'];
-  // check that fields are present
-  if (!isset($a[$f]) || !isset($b[$f])) {
-      return 0;
-  }
+    // check that fields are present
+    if (!isset($a[$f]) || !isset($b[$f])) {
+        return 0;
+    }
     if ($a[$f] == $b[$f]) {
         return 0;
     }

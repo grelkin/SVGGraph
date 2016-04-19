@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -27,8 +27,8 @@ class StackedGroupedBarGraph extends StackedBarGraph
 {
     protected $single_axis = true;
 
-  // stores the actual group starts
-  protected $groups = array();
+    // stores the actual group starts
+    protected $groups = array();
 
     protected function Draw()
     {
@@ -36,36 +36,41 @@ class StackedGroupedBarGraph extends StackedBarGraph
             throw new Exception('log_axis_y not supported by StackedGroupedBarGraph');
         }
 
-        $body = $this->Grid().$this->UnderShapes();
+        $body = $this->Grid() . $this->UnderShapes();
 
         $group_count = count($this->groups);
         list($group_width, $bspace, $group_unit_width) =
-      GroupedBarGraph::BarPosition($this->bar_width, $this->bar_width_min,
-      $this->x_axes[$this->main_x_axis]->Unit(), $group_count, $this->bar_space,
-      $this->group_space);
+            GroupedBarGraph::BarPosition(
+                $this->bar_width,
+                $this->bar_width_min,
+                $this->x_axes[$this->main_x_axis]->Unit(),
+                $group_count,
+                $this->bar_space,
+                $this->group_space
+            );
         $bar_style = array();
-        $bar = array('width' => $group_width);
+        $bar       = array('width' => $group_width);
 
-        $bnum = 0;
-        $bar_count = count($this->multi_graph);
+        $bnum       = 0;
+        $bar_count  = count($this->multi_graph);
         $bars_shown = array_fill(0, $bar_count, 0); // for legend yes/no
-    $bars = '';
+        $bars       = '';
         $this->ColourSetup($this->multi_graph->ItemsCount(-1), $bar_count);
 
         foreach ($this->multi_graph as $itemlist) {
-            $k = $itemlist[0]->key;
+            $k       = $itemlist[0]->key;
             $bar_pos = $this->GridPosition($k, $bnum);
 
             if (!is_null($bar_pos)) {
                 for ($l = 0; $l < $group_count; ++$l) {
-                    $bar['x'] = $bspace + $bar_pos + ($l * $group_unit_width);
+                    $bar['x']  = $bspace + $bar_pos + ($l * $group_unit_width);
                     $start_bar = $this->groups[$l];
-                    $end_bar = isset($this->groups[$l + 1]) ? $this->groups[$l + 1] : $bar_count;
+                    $end_bar   = isset($this->groups[$l + 1]) ? $this->groups[$l + 1] : $bar_count;
 
                     $ypos = $yneg = 0;
 
-          // find greatest -/+ bar
-          $max_neg_bar = $max_pos_bar = -1;
+                    // find greatest -/+ bar
+                    $max_neg_bar = $max_pos_bar = -1;
                     for ($j = $start_bar; $j < $end_bar; ++$j) {
                         if ($itemlist[$j]->value > 0) {
                             $max_pos_bar = $j;
@@ -89,11 +94,25 @@ class StackedGroupedBarGraph extends StackedBarGraph
                             if ($bar['height'] > 0) {
                                 ++$bars_shown[$j];
 
-                                $show_label = $this->AddDataLabel($j, $bnum, $bar, $item,
-                  $bar['x'], $bar['y'], $bar['width'], $bar['height']);
+                                $show_label = $this->AddDataLabel(
+                                    $j,
+                                    $bnum,
+                                    $bar,
+                                    $item,
+                                    $bar['x'],
+                                    $bar['y'],
+                                    $bar['width'],
+                                    $bar['height']
+                                );
                                 if ($this->show_tooltips) {
-                                    $this->SetTooltip($bar, $item, $j, $item->key, $item->value,
-                    !$this->compat_events && $show_label);
+                                    $this->SetTooltip(
+                                        $bar,
+                                        $item,
+                                        $j,
+                                        $item->key,
+                                        $item->value,
+                                        !$this->compat_events && $show_label
+                                    );
                                 }
                                 if ($this->semantic_classes) {
                                     $bar['class'] = "series{$j}";
@@ -108,28 +127,48 @@ class StackedGroupedBarGraph extends StackedBarGraph
                     if ($this->show_bar_totals) {
                         if ($ypos) {
                             // make a dataset name for stack total
-              $tds = 'totalpos-'.$start_bar;
+                            $tds = 'totalpos-' . $start_bar;
                             $this->Bar($ypos, $bar);
                             if (is_callable($this->bar_total_callback)) {
-                                $bar_total = call_user_func($this->bar_total_callback, $item->key,
-                  $ypos);
+                                $bar_total = call_user_func(
+                                    $this->bar_total_callback,
+                                    $item->key,
+                                    $ypos
+                                );
                             } else {
                                 $bar_total = $ypos;
                             }
-                            $this->AddContentLabel($tds, $bnum, $bar['x'], $bar['y'],
-                $bar['width'], $bar['height'], $bar_total);
+                            $this->AddContentLabel(
+                                $tds,
+                                $bnum,
+                                $bar['x'],
+                                $bar['y'],
+                                $bar['width'],
+                                $bar['height'],
+                                $bar_total
+                            );
                         }
                         if ($yneg) {
-                            $tds = 'totalneg-'.$start_bar;
+                            $tds = 'totalneg-' . $start_bar;
                             $this->Bar($yneg, $bar);
                             if (is_callable($this->bar_total_callback)) {
-                                $bar_total = call_user_func($this->bar_total_callback, $item->key,
-                  $yneg);
+                                $bar_total = call_user_func(
+                                    $this->bar_total_callback,
+                                    $item->key,
+                                    $yneg
+                                );
                             } else {
                                 $bar_total = $yneg;
                             }
-                            $this->AddContentLabel($tds, $bnum, $bar['x'], $bar['y'],
-                $bar['width'], $bar['height'], $bar_total);
+                            $this->AddContentLabel(
+                                $tds,
+                                $bnum,
+                                $bar['x'],
+                                $bar['y'],
+                                $bar['width'],
+                                $bar['height'],
+                                $bar_total
+                            );
                         }
                     }
                 }
@@ -154,95 +193,97 @@ class StackedGroupedBarGraph extends StackedBarGraph
         return $body;
     }
 
-  /**
-   * construct multigraph.
-   */
-  public function Values($values)
-  {
-      parent::Values($values);
-      if (!$this->values->error) {
-          $this->multi_graph = new MultiGraph($this->values, $this->force_assoc,
-        $this->require_integer_keys);
-      }
-  }
-
-  /**
-   * Check that the required options are set and match the data.
-   */
-  protected function CheckValues()
-  {
-      parent::CheckValues();
-      if (empty($this->stack_group)) {
-          throw new Exception('stack_group not set for StackedGroupedBarGraph');
-      }
-
-    // make sure the group details are stored in an array
-    if (!is_array($this->stack_group)) {
-        $this->stack_group = array($this->stack_group);
-    }
-
-    // make the list of groups
-    $datasets = count($this->multi_graph);
-      $this->groups = array(0); // first starts at 0, obviously
-
-    $last_start = 0;
-      foreach ($this->stack_group as $group_start) {
-          if ($group_start <= $last_start) {
-              throw new Exception('Invalid stack_group option');
-          }
-          if ($group_start < $datasets) {
-              $this->groups[] = $group_start;
-          }
-          $last_start = $group_start;
-      }
-
-    // without this check there will be an invalid axis error
-    if (count($this->groups) == 1) {
-        throw new Exception('Too few datasets for grouping');
-    }
-  }
-
-  /**
-   * Returns the maximum (stacked) value.
-   */
-  protected function GetMaxValue()
-  {
-      $max = null;
-      $values = &$this->multi_graph->GetValues();
-
-    // find the max for each group from the MultiGraph's structured data
-    for ($i = 0; $i < count($this->groups); ++$i) {
-        $start = $this->groups[$i];
-        $end = isset($this->groups[$i + 1]) ? $this->groups[$i + 1] - 1 : null;
-        list($junk, $group_max) = $values->GetMinMaxSumValues($start, $end);
-        if (is_null($max) || $group_max > $max) {
-            $max = $group_max;
+    /**
+     * construct multigraph.
+     */
+    public function Values($values)
+    {
+        parent::Values($values);
+        if (!$this->values->error) {
+            $this->multi_graph = new MultiGraph(
+                $this->values, $this->force_assoc,
+                $this->require_integer_keys
+            );
         }
-        $start = $end + 1;
     }
 
-      return $max;
-  }
-
-  /**
-   * Returns the minimum (stacked) value.
-   */
-  protected function GetMinValue()
-  {
-      $min = null;
-      $values = &$this->multi_graph->GetValues();
-
-    // find the min for each group from the MultiGraph's structured data
-    for ($i = 0; $i < count($this->groups); ++$i) {
-        $start = $this->groups[$i];
-        $end = isset($this->groups[$i + 1]) ? $this->groups[$i + 1] - 1 : null;
-        list($group_min) = $values->GetMinMaxSumValues($start, $end);
-        if (is_null($min) || $group_min < $min) {
-            $min = $group_min;
+    /**
+     * Check that the required options are set and match the data.
+     */
+    protected function CheckValues()
+    {
+        parent::CheckValues();
+        if (empty($this->stack_group)) {
+            throw new Exception('stack_group not set for StackedGroupedBarGraph');
         }
-        $start = $end + 1;
+
+        // make sure the group details are stored in an array
+        if (!is_array($this->stack_group)) {
+            $this->stack_group = array($this->stack_group);
+        }
+
+        // make the list of groups
+        $datasets     = count($this->multi_graph);
+        $this->groups = array(0); // first starts at 0, obviously
+
+        $last_start = 0;
+        foreach ($this->stack_group as $group_start) {
+            if ($group_start <= $last_start) {
+                throw new Exception('Invalid stack_group option');
+            }
+            if ($group_start < $datasets) {
+                $this->groups[] = $group_start;
+            }
+            $last_start = $group_start;
+        }
+
+        // without this check there will be an invalid axis error
+        if (count($this->groups) == 1) {
+            throw new Exception('Too few datasets for grouping');
+        }
     }
 
-      return $min;
-  }
+    /**
+     * Returns the maximum (stacked) value.
+     */
+    protected function GetMaxValue()
+    {
+        $max    = null;
+        $values = &$this->multi_graph->GetValues();
+
+        // find the max for each group from the MultiGraph's structured data
+        for ($i = 0; $i < count($this->groups); ++$i) {
+            $start = $this->groups[$i];
+            $end   = isset($this->groups[$i + 1]) ? $this->groups[$i + 1] - 1 : null;
+            list($junk, $group_max) = $values->GetMinMaxSumValues($start, $end);
+            if (is_null($max) || $group_max > $max) {
+                $max = $group_max;
+            }
+            $start = $end + 1;
+        }
+
+        return $max;
+    }
+
+    /**
+     * Returns the minimum (stacked) value.
+     */
+    protected function GetMinValue()
+    {
+        $min    = null;
+        $values = &$this->multi_graph->GetValues();
+
+        // find the min for each group from the MultiGraph's structured data
+        for ($i = 0; $i < count($this->groups); ++$i) {
+            $start = $this->groups[$i];
+            $end   = isset($this->groups[$i + 1]) ? $this->groups[$i + 1] - 1 : null;
+            list($group_min) = $values->GetMinMaxSumValues($start, $end);
+            if (is_null($min) || $group_min < $min) {
+                $min = $group_min;
+            }
+            $start = $end + 1;
+        }
+
+        return $min;
+    }
 }

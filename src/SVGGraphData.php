@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -41,7 +41,7 @@ class SVGGraphData implements Countable, ArrayAccess, Iterator
 
             return;
         }
-        $this->data = $data;
+        $this->data     = $data;
         $this->datasets = count($data);
         if ($force_assoc) {
             $this->assoc = true;
@@ -51,199 +51,209 @@ class SVGGraphData implements Countable, ArrayAccess, Iterator
         }
     }
 
-  /**
-   * Implement Iterator interface to prevent iteration...
-   */
-  private function notIterator()
-  {
-      throw new Exception('Cannot iterate '.__CLASS__);
-  }
+    /**
+     * Implement Iterator interface to prevent iteration...
+     */
+    private function notIterator()
+    {
+        throw new Exception('Cannot iterate ' . __CLASS__);
+    }
+
     public function current()
     {
         $this->notIterator();
     }
+
     public function key()
     {
         $this->notIterator();
     }
+
     public function next()
     {
         $this->notIterator();
     }
+
     public function rewind()
     {
         $this->notIterator();
     }
+
     public function valid()
     {
         $this->notIterator();
     }
 
-  /**
-   * ArrayAccess methods.
-   */
-  public function offsetExists($offset)
-  {
-      return array_key_exists($offset, $this->data);
-  }
+    /**
+     * ArrayAccess methods.
+     */
+    public function offsetExists($offset)
+    {
+        return array_key_exists($offset, $this->data);
+    }
 
     public function offsetGet($offset)
     {
         return $this->iterators[$offset];
     }
 
-  /**
-   * Don't allow writing to the data.
-   */
-  public function offsetSet($offset, $value)
-  {
-      throw new Exception('Read-only');
-  }
+    /**
+     * Don't allow writing to the data.
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new Exception('Read-only');
+    }
+
     public function offsetUnset($offset)
     {
         throw new Exception('Read-only');
     }
 
-  /**
-   * Countable method.
-   */
-  public function count()
-  {
-      return $this->datasets;
-  }
+    /**
+     * Countable method.
+     */
+    public function count()
+    {
+        return $this->datasets;
+    }
 
-  /**
-   * Returns minimum data value for a dataset.
-   */
-  public function GetMinValue($dataset = 0)
-  {
-      if (!isset($this->min_value[$dataset])) {
-          if (count($this->data[$dataset])) {
-              $this->min_value[$dataset] = Graph::min($this->data[$dataset]);
-          } else {
-              $this->min_value[$dataset] = null;
-          }
-      }
+    /**
+     * Returns minimum data value for a dataset.
+     */
+    public function GetMinValue($dataset = 0)
+    {
+        if (!isset($this->min_value[$dataset])) {
+            if (count($this->data[$dataset])) {
+                $this->min_value[$dataset] = Graph::min($this->data[$dataset]);
+            } else {
+                $this->min_value[$dataset] = null;
+            }
+        }
 
-      return $this->min_value[$dataset];
-  }
+        return $this->min_value[$dataset];
+    }
 
-  /**
-   * Returns maximum data value for a dataset.
-   */
-  public function GetMaxValue($dataset = 0)
-  {
-      if (!isset($this->max_value[$dataset])) {
-          if (count($this->data[$dataset])) {
-              $this->max_value[$dataset] = max($this->data[$dataset]);
-          } else {
-              $this->max_value[$dataset] = null;
-          }
-      }
+    /**
+     * Returns maximum data value for a dataset.
+     */
+    public function GetMaxValue($dataset = 0)
+    {
+        if (!isset($this->max_value[$dataset])) {
+            if (count($this->data[$dataset])) {
+                $this->max_value[$dataset] = max($this->data[$dataset]);
+            } else {
+                $this->max_value[$dataset] = null;
+            }
+        }
 
-      return $this->max_value[$dataset];
-  }
+        return $this->max_value[$dataset];
+    }
 
-  /**
-   * Returns the minimum key value.
-   */
-  public function GetMinKey($dataset = 0)
-  {
-      if (!isset($this->min_key[$dataset])) {
-          if (count($this->data[$dataset])) {
-              $this->min_key[$dataset] = $this->AssociativeKeys() ? 0 :
-          min(array_keys($this->data[$dataset]));
-          } else {
-              $this->min_key[$dataset] = null;
-          }
-      }
+    /**
+     * Returns the minimum key value.
+     */
+    public function GetMinKey($dataset = 0)
+    {
+        if (!isset($this->min_key[$dataset])) {
+            if (count($this->data[$dataset])) {
+                $this->min_key[$dataset] = $this->AssociativeKeys()
+                    ? 0
+                    :
+                    min(array_keys($this->data[$dataset]));
+            } else {
+                $this->min_key[$dataset] = null;
+            }
+        }
 
-      return $this->min_key[$dataset];
-  }
+        return $this->min_key[$dataset];
+    }
 
-  /**
-   * Returns the maximum key value.
-   */
-  public function GetMaxKey($dataset = 0)
-  {
-      if (!isset($this->max_key[$dataset])) {
-          if (count($this->data[$dataset])) {
-              $this->max_key[$dataset] = $this->AssociativeKeys() ?
-          count($this->data[$dataset]) - 1 :
-          max(array_keys($this->data[$dataset]));
-          } else {
-              $this->max_key[$dataset] = null;
-          }
-      }
+    /**
+     * Returns the maximum key value.
+     */
+    public function GetMaxKey($dataset = 0)
+    {
+        if (!isset($this->max_key[$dataset])) {
+            if (count($this->data[$dataset])) {
+                $this->max_key[$dataset] = $this->AssociativeKeys()
+                    ?
+                    count($this->data[$dataset]) - 1
+                    :
+                    max(array_keys($this->data[$dataset]));
+            } else {
+                $this->max_key[$dataset] = null;
+            }
+        }
 
-      return $this->max_key[$dataset];
-  }
+        return $this->max_key[$dataset];
+    }
 
-  /**
-   * Returns the key at a given index.
-   */
-  public function GetKey($index, $dataset = 0)
-  {
-      if (!$this->AssociativeKeys()) {
-          return $index;
-      }
+    /**
+     * Returns the key at a given index.
+     */
+    public function GetKey($index, $dataset = 0)
+    {
+        if (!$this->AssociativeKeys()) {
+            return $index;
+        }
 
-    // round index to nearest integer, or PHP will floor() it
-    $index = (int) round($index);
-      if ($index >= 0) {
-          $slice = array_slice($this->data[$dataset], $index, 1, true);
-      // use foreach to get key and value
-      foreach ($slice as $k => $v) {
-          return $k;
-      }
-      }
+        // round index to nearest integer, or PHP will floor() it
+        $index = (int)round($index);
+        if ($index >= 0) {
+            $slice = array_slice($this->data[$dataset], $index, 1, true);
+            // use foreach to get key and value
+            foreach ($slice as $k => $v) {
+                return $k;
+            }
+        }
 
-      return;
-  }
+        return;
+    }
 
-  /**
-   * Returns TRUE if the keys are associative.
-   */
-  public function AssociativeKeys()
-  {
-      if (!is_null($this->assoc)) {
-          return $this->assoc;
-      }
+    /**
+     * Returns TRUE if the keys are associative.
+     */
+    public function AssociativeKeys()
+    {
+        if (!is_null($this->assoc)) {
+            return $this->assoc;
+        }
 
-      foreach (array_keys($this->data[0]) as $k) {
-          if (!is_integer($k)) {
-              return ($this->assoc = true);
-          }
-      }
+        foreach (array_keys($this->data[0]) as $k) {
+            if (!is_integer($k)) {
+                return ($this->assoc = true);
+            }
+        }
 
-      return ($this->assoc = false);
-  }
+        return ($this->assoc = false);
+    }
 
-  /**
-   * Returns the number of data items.
-   */
-  public function ItemsCount($dataset = 0)
-  {
-      if ($dataset < 0) {
-          $dataset = 0;
-      }
+    /**
+     * Returns the number of data items.
+     */
+    public function ItemsCount($dataset = 0)
+    {
+        if ($dataset < 0) {
+            $dataset = 0;
+        }
 
-      return count($this->data[$dataset]);
-  }
+        return count($this->data[$dataset]);
+    }
 
-  /**
-   * Returns the min and max sum values.
-   */
-  public function GetMinMaxSumValues($start = 0, $end = null)
-  {
-      if ($start != 0 || (!is_null($end) && $end != 0)) {
-          throw new Exception('Dataset not found');
-      }
+    /**
+     * Returns the min and max sum values.
+     */
+    public function GetMinMaxSumValues($start = 0, $end = null)
+    {
+        if ($start != 0 || (!is_null($end) && $end != 0)) {
+            throw new Exception('Dataset not found');
+        }
 
-    // structured data is used for multi-data, so just
-    // return the min and max
-    return array($this->GetMinValue(), $this->GetMaxValue());
-  }
+        // structured data is used for multi-data, so just
+        // return the min and max
+        return array($this->GetMinValue(), $this->GetMaxValue());
+    }
 }
 
 /**
@@ -259,17 +269,17 @@ class SVGGraphDataIterator implements Iterator
     public function __construct(&$data, $dataset)
     {
         $this->dataset = $dataset;
-        $this->data = &$data;
-        $this->count = count($data[$dataset]);
+        $this->data    = &$data;
+        $this->count   = count($data[$dataset]);
     }
 
-  /**
-   * Iterator methods.
-   */
-  public function current()
-  {
-      return $this->GetItemByIndex($this->position);
-  }
+    /**
+     * Iterator methods.
+     */
+    public function current()
+    {
+        return $this->GetItemByIndex($this->position);
+    }
 
     public function key()
     {
@@ -293,31 +303,31 @@ class SVGGraphDataIterator implements Iterator
         return $this->position < $this->count;
     }
 
-  /**
-   * Returns an item by index.
-   */
-  public function GetItemByIndex($index)
-  {
-      $slice = array_slice($this->data[$this->dataset], $index, 1, true);
-    // use foreach to get key and value
-    foreach ($slice as $k => $v) {
-        return new SVGGraphDataItem($k, $v);
+    /**
+     * Returns an item by index.
+     */
+    public function GetItemByIndex($index)
+    {
+        $slice = array_slice($this->data[$this->dataset], $index, 1, true);
+        // use foreach to get key and value
+        foreach ($slice as $k => $v) {
+            return new SVGGraphDataItem($k, $v);
+        }
+
+        return;
     }
 
-      return;
-  }
+    /**
+     * Returns an item by its key.
+     */
+    public function GetItemByKey($key)
+    {
+        if (isset($this->data[$this->dataset][$key])) {
+            return new SVGGraphDataItem($key, $this->data[$this->dataset][$key]);
+        }
 
-  /**
-   * Returns an item by its key.
-   */
-  public function GetItemByKey($key)
-  {
-      if (isset($this->data[$this->dataset][$key])) {
-          return new SVGGraphDataItem($key, $this->data[$this->dataset][$key]);
-      }
-
-      return;
-  }
+        return;
+    }
 }
 
 /**
@@ -330,15 +340,15 @@ class SVGGraphDataItem
 
     public function __construct($key, $value)
     {
-        $this->key = $key;
+        $this->key   = $key;
         $this->value = $value;
     }
 
-  /**
-   * Returns NULL because standard data doesn't support extra fields.
-   */
-  public function Data($field)
-  {
-      return;
-  }
+    /**
+     * Returns NULL because standard data doesn't support extra fields.
+     */
+    public function Data($field)
+    {
+        return;
+    }
 }

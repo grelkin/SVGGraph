@@ -11,10 +11,11 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 /**
  * For more information, please contact <graham@goat1000.com>.
  */
@@ -29,52 +30,52 @@ class SVGGraphJavascript
     protected $fader_enabled = false;
     protected $clickshow_enabled = false;
 
-  /**
-   * Constructor takes array of settings and graph instance as arguments.
-   */
-  public function __construct(&$settings, &$graph)
-  {
-      $this->settings = $settings;
-      $this->graph = $graph;
-  }
+    /**
+     * Constructor takes array of settings and graph instance as arguments.
+     */
+    public function __construct(&$settings, &$graph)
+    {
+        $this->settings = $settings;
+        $this->graph    = $graph;
+    }
 
-  /**
-   * Return the settings as properties.
-   */
-  public function __get($name)
-  {
-      $this->{$name} = isset($this->settings[$name]) ? $this->settings[$name] : null;
+    /**
+     * Return the settings as properties.
+     */
+    public function __get($name)
+    {
+        $this->{$name} = isset($this->settings[$name]) ? $this->settings[$name] : null;
 
-      return $this->{$name};
-  }
+        return $this->{$name};
+    }
 
-  /**
-   * Adds a javascript function.
-   */
-  public function AddFunction($name)
-  {
-      if (isset($this->functions[$name])) {
-          return true;
-      }
+    /**
+     * Adds a javascript function.
+     */
+    public function AddFunction($name)
+    {
+        if (isset($this->functions[$name])) {
+            return true;
+        }
 
-      $simple_functions = array(
-      'setattr' => "function setattr(i,a,v){i.setAttributeNS(null,a,v);return v}\n",
-      'getE' => "function getE(i){return document.getElementById(i)}\n",
-      'newtext' => "function newtext(c){return document.createTextNode(c)}\n",
-    );
+        $simple_functions = array(
+            'setattr' => "function setattr(i,a,v){i.setAttributeNS(null,a,v);return v}\n",
+            'getE'    => "function getE(i){return document.getElementById(i)}\n",
+            'newtext' => "function newtext(c){return document.createTextNode(c)}\n",
+        );
 
-      if (isset($simple_functions[$name])) {
-          $this->InsertFunction($name, $simple_functions[$name]);
+        if (isset($simple_functions[$name])) {
+            $this->InsertFunction($name, $simple_functions[$name]);
 
-          return;
-      }
+            return;
+        }
 
-      $namespace = $this->namespace ? 'svg:' : '';
+        $namespace = $this->namespace ? 'svg:' : '';
 
-      switch ($name) {
-    case 'textFit' :
-      $this->AddFunction('setattr');
-      $fn = <<<JAVASCRIPT
+        switch ($name) {
+            case 'textFit' :
+                $this->AddFunction('setattr');
+                $fn = <<<JAVASCRIPT
 function textFit(evt,x,y,w,h) {
   var t = evt.target;
   var aw = t.getBBox().width;
@@ -91,18 +92,20 @@ function textFit(evt,x,y,w,h) {
   setattr(t, 'transform', trans);
 }\n
 JAVASCRIPT;
-      break;
+                break;
 
-    // fadeIn, fadeOut are shortcuts to fader function
-    case 'fadeIn' : $name = 'fader';
-    case 'fadeOut' : $name = 'fader';
-    case 'fader' :
-      $this->AddFunction('getE');
-      $this->AddFunction('setattr');
-      $this->AddFunction('textAttr');
-      $this->InsertVariable('faders', '', 1); // insert empty object
-      $this->InsertVariable('fader_itimer', null);
-      $fn = <<<JAVASCRIPT
+            // fadeIn, fadeOut are shortcuts to fader function
+            case 'fadeIn' :
+                $name = 'fader';
+            case 'fadeOut' :
+                $name = 'fader';
+            case 'fader' :
+                $this->AddFunction('getE');
+                $this->AddFunction('setattr');
+                $this->AddFunction('textAttr');
+                $this->InsertVariable('faders', '', 1); // insert empty object
+                $this->InsertVariable('fader_itimer', null);
+                $fn = <<<JAVASCRIPT
 function fadeIn(e,i,s){fader(e,i,0,1,s)}
 function fadeOut(e,i,s){fader(e,i,1,0,s)}
 function fader(e,i,o1,o2,s) {
@@ -124,11 +127,11 @@ function fade() {
   }
 }\n
 JAVASCRIPT;
-      break;
+                break;
 
-    case 'newel' :
-      $this->AddFunction('setattr');
-      $fn = <<<JAVASCRIPT
+            case 'newel' :
+                $this->AddFunction('setattr');
+                $fn = <<<JAVASCRIPT
 function newel(e,a){
   var ns='http://www.w3.org/2000/svg', ne=document.createElementNS(ns,e),i;
   for(i in a)
@@ -136,15 +139,15 @@ function newel(e,a){
   return ne;
 }\n
 JAVASCRIPT;
-      break;
-    case 'showhide' :
-      $this->AddFunction('setattr');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'showhide' :
+                $this->AddFunction('setattr');
+                $fn = <<<JAVASCRIPT
 function showhide(e,h){setattr(e,'visibility',h?'visible':'hidden');}\n
 JAVASCRIPT;
-      break;
-    case 'finditem' :
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'finditem' :
+                $fn = <<<JAVASCRIPT
 function finditem(e,list) {
   var l = e.target.correspondingUseElement || e.target, t;
   while(!t && l.parentNode) {
@@ -154,22 +157,22 @@ function finditem(e,list) {
   return t;
 }\n
 JAVASCRIPT;
-      break;
-    case 'tooltip' :
-      $this->AddFunction('getE');
-      $this->AddFunction('setattr');
-      $this->AddFunction('newel');
-      $this->AddFunction('showhide');
-      $this->AddFunction('svgNode');
-      $this->AddFunction('svgCursorCoords');
-      $this->InsertVariable('tooltipOn', '');
-      $max_x = $this->graph->width - $this->tooltip_stroke_width;
-      $max_y = $this->graph->height - $this->tooltip_stroke_width;
-      if (is_numeric($this->tooltip_shadow_opacity)) {
-          $ttoffs = (2 - $this->tooltip_stroke_width / 2);
-          $max_x -= $ttoffs;
-          $max_y -= $ttoffs;
-          $shadow = <<<JAVASCRIPT
+                break;
+            case 'tooltip' :
+                $this->AddFunction('getE');
+                $this->AddFunction('setattr');
+                $this->AddFunction('newel');
+                $this->AddFunction('showhide');
+                $this->AddFunction('svgNode');
+                $this->AddFunction('svgCursorCoords');
+                $this->InsertVariable('tooltipOn', '');
+                $max_x = $this->graph->width - $this->tooltip_stroke_width;
+                $max_y = $this->graph->height - $this->tooltip_stroke_width;
+                if (is_numeric($this->tooltip_shadow_opacity)) {
+                    $ttoffs = (2 - $this->tooltip_stroke_width / 2);
+                    $max_x -= $ttoffs;
+                    $max_y -= $ttoffs;
+                    $shadow = <<<JAVASCRIPT
     shadow = newel('rect',{
       fill: '#000',
       opacity: {$this->tooltip_shadow_opacity},
@@ -180,12 +183,12 @@ JAVASCRIPT;
     });
     tt.appendChild(shadow);
 JAVASCRIPT;
-      } else {
-          $shadow = '';
-      }
-      $dpad = 2 * $this->tooltip_padding;
-      $back_colour = $this->graph->ParseColour($this->tooltip_back_colour);
-      $fn = <<<JAVASCRIPT
+                } else {
+                    $shadow = '';
+                }
+                $dpad        = 2 * $this->tooltip_padding;
+                $back_colour = $this->graph->ParseColour($this->tooltip_back_colour);
+                $fn          = <<<JAVASCRIPT
 function tooltip(e,callback,on,param) {
   var tt = getE('tooltip'), rect = getE('ttrect'), shadow = getE('ttshdw'),
     offset = {$this->tooltip_offset}, pos = svgCursorCoords(e),
@@ -238,16 +241,16 @@ function tooltip(e,callback,on,param) {
   tooltipOn = on ? 1 : 0;
 }\n
 JAVASCRIPT;
-      break;
+                break;
 
-    case 'texttt' :
-      $this->AddFunction('getE');
-      $this->AddFunction('setattr');
-      $this->AddFunction('newel');
-      $this->AddFunction('newtext');
-      $tty = $this->tooltip_font_size + $this->tooltip_padding;
-      $ttypx = "{$tty}px";
-      $fn = <<<JAVASCRIPT
+            case 'texttt' :
+                $this->AddFunction('getE');
+                $this->AddFunction('setattr');
+                $this->AddFunction('newel');
+                $this->AddFunction('newtext');
+                $tty   = $this->tooltip_font_size + $this->tooltip_padding;
+                $ttypx = "{$tty}px";
+                $fn    = <<<JAVASCRIPT
 function texttt(e,tt,on,t){
   var ttt = getE('tooltiptext'), lines, i, ts, xpos;
   if(on) {
@@ -276,12 +279,12 @@ function texttt(e,tt,on,t){
   return ttt;
 }\n
 JAVASCRIPT;
-      break;
-    case 'ttEvent' :
-      $this->AddFunction('finditem');
-      $this->AddFunction('init');
-      $this->InsertVariable('initfns', null, 'ttEvt');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'ttEvent' :
+                $this->AddFunction('finditem');
+                $this->AddFunction('init');
+                $this->InsertVariable('initfns', null, 'ttEvt');
+                $fn = <<<JAVASCRIPT
 function ttEvt() {
   document.addEventListener && document.addEventListener('mousemove',
     function(e) {
@@ -291,13 +294,13 @@ function ttEvt() {
     },false);
 }\n
 JAVASCRIPT;
-      break;
-    case 'popFront' :
-      $this->AddFunction('getE');
-      $this->AddFunction('init');
-      $this->AddFunction('finditem');
-      $this->InsertVariable('initfns', null, 'popFrontInit');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'popFront' :
+                $this->AddFunction('getE');
+                $this->AddFunction('init');
+                $this->AddFunction('finditem');
+                $this->InsertVariable('initfns', null, 'popFrontInit');
+                $fn = <<<JAVASCRIPT
 function popFrontInit() {
   var c, c1, e;
   for(c in popfronts) {
@@ -317,9 +320,9 @@ function popFrontInit() {
   }
 }\n
 JAVASCRIPT;
-      break;
-    case 'fading' :
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'fading' :
+                $fn = <<<JAVASCRIPT
 function fading(id) {
   var c;
   for(c in fades) {
@@ -329,18 +332,18 @@ function fading(id) {
   return false;
 }\n
 JAVASCRIPT;
-      break;
-    case 'clickShowEvent' :
-      if ($this->fader_enabled) {
-          return $this->FadeAndClick();
-      }
+                break;
+            case 'clickShowEvent' :
+                if ($this->fader_enabled) {
+                    return $this->FadeAndClick();
+                }
 
-      $this->AddFunction('getE');
-      $this->AddFunction('init');
-      $this->AddFunction('finditem');
-      $this->AddFunction('setattr');
-      $this->InsertVariable('initfns', null, 'clickShowInit');
-      $fn = <<<JAVASCRIPT
+                $this->AddFunction('getE');
+                $this->AddFunction('init');
+                $this->AddFunction('finditem');
+                $this->AddFunction('setattr');
+                $this->InsertVariable('initfns', null, 'clickShowInit');
+                $fn = <<<JAVASCRIPT
 function clickShowInit() {
   var c, c1, e;
   for(c in clickElements) {
@@ -357,18 +360,18 @@ function clickShowInit() {
   }
 }\n
 JAVASCRIPT;
-      break;
-    case 'fadeEvent' :
-      if ($this->clickshow_enabled) {
-          return $this->FadeAndClick();
-      }
+                break;
+            case 'fadeEvent' :
+                if ($this->clickshow_enabled) {
+                    return $this->FadeAndClick();
+                }
 
-      $this->AddFunction('getE');
-      $this->AddFunction('init');
-      $this->AddFunction('setattr');
-      $this->AddFunction('textAttr');
-      $this->InsertVariable('initfns', null, 'fade');
-      $fn = <<<JAVASCRIPT
+                $this->AddFunction('getE');
+                $this->AddFunction('init');
+                $this->AddFunction('setattr');
+                $this->AddFunction('textAttr');
+                $this->InsertVariable('initfns', null, 'fade');
+                $fn = <<<JAVASCRIPT
 function fade() {
   var f,f1,e,o;
   for(f in fades) {
@@ -384,12 +387,12 @@ function fade() {
   setTimeout(fade,50);
 }\n
 JAVASCRIPT;
-      break;
-    case 'fadeEventIn' :
-      $this->AddFunction('init');
-      $this->AddFunction('finditem');
-      $this->InsertVariable('initfns', null, 'fiEvt');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'fadeEventIn' :
+                $this->AddFunction('init');
+                $this->AddFunction('finditem');
+                $this->InsertVariable('initfns', null, 'fiEvt');
+                $fn = <<<JAVASCRIPT
 function fiEvt() {
   var f;
   document.addEventListener && document.addEventListener('mouseover',
@@ -399,12 +402,12 @@ function fiEvt() {
     },false);
 }\n
 JAVASCRIPT;
-      break;
-    case 'fadeEventOut' :
-      $this->AddFunction('init');
-      $this->AddFunction('finditem');
-      $this->InsertVariable('initfns', null, 'foEvt');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'fadeEventOut' :
+                $this->AddFunction('init');
+                $this->AddFunction('finditem');
+                $this->InsertVariable('initfns', null, 'foEvt');
+                $fn = <<<JAVASCRIPT
 function foEvt() {
   document.addEventListener && document.addEventListener('mouseout',
     function(e) {
@@ -413,14 +416,14 @@ function foEvt() {
     },false);
 }\n
 JAVASCRIPT;
-      break;
-    case 'duplicate' :
-      $this->AddFunction('getE');
-      $this->AddFunction('newel');
-      $this->AddFunction('init');
-      $this->AddFunction('setattr');
-      $this->InsertVariable('initfns', null, 'initDups');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'duplicate' :
+                $this->AddFunction('getE');
+                $this->AddFunction('newel');
+                $this->AddFunction('init');
+                $this->AddFunction('setattr');
+                $this->InsertVariable('initfns', null, 'initDups');
+                $fn = <<<JAVASCRIPT
 function duplicate(f,t) {
   var e = getE(f), g, a, p = e && e.parentNode, m;
   if(e) {
@@ -446,9 +449,9 @@ function initDups() {
     duplicate(d,dups[d]);
 }\n
 JAVASCRIPT;
-      break;
-    case 'svgNode' :
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'svgNode' :
+                $fn = <<<JAVASCRIPT
 function svgNode(e) {
   var d = e.target.correspondingUseElement || e.target, nn = '{$namespace}svg';
   while(d.parentNode && d.nodeName != nn)
@@ -456,10 +459,10 @@ function svgNode(e) {
   return d.nodeName == nn ? d : null;
 }\n
 JAVASCRIPT;
-      break;
-    case 'svgCursorCoords' :
-      $this->AddFunction('svgNode');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'svgCursorCoords' :
+                $this->AddFunction('svgNode');
+                $fn = <<<JAVASCRIPT
 function svgCursorCoords(e) {
   var d = svgNode(e), pt;
   if(!d || !d.createSVGPoint || !d.getScreenCTM) {
@@ -470,13 +473,13 @@ function svgCursorCoords(e) {
   return [pt.x,pt.y];
 }\n
 JAVASCRIPT;
-      break;
-    case 'autoHide' :
-      $this->AddFunction('init');
-      $this->AddFunction('getE');
-      $this->AddFunction('setattr');
-      $this->InsertVariable('initfns', null, 'autoHide');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'autoHide' :
+                $this->AddFunction('init');
+                $this->AddFunction('getE');
+                $this->AddFunction('setattr');
+                $this->InsertVariable('initfns', null, 'autoHide');
+                $fn = <<<JAVASCRIPT
 function autoHide() {
   if(document.addEventListener) {
     for(var a in autohide)
@@ -490,19 +493,19 @@ function autoHide() {
   }
 }\n
 JAVASCRIPT;
-      break;
-    case 'chEvt' :
-      $this->AddFunction('init');
-      $this->InsertVariable('initfns', null, 'chEvt');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'chEvt' :
+                $this->AddFunction('init');
+                $this->InsertVariable('initfns', null, 'chEvt');
+                $fn = <<<JAVASCRIPT
 function chEvt() {
   document.addEventListener && document.addEventListener('mousemove',
     crosshairs, false);
 }\n
 JAVASCRIPT;
-      break;
-    case 'getData' :
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'getData' :
+                $fn = <<<JAVASCRIPT
 function getData(doc,ename) {
   var ns = 'http://www.goat1000.com/svggraph', element;
   element = doc.getElementsByTagName('svggraph:' + ename);
@@ -513,10 +516,10 @@ function getData(doc,ename) {
   return element[0];
 }\n
 JAVASCRIPT;
-      break;
-    case 'fitRect' :
-      $this->AddFunction('setattr');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'fitRect' :
+                $this->AddFunction('setattr');
+                $fn = <<<JAVASCRIPT
 function fitRect(rect,brect,pad) {
   var bw = Math.ceil(brect.width + pad + pad),
     bh = Math.ceil(brect.height + pad + pad);
@@ -526,40 +529,40 @@ function fitRect(rect,brect,pad) {
   setattr(rect, 'height', bh + 'px');
 }\n
 JAVASCRIPT;
-      break;
-    case 'textAttr' :
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'textAttr' :
+                $fn = <<<JAVASCRIPT
 function textAttr(e,a) {
   var s = e.getAttributeNS(null,a);
   return s ? s : '';
 }\n
 JAVASCRIPT;
-      break;
-    case 'showCoords' :
-      $this->AddFunction('getE');
-      $this->AddFunction('newel');
-      $this->AddFunction('newtext');
-      $this->AddFunction('getData');
-      $this->AddFunction('showhide');
-      $this->AddFunction('fitRect');
-      $this->AddFunction('textAttr');
-      $yb = "textAttr(ti,'unitsby') + ";
-      $ya = " + textAttr(ti,'unitsy')";
-      $xb = "textAttr(ti,'unitsbx') + ";
-      $xa = " + textAttr(ti,'unitsx')";
-      $text_format = "{$xb}x1.toFixed(xp){$xa} + ', ' + {$yb}y1.toFixed(yp){$ya}";
-      if (!$this->crosshairs_show_h) {
-          $text_format = "{$xb}x1.toFixed(xp){$xa}";
-      } elseif (!$this->crosshairs_show_v) {
-          $text_format = "{$yb}y1.toFixed(yp){$ya}";
-      }
-      $font_size = max(3, (int) $this->crosshairs_text_font_size);
-      $pad = max(0, (int) $this->crosshairs_text_padding);
-      $space = max(0, (int) $this->crosshairs_text_space);
-      // calculate these here to save doing it in JS
-      $pad_space = $pad + $space;
-      $space2 = $space * 2;
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'showCoords' :
+                $this->AddFunction('getE');
+                $this->AddFunction('newel');
+                $this->AddFunction('newtext');
+                $this->AddFunction('getData');
+                $this->AddFunction('showhide');
+                $this->AddFunction('fitRect');
+                $this->AddFunction('textAttr');
+                $yb          = "textAttr(ti,'unitsby') + ";
+                $ya          = " + textAttr(ti,'unitsy')";
+                $xb          = "textAttr(ti,'unitsbx') + ";
+                $xa          = " + textAttr(ti,'unitsx')";
+                $text_format = "{$xb}x1.toFixed(xp){$xa} + ', ' + {$yb}y1.toFixed(yp){$ya}";
+                if (!$this->crosshairs_show_h) {
+                    $text_format = "{$xb}x1.toFixed(xp){$xa}";
+                } elseif (!$this->crosshairs_show_v) {
+                    $text_format = "{$yb}y1.toFixed(yp){$ya}";
+                }
+                $font_size = max(3, (int)$this->crosshairs_text_font_size);
+                $pad       = max(0, (int)$this->crosshairs_text_padding);
+                $space     = max(0, (int)$this->crosshairs_text_space);
+                // calculate these here to save doing it in JS
+                $pad_space = $pad + $space;
+                $space2    = $space * 2;
+                $fn        = <<<JAVASCRIPT
 function showCoords(de,x,y,bb,on) {
   var gx = getData(de, 'gridx'), gy = getData(de, 'gridy'),
     textList = getData(de,'chtext'), group, i, x1, y1, xz, yz, xp, yp,
@@ -615,21 +618,21 @@ function showCoords(de,x,y,bb,on) {
   }
 }\n
 JAVASCRIPT;
-      break;
-    case 'crosshairs' :
-      $this->AddFunction('chEvt');
-      $this->AddFunction('setattr');
-      $this->AddFunction('svgNode');
-      $this->AddFunction('svgCursorCoords');
-      $this->AddFunction('showhide');
-      $show_text = '';
-      if ($this->crosshairs_show_text) {
-          $this->AddFunction('showCoords');
-          $show_text = 'showCoords(de, x - bb.x, y - bb.y, bb, on);';
-      }
-      $show_x = $this->crosshairs_show_h ? 'showhide(xc, on);' : '';
-      $show_y = $this->crosshairs_show_v ? 'showhide(yc, on);' : '';
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'crosshairs' :
+                $this->AddFunction('chEvt');
+                $this->AddFunction('setattr');
+                $this->AddFunction('svgNode');
+                $this->AddFunction('svgCursorCoords');
+                $this->AddFunction('showhide');
+                $show_text = '';
+                if ($this->crosshairs_show_text) {
+                    $this->AddFunction('showCoords');
+                    $show_text = 'showCoords(de, x - bb.x, y - bb.y, bb, on);';
+                }
+                $show_x = $this->crosshairs_show_h ? 'showhide(xc, on);' : '';
+                $show_y = $this->crosshairs_show_v ? 'showhide(yc, on);' : '';
+                $fn     = <<<JAVASCRIPT
 function crosshairs(e) {
   var de = svgNode(e), pos = svgCursorCoords(e), xc, yc, grid, bb, on, x, y;
   if(!de)
@@ -652,12 +655,12 @@ function crosshairs(e) {
   {$show_y}
 }\n
 JAVASCRIPT;
-      break;
-    case 'dragOver' :
-      $this->AddFunction('getE');
-      $this->AddFunction('svgCursorCoords');
-      $this->AddFunction('setattr');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'dragOver' :
+                $this->AddFunction('getE');
+                $this->AddFunction('svgCursorCoords');
+                $this->AddFunction('setattr');
+                $fn = <<<JAVASCRIPT
 function dragOver(e,el) {
   var t = getE(el), d;
   if(t && t.dragging) {
@@ -672,11 +675,11 @@ function dragOver(e,el) {
   }
 }\n
 JAVASCRIPT;
-      break;
-    case 'dragStart' :
-      $this->AddFunction('getE');
-      $this->AddFunction('newel');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'dragStart' :
+                $this->AddFunction('getE');
+                $this->AddFunction('newel');
+                $fn = <<<JAVASCRIPT
 function dragStart(e,el) {
   var t = getE(el), m;
   var pos = svgCursorCoords(e);
@@ -693,24 +696,24 @@ function dragStart(e,el) {
   return false;
 }\n
 JAVASCRIPT;
-      break;
-    case 'dragEnd' :
-      $this->AddFunction('getE');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'dragEnd' :
+                $this->AddFunction('getE');
+                $fn = <<<JAVASCRIPT
 function dragEnd(e,el) {
   getE(el).dragging = null;
 }\n
 JAVASCRIPT;
-      break;
-    case 'dragEvent' :
-      $this->AddFunction('init');
-      $this->AddFunction('newel');
-      $this->AddFunction('getE');
-      $this->AddFunction('setattr');
-      $this->AddFunction('finditem');
-      $this->AddFunction('svgCursorCoords');
-      $this->InsertVariable('initfns', null, 'initDrag');
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'dragEvent' :
+                $this->AddFunction('init');
+                $this->AddFunction('newel');
+                $this->AddFunction('getE');
+                $this->AddFunction('setattr');
+                $this->AddFunction('finditem');
+                $this->AddFunction('svgCursorCoords');
+                $this->InsertVariable('initfns', null, 'initDrag');
+                $fn = <<<JAVASCRIPT
 function initDrag() {
   var d, e;
   if(document.addEventListener) {
@@ -759,10 +762,10 @@ function initDrag() {
   }
 }\n
 JAVASCRIPT;
-      break;
-    case 'init' :
-      $this->onload = true;
-      $fn = <<<JAVASCRIPT
+                break;
+            case 'init' :
+                $this->onload = true;
+                $fn           = <<<JAVASCRIPT
 function init() {
   if(!document.addEventListener || !initfns)
     return;
@@ -771,104 +774,110 @@ function init() {
   initfns = [];
 }\n
 JAVASCRIPT;
-      break;
+                break;
 
-    default :
-      // Trying to add a function that doesn't exist?
-      throw new Exception("Unknown function '$name'");
+            default :
+                // Trying to add a function that doesn't exist?
+                throw new Exception("Unknown function '$name'");
+        }
+
+        $this->InsertFunction($name, $fn);
     }
 
-      $this->InsertFunction($name, $fn);
-  }
+    /**
+     * Inserts a Javascript function into the list.
+     */
+    public function InsertFunction($name, $fn)
+    {
+        $this->functions[$name] = $fn;
+    }
 
-  /**
-   * Inserts a Javascript function into the list.
-   */
-  public function InsertFunction($name, $fn)
-  {
-      $this->functions[$name] = $fn;
-  }
+    /**
+     * Convert hex from regex matched entity to javascript escape sequence.
+     */
+    public static function hex2js($m)
+    {
+        return sprintf('\u%04x', base_convert($m[1], 16, 10));
+    }
 
-  /**
-   * Convert hex from regex matched entity to javascript escape sequence.
-   */
-  public static function hex2js($m)
-  {
-      return sprintf('\u%04x', base_convert($m[1], 16, 10));
-  }
-
-  /**
-   * Convert decimal from regex matched entity to javascript escape sequence.
-   */
-  public static function dec2js($m)
-  {
-      return sprintf('\u%04x', $m[1]);
-  }
+    /**
+     * Convert decimal from regex matched entity to javascript escape sequence.
+     */
+    public static function dec2js($m)
+    {
+        return sprintf('\u%04x', $m[1]);
+    }
 
     public static function ReEscape($string)
     {
         // convert XML char entities to JS unicode
-    $string = preg_replace_callback('/&#x([a-f0-9]+);/',
-      'SVGGraphJavascript::hex2js', $string);
-        $string = preg_replace_callback('/&#([0-9]+);/',
-      'SVGGraphJavascript::dec2js', $string);
+        $string = preg_replace_callback(
+            '/&#x([a-f0-9]+);/',
+            'SVGGraphJavascript::hex2js',
+            $string
+        );
+        $string = preg_replace_callback(
+            '/&#([0-9]+);/',
+            'SVGGraphJavascript::dec2js',
+            $string
+        );
 
         return $string;
     }
 
-  /**
-   * Adds a Javascript variable
-   * - use $value:$more for assoc
-   * - use NULL:$more for array.
-   */
-  public function InsertVariable($var, $value, $more = null, $quote = true)
-  {
-      $q = $quote ? "'" : '';
-      if (is_null($more)) {
-          $this->variables[$var] = $q.$this->ReEscape($value).$q;
-      } elseif (is_null($value)) {
-          $this->variables[$var][] = $q.$this->ReEscape($more).$q;
-      } else {
-          $this->variables[$var][$value] = $q.$this->ReEscape($more).$q;
-      }
-  }
+    /**
+     * Adds a Javascript variable
+     * - use $value:$more for assoc
+     * - use NULL:$more for array.
+     */
+    public function InsertVariable($var, $value, $more = null, $quote = true)
+    {
+        $q = $quote ? "'" : '';
+        if (is_null($more)) {
+            $this->variables[$var] = $q . $this->ReEscape($value) . $q;
+        } elseif (is_null($value)) {
+            $this->variables[$var][] = $q . $this->ReEscape($more) . $q;
+        } else {
+            $this->variables[$var][$value] = $q . $this->ReEscape($more) . $q;
+        }
+    }
 
-  /**
-   * Insert a comment into the Javascript section - handy for debugging!
-   */
-  public function InsertComment($details)
-  {
-      $this->comments[] = $details;
-  }
+    /**
+     * Insert a comment into the Javascript section - handy for debugging!
+     */
+    public function InsertComment($details)
+    {
+        $this->comments[] = $details;
+    }
 
-  /**
-   * Adds an inline event handler to an element's array.
-   */
-  public function AddEventHandler(&$array, $evt, $code)
-  {
-      if (isset($array[$evt])) {
-          $array[$evt] .= ';'.$code;
-      } else {
-          $array[$evt] = $code;
-      }
-  }
+    /**
+     * Adds an inline event handler to an element's array.
+     */
+    public function AddEventHandler(&$array, $evt, $code)
+    {
+        if (isset($array[$evt])) {
+            $array[$evt] .= ';' . $code;
+        } else {
+            $array[$evt] = $code;
+        }
+    }
 
-  /**
-   * Fade and click at the same time requires different functions.
-   */
-  private function FadeAndClick()
-  {
-      $this->AddFunction('getE');
-      $this->AddFunction('init');
-      $this->AddFunction('finditem');
-      $this->AddFunction('fading');
-      $this->AddFunction('textAttr');
-      $this->AddFunction('setattr');
-      $this->InsertVariable('initfns', null, 'clickShowInit');
-      $this->InsertVariable('initfns', null, 'fade');
-      $this->variables['initfns'] = array_unique($this->variables['initfns']);
+    /**
+     * Fade and click at the same time requires different functions.
+     */
+    private function FadeAndClick()
+    {
+        $this->AddFunction('getE');
+        $this->AddFunction('init');
+        $this->AddFunction('finditem');
+        $this->AddFunction('fading');
+        $this->AddFunction('textAttr');
+        $this->AddFunction('setattr');
+        $this->InsertVariable('initfns', null, 'clickShowInit');
+        $this->InsertVariable('initfns', null, 'fade');
+        $this->variables['initfns'] = array_unique($this->variables['initfns']);
 
-      $fn = <<<JAVASCRIPT
+        $fn = <<<JAVASCRIPT
 function clickShowInit() {
   var c, c1, e;
   for(c in clickElements) {
@@ -887,9 +896,9 @@ function clickShowInit() {
   }
 }\n
 JAVASCRIPT;
-      $this->InsertFunction('clickShowEvent', $fn);
+        $this->InsertFunction('clickShowEvent', $fn);
 
-      $fn = <<<JAVASCRIPT
+        $fn = <<<JAVASCRIPT
 function fade() {
   var f,f1,e,o;
   for(f in fades) {
@@ -905,236 +914,279 @@ function fade() {
   setTimeout(fade,50);
 }\n
 JAVASCRIPT;
-      $this->InsertFunction('fadeEvent', $fn);
-  }
+        $this->InsertFunction('fadeEvent', $fn);
+    }
 
-  /**
-   * Sets the tooltip for an element.
-   */
-  public function SetTooltip(&$element, $text, $duplicate = false)
-  {
-      $this->AddFunction('tooltip');
-      $this->AddFunction('texttt');
-      if ($this->compat_events) {
-          $this->AddEventHandler($element, 'onmousemove',
-        "tooltip(evt,texttt,true,'$text')");
-          $this->AddEventHandler($element, 'onmouseout',
-        "tooltip(evt,texttt,false,'')");
-      } else {
-          if (!isset($element['id'])) {
-              $element['id'] = $this->graph->NewID();
-          }
-          $this->AddFunction('ttEvent');
-          $this->InsertVariable('tips', $element['id'], $text);
-      }
-      if ($duplicate) {
-          if (!isset($element['id'])) {
-              $element['id'] = $this->graph->NewID();
-          }
-          $this->AddOverlay($element['id'], $this->graph->NewID());
-      }
-  }
-
-  /**
-   * Sets click show/hide for an element
-   * If using with fading, this must be used first.
-   */
-  public function SetClickShow(&$element, $target, $hidden, $duplicate = false)
-  {
-      if (!isset($element['id'])) {
-          $element['id'] = $this->graph->NewID();
-      }
-      $id = $duplicate ? $this->graph->NewID() : $element['id'];
-      if ($duplicate) {
-          $this->AddOverlay($element['id'], $id);
-      }
-
-      $this->AddFunction('clickShowEvent');
-      $show = $hidden ? 0 : 1;
-      $this->InsertVariable('clickElements', $element['id'],
-      "{id:'{$target}',show:{$show}}", false);
-      $this->clickshow_enabled = true;
-  }
-
-  /**
-   * Sets pop to front for $target when mouse over $element.
-   */
-  public function SetPopFront(&$element, $target, $duplicate = false)
-  {
-      if (!isset($element['id'])) {
-          $element['id'] = $this->graph->NewID();
-      }
-      $id = $duplicate ? $this->graph->NewID() : $element['id'];
-      if ($duplicate) {
-          $this->AddOverlay($element['id'], $id);
-      }
-
-      $this->AddFunction('popFront');
-      $this->InsertVariable('popfronts', $element['id'],
-      "{id:'{$target}'}", false);
-  }
-
-  /**
-   * Sets the fader for an element
-   * If using with clickShow, that must be used first.
-   */
-  public function SetFader(&$element, $in, $out, $target = null,
-    $duplicate = false)
-  {
-      if (!isset($element['id'])) {
-          $element['id'] = $this->graph->NewID();
-      }
-      if (is_null($target)) {
-          $target = $element['id'];
-      }
-      $id = $duplicate ? $this->graph->NewID() : $element['id'];
-      if ($this->compat_events) {
-          if ($in) {
-              $this->AddFunction('fadeIn');
-              $this->AddEventHandler($element, 'onmouseover',
-          'fadeIn(evt,"'.$target.'", '.$in.')');
-          }
-          if ($out) {
-              $this->AddFunction('fadeOut');
-              $this->AddEventHandler($element, 'onmouseout',
-          'fadeOut(evt,"'.$target.'", '.$out.')');
-          }
-      } else {
-          $this->AddFunction('fadeEvent');
-          if ($in) {
-              $this->AddFunction('fadeEventIn');
-              $this->InsertVariable('fistep', $in, null, false);
-          }
-          if ($out) {
-              $this->AddFunction('fadeEventOut');
-              $this->InsertVariable('fostep', -$out, null, false);
-          }
-          $this->InsertVariable('fades', $element['id'],
-        "{id:'{$target}',dir:0}", false);
-          $this->InsertVariable('fstart', $in ? 0 : 1, null, false);
-      }
-      if ($duplicate) {
-          $this->AddOverlay($element['id'], $id);
-      }
-      $this->fader_enabled = true;
-  }
-
-  /**
-   * Makes an item draggable.
-   */
-  public function SetDraggable(&$element)
-  {
-      if (!isset($element['id'])) {
-          $element['id'] = $this->graph->NewID();
-      }
-      if ($this->compat_events) {
-          $this->AddFunction('dragOver');
-          $this->AddFunction('dragStart');
-          $this->AddFunction('dragEnd');
-          $this->AddFunction('svgCursorCoords');
-          $this->AddEventHandler($element, 'onmousemove',
-        "dragOver(evt,'$element[id]')");
-          $this->AddEventHandler($element, 'onmousedown',
-        "dragStart(evt,'$element[id]')");
-          $this->AddEventHandler($element, 'onmouseup',
-        "dragEnd(evt,'$element[id]')");
-      } else {
-          $this->AddFunction('dragEvent');
-          $this->InsertVariable('draggable', $element['id'], 0);
-      }
-  }
-
-  /**
-   * Makes something auto-hide.
-   */
-  public function AutoHide(&$element)
-  {
-      if (!isset($element['id'])) {
-          $element['id'] = $this->graph->NewID();
-      }
-      if ($this->compat_events) {
-          $this->AddFunction('setattr');
-          $this->AddFunction('getE');
-          $this->AddEventHandler($element, 'onmouseover',
-        "setattr(getE('$element[id]'),'opacity',0)");
-          $this->AddEventHandler($element, 'onmouseout',
-        "setattr(getE('$element[id]'),'opacity',1)");
-      } else {
-          $this->AddFunction('autoHide');
-          $this->InsertVariable('autohide', $element['id'], 0);
-      }
-  }
-
-  /**
-   * Add an overlaid copy of an element, with opacity of 0.
-   */
-  public function AddOverlay($from, $to)
-  {
-      $this->AddFunction('duplicate');
-      $this->InsertVariable('dups', $from, $to);
-  }
-
-  /**
-   * Returns the variables (and comments) as Javascript code.
-   */
-  public function GetVariables()
-  {
-      $variables = '';
-      if (count($this->variables)) {
-          $vlist = array();
-          foreach ($this->variables as $name => $value) {
-              $var = $name;
-              if (is_array($value)) {
-                  if (isset($value[0]) && isset($value[count($value) - 1])) {
-                      $var .= '=['.implode(',', $value).']';
-                  } else {
-                      $vs = array();
-                      foreach ($value as $k => $v) {
-                          if ($k) {
-                              $vs[] = "$k:$v";
-                          }
-                      }
-
-                      $var .= '={'.implode(',', $vs).'}';
-                  }
-              } elseif (!is_null($value)) {
-                  $var .= "=$value";
-              }
-              $vlist[] = $var;
-          }
-          $variables = 'var '.implode(', ', $vlist).';';
-      }
-    // comments can be stuck with the variables
-    if (count($this->comments)) {
-        foreach ($this->comments as $c) {
-            if (!is_string($c)) {
-                $c = print_r($c, true);
+    /**
+     * Sets the tooltip for an element.
+     */
+    public function SetTooltip(&$element, $text, $duplicate = false)
+    {
+        $this->AddFunction('tooltip');
+        $this->AddFunction('texttt');
+        if ($this->compat_events) {
+            $this->AddEventHandler(
+                $element,
+                'onmousemove',
+                "tooltip(evt,texttt,true,'$text')"
+            );
+            $this->AddEventHandler(
+                $element,
+                'onmouseout',
+                "tooltip(evt,texttt,false,'')"
+            );
+        } else {
+            if (!isset($element['id'])) {
+                $element['id'] = $this->graph->NewID();
             }
-            $variables .= "\n// ".str_replace("\n", "\n// ", $c);
+            $this->AddFunction('ttEvent');
+            $this->InsertVariable('tips', $element['id'], $text);
+        }
+        if ($duplicate) {
+            if (!isset($element['id'])) {
+                $element['id'] = $this->graph->NewID();
+            }
+            $this->AddOverlay($element['id'], $this->graph->NewID());
         }
     }
 
-      return $variables;
-  }
+    /**
+     * Sets click show/hide for an element
+     * If using with fading, this must be used first.
+     */
+    public function SetClickShow(&$element, $target, $hidden, $duplicate = false)
+    {
+        if (!isset($element['id'])) {
+            $element['id'] = $this->graph->NewID();
+        }
+        $id = $duplicate ? $this->graph->NewID() : $element['id'];
+        if ($duplicate) {
+            $this->AddOverlay($element['id'], $id);
+        }
 
-  /**
-   * Returns the functions as Javascript code.
-   */
-  public function GetFunctions()
-  {
-      $functions = '';
-      if (count($this->functions)) {
-          $functions = implode('', $this->functions);
-      }
+        $this->AddFunction('clickShowEvent');
+        $show = $hidden ? 0 : 1;
+        $this->InsertVariable(
+            'clickElements',
+            $element['id'],
+            "{id:'{$target}',show:{$show}}",
+            false
+        );
+        $this->clickshow_enabled = true;
+    }
 
-      return $functions;
-  }
+    /**
+     * Sets pop to front for $target when mouse over $element.
+     */
+    public function SetPopFront(&$element, $target, $duplicate = false)
+    {
+        if (!isset($element['id'])) {
+            $element['id'] = $this->graph->NewID();
+        }
+        $id = $duplicate ? $this->graph->NewID() : $element['id'];
+        if ($duplicate) {
+            $this->AddOverlay($element['id'], $id);
+        }
 
-  /**
-   * Returns the onload code to use for the SVG.
-   */
-  public function GetOnload()
-  {
-      return $this->onload ? 'init()' : '';
-  }
+        $this->AddFunction('popFront');
+        $this->InsertVariable(
+            'popfronts',
+            $element['id'],
+            "{id:'{$target}'}",
+            false
+        );
+    }
+
+    /**
+     * Sets the fader for an element
+     * If using with clickShow, that must be used first.
+     */
+    public function SetFader(
+        &$element,
+        $in,
+        $out,
+        $target = null,
+        $duplicate = false
+    ) {
+        if (!isset($element['id'])) {
+            $element['id'] = $this->graph->NewID();
+        }
+        if (is_null($target)) {
+            $target = $element['id'];
+        }
+        $id = $duplicate ? $this->graph->NewID() : $element['id'];
+        if ($this->compat_events) {
+            if ($in) {
+                $this->AddFunction('fadeIn');
+                $this->AddEventHandler(
+                    $element,
+                    'onmouseover',
+                    'fadeIn(evt,"' . $target . '", ' . $in . ')'
+                );
+            }
+            if ($out) {
+                $this->AddFunction('fadeOut');
+                $this->AddEventHandler(
+                    $element,
+                    'onmouseout',
+                    'fadeOut(evt,"' . $target . '", ' . $out . ')'
+                );
+            }
+        } else {
+            $this->AddFunction('fadeEvent');
+            if ($in) {
+                $this->AddFunction('fadeEventIn');
+                $this->InsertVariable('fistep', $in, null, false);
+            }
+            if ($out) {
+                $this->AddFunction('fadeEventOut');
+                $this->InsertVariable('fostep', -$out, null, false);
+            }
+            $this->InsertVariable(
+                'fades',
+                $element['id'],
+                "{id:'{$target}',dir:0}",
+                false
+            );
+            $this->InsertVariable('fstart', $in ? 0 : 1, null, false);
+        }
+        if ($duplicate) {
+            $this->AddOverlay($element['id'], $id);
+        }
+        $this->fader_enabled = true;
+    }
+
+    /**
+     * Makes an item draggable.
+     */
+    public function SetDraggable(&$element)
+    {
+        if (!isset($element['id'])) {
+            $element['id'] = $this->graph->NewID();
+        }
+        if ($this->compat_events) {
+            $this->AddFunction('dragOver');
+            $this->AddFunction('dragStart');
+            $this->AddFunction('dragEnd');
+            $this->AddFunction('svgCursorCoords');
+            $this->AddEventHandler(
+                $element,
+                'onmousemove',
+                "dragOver(evt,'$element[id]')"
+            );
+            $this->AddEventHandler(
+                $element,
+                'onmousedown',
+                "dragStart(evt,'$element[id]')"
+            );
+            $this->AddEventHandler(
+                $element,
+                'onmouseup',
+                "dragEnd(evt,'$element[id]')"
+            );
+        } else {
+            $this->AddFunction('dragEvent');
+            $this->InsertVariable('draggable', $element['id'], 0);
+        }
+    }
+
+    /**
+     * Makes something auto-hide.
+     */
+    public function AutoHide(&$element)
+    {
+        if (!isset($element['id'])) {
+            $element['id'] = $this->graph->NewID();
+        }
+        if ($this->compat_events) {
+            $this->AddFunction('setattr');
+            $this->AddFunction('getE');
+            $this->AddEventHandler(
+                $element,
+                'onmouseover',
+                "setattr(getE('$element[id]'),'opacity',0)"
+            );
+            $this->AddEventHandler(
+                $element,
+                'onmouseout',
+                "setattr(getE('$element[id]'),'opacity',1)"
+            );
+        } else {
+            $this->AddFunction('autoHide');
+            $this->InsertVariable('autohide', $element['id'], 0);
+        }
+    }
+
+    /**
+     * Add an overlaid copy of an element, with opacity of 0.
+     */
+    public function AddOverlay($from, $to)
+    {
+        $this->AddFunction('duplicate');
+        $this->InsertVariable('dups', $from, $to);
+    }
+
+    /**
+     * Returns the variables (and comments) as Javascript code.
+     */
+    public function GetVariables()
+    {
+        $variables = '';
+        if (count($this->variables)) {
+            $vlist = array();
+            foreach ($this->variables as $name => $value) {
+                $var = $name;
+                if (is_array($value)) {
+                    if (isset($value[0]) && isset($value[count($value) - 1])) {
+                        $var .= '=[' . implode(',', $value) . ']';
+                    } else {
+                        $vs = array();
+                        foreach ($value as $k => $v) {
+                            if ($k) {
+                                $vs[] = "$k:$v";
+                            }
+                        }
+
+                        $var .= '={' . implode(',', $vs) . '}';
+                    }
+                } elseif (!is_null($value)) {
+                    $var .= "=$value";
+                }
+                $vlist[] = $var;
+            }
+            $variables = 'var ' . implode(', ', $vlist) . ';';
+        }
+        // comments can be stuck with the variables
+        if (count($this->comments)) {
+            foreach ($this->comments as $c) {
+                if (!is_string($c)) {
+                    $c = print_r($c, true);
+                }
+                $variables .= "\n// " . str_replace("\n", "\n// ", $c);
+            }
+        }
+
+        return $variables;
+    }
+
+    /**
+     * Returns the functions as Javascript code.
+     */
+    public function GetFunctions()
+    {
+        $functions = '';
+        if (count($this->functions)) {
+            $functions = implode('', $this->functions);
+        }
+
+        return $functions;
+    }
+
+    /**
+     * Returns the onload code to use for the SVG.
+     */
+    public function GetOnload()
+    {
+        return $this->onload ? 'init()' : '';
+    }
 }

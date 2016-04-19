@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -36,38 +36,38 @@ class StackedLineGraph extends MultiLineGraph
             throw new Exception('log_axis_y not supported by StackedLineGraph');
         }
 
-        $body = $this->Grid().$this->UnderShapes();
+        $body = $this->Grid() . $this->UnderShapes();
 
-        $plots = array();
+        $plots       = array();
         $chunk_count = count($this->multi_graph);
         $this->ColourSetup($this->multi_graph->ItemsCount(-1), $chunk_count);
         $stack = array();
         for ($i = 0; $i < $chunk_count; ++$i) {
-            $bnum = 0;
-            $cmd = 'M';
-            $path = $fillpath = '';
-            $attr = array('fill' => 'none');
-            $fill = $this->ArrayOption($this->fill_under, $i);
-            $dash = $this->ArrayOption($this->line_dash, $i);
+            $bnum         = 0;
+            $cmd          = 'M';
+            $path         = $fillpath = '';
+            $attr         = array('fill' => 'none');
+            $fill         = $this->ArrayOption($this->fill_under, $i);
+            $dash         = $this->ArrayOption($this->line_dash, $i);
             $stroke_width =
-        $this->ArrayOption($this->line_stroke_width, $i);
+                $this->ArrayOption($this->line_stroke_width, $i);
             if (!empty($dash)) {
                 $attr['stroke-dasharray'] = $dash;
             }
             $attr['stroke-width'] = $stroke_width <= 0 ? 1 : $stroke_width;
 
-            $bottom = array();
+            $bottom      = array();
             $point_count = 0;
             foreach ($this->multi_graph[$i] as $item) {
                 $x = $this->GridPosition($item->key, $bnum);
-        // key might not be an integer, so convert to string for $stack
-        $strkey = "{$item->key}";
+                // key might not be an integer, so convert to string for $stack
+                $strkey = "{$item->key}";
                 if (!isset($stack[$strkey])) {
                     $stack[$strkey] = 0;
                 }
                 if (!is_null($x)) {
                     $bottom["$x"] = $stack[$strkey];
-                    $y = $this->GridY($stack[$strkey] + $item->value);
+                    $y            = $this->GridY($stack[$strkey] + $item->value);
                     $stack[$strkey] += $item->value;
 
                     $path .= "$cmd$x $y ";
@@ -77,11 +77,11 @@ class StackedLineGraph extends MultiLineGraph
                         $fillpath .= "$x $y ";
                     }
 
-          // no need to repeat same L command
-          $cmd = $cmd == 'M' ? 'L' : '';
+                    // no need to repeat same L command
+                    $cmd = $cmd == 'M' ? 'L' : '';
                     if (!is_null($item->value)) {
                         $marker_id = $this->MarkerLabel($i, $bnum, $item, $x, $y);
-                        $extra = empty($marker_id) ? null : array('id' => $marker_id);
+                        $extra     = empty($marker_id) ? null : array('id' => $marker_id);
                         $this->AddMarker($x, $y, $item, $extra, $i);
                         ++$point_count;
                     }
@@ -90,7 +90,7 @@ class StackedLineGraph extends MultiLineGraph
             }
 
             if ($point_count > 0) {
-                $attr['d'] = $path;
+                $attr['d']      = $path;
                 $attr['stroke'] = $this->GetColour(null, 0, $i, true);
                 if ($this->semantic_classes) {
                     $attr['class'] = "series{$i}";
@@ -100,7 +100,7 @@ class StackedLineGraph extends MultiLineGraph
 
                 if ($fill) {
                     // complete the fill area with the previous stack total
-          $cmd = 'L';
+                    $cmd     = 'L';
                     $opacity = $this->ArrayOption($this->fill_opacity, $i);
                     $bpoints = array_reverse($bottom, true);
                     foreach ($bpoints as $x => $pos) {
@@ -109,17 +109,17 @@ class StackedLineGraph extends MultiLineGraph
                     }
                     $fillpath .= 'z';
                     $fill_style = array(
-            'fill' => $this->GetColour(null, 0, $i),
-            'd' => $fillpath,
-            'stroke' => $attr['fill'],
-          );
+                        'fill'   => $this->GetColour(null, 0, $i),
+                        'd'      => $fillpath,
+                        'stroke' => $attr['fill'],
+                    );
                     if ($opacity < 1) {
                         $fill_style['opacity'] = $opacity;
                     }
                     if ($this->semantic_classes) {
                         $fill_style['class'] = "series{$i}";
                     }
-                    $graph_line = $this->Element('path', $fill_style).$graph_line;
+                    $graph_line = $this->Element('path', $fill_style) . $graph_line;
                 }
 
                 $plots[] = $graph_line;
@@ -132,7 +132,7 @@ class StackedLineGraph extends MultiLineGraph
         $group = array();
         $this->ClipGrid($group);
 
-        $plots = array_reverse($plots);
+        $plots     = array_reverse($plots);
         $all_plots = '';
         if ($this->semantic_classes) {
             foreach ($plots as $p) {
@@ -153,19 +153,19 @@ class StackedLineGraph extends MultiLineGraph
         return $body;
     }
 
-  /**
-   * Returns the maximum value.
-   */
-  protected function GetMaxValue()
-  {
-      return $this->multi_graph->GetMaxSumValue();
-  }
+    /**
+     * Returns the maximum value.
+     */
+    protected function GetMaxValue()
+    {
+        return $this->multi_graph->GetMaxSumValue();
+    }
 
-  /**
-   * Returns the minimum value.
-   */
-  protected function GetMinValue()
-  {
-      return $this->multi_graph->GetMinSumValue();
-  }
+    /**
+     * Returns the minimum value.
+     */
+    protected function GetMinValue()
+    {
+        return $this->multi_graph->GetMinSumValue();
+    }
 }

@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,24 +30,24 @@ class MultiBezierGraph extends BezierGraph
 
     protected function Draw()
     {
-        $body = $this->Grid().$this->Guidelines(SVGG_GUIDELINE_BELOW);
+        $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
 
-        $plots = '';
+        $plots      = '';
         $y_axis_pos = $this->height - $this->pad_bottom -
-      $this->y_axes[$this->main_y_axis]->Zero();
-        $y_bottom = min($y_axis_pos, $this->height - $this->pad_bottom);
+                      $this->y_axes[$this->main_y_axis]->Zero();
+        $y_bottom   = min($y_axis_pos, $this->height - $this->pad_bottom);
 
         $chunk_count = count($this->multi_graph);
         $this->ColourSetup($this->multi_graph->ItemsCount(-1), $chunk_count);
 
         for ($i = 0; $i < $chunk_count; ++$i) {
-            $bnum = 0;
+            $bnum   = 0;
             $points = array();
-            $axis = $this->DatasetYAxis($i);
+            $axis   = $this->DatasetYAxis($i);
             foreach ($this->multi_graph[$i] as $item) {
                 $x = $this->GridPosition($item->key, $bnum);
                 if (!is_null($x) && !is_null($item->value)) {
-                    $y = $this->GridY($item->value, $axis);
+                    $y        = $this->GridY($item->value, $axis);
                     $points[] = array($x, $y, $item, $i, $bnum);
                 }
                 ++$bnum;
@@ -73,15 +73,17 @@ class MultiBezierGraph extends BezierGraph
         return $body;
     }
 
-  /**
-   * construct multigraph.
-   */
-  public function Values($values)
-  {
-      parent::Values($values);
-      if (!$this->values->error) {
-          $this->multi_graph = new MultiGraph($this->values, $this->force_assoc,
-        $this->require_integer_keys);
-      }
-  }
+    /**
+     * construct multigraph.
+     */
+    public function Values($values)
+    {
+        parent::Values($values);
+        if (!$this->values->error) {
+            $this->multi_graph = new MultiGraph(
+                $this->values, $this->force_assoc,
+                $this->require_integer_keys
+            );
+        }
+    }
 }

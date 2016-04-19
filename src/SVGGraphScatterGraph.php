@@ -11,7 +11,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Lesser General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Lesser General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -30,12 +30,12 @@ class ScatterGraph extends PointGraph
 
     protected function Draw()
     {
-        $body = $this->Grid().$this->UnderShapes();
+        $body = $this->Grid() . $this->UnderShapes();
 
-    // a scatter graph without markers is empty!
-    if ($this->marker_size == 0) {
-        $this->marker_size = 1;
-    }
+        // a scatter graph without markers is empty!
+        if ($this->marker_size == 0) {
+            $this->marker_size = 1;
+        }
         $this->ColourSetup($this->values->ItemsCount());
 
         $bnum = 0;
@@ -45,7 +45,7 @@ class ScatterGraph extends PointGraph
                 $y = $this->GridY($item->value);
                 if (!is_null($y)) {
                     $marker_id = $this->MarkerLabel(0, $bnum, $item, $x, $y);
-                    $extra = empty($marker_id) ? null : array('id' => $marker_id);
+                    $extra     = empty($marker_id) ? null : array('id' => $marker_id);
                     $this->AddMarker($x, $y, $item, $extra);
                 }
             }
@@ -63,16 +63,16 @@ class ScatterGraph extends PointGraph
         return $body;
     }
 
-  /**
-   * Checks that the data produces a 2-D plot.
-   */
-  protected function CheckValues()
-  {
-      parent::CheckValues();
+    /**
+     * Checks that the data produces a 2-D plot.
+     */
+    protected function CheckValues()
+    {
+        parent::CheckValues();
 
-    // using force_assoc makes things work properly
-    if ($this->values->AssociativeKeys()) {
-        $this->force_assoc = true;
+        // using force_assoc makes things work properly
+        if ($this->values->AssociativeKeys()) {
+            $this->force_assoc = true;
+        }
     }
-  }
 }
