@@ -11,7 +11,14 @@ class SVGGraph
     private $settings = array();
     public $values = array();
     public $links = null;
+    /**
+     * @var SVGGraphColours
+     */
     public $colours = null;
+    /**
+     * @var Graph
+     */
+    private $g;
 
     public function __construct($w, $h, $settings = null)
     {
@@ -181,11 +188,14 @@ class SVGGraph
     /**
      * Instantiate the correct class.
      * @param $class
-     * @return
+     * @return Graph
      */
     private function Setup($class)
     {
         $class_name = 'GGS\\SVGGraph\\' . $class;
+        /**
+         * @var Graph $g
+         */
         $g          = new $class_name($this->width, $this->height, $this->settings);
         $g->Values($this->values);
         $g->Links($this->links);
@@ -200,10 +210,12 @@ class SVGGraph
 
     /**
      * Fetch the content.
+     *
      * @param      $class
      * @param bool $header
      * @param bool $defer_js
-     * @return
+     *
+     * @return mixed|string
      */
     public function Fetch($class, $header = true, $defer_js = true)
     {
@@ -214,11 +226,11 @@ class SVGGraph
 
     /**
      * Pass in the type of graph to display.
+     *
      * @param      $class
      * @param bool $header
      * @param bool $content_type
      * @param bool $defer_js
-     * @return
      */
     public function Render(
         $class,
@@ -228,7 +240,7 @@ class SVGGraph
     ) {
         $this->g = $this->Setup($class);
 
-        return $this->g->Render($header, $content_type, $defer_js);
+        $this->g->Render($header, $content_type, $defer_js);
     }
 
     public function FetchJavascript()

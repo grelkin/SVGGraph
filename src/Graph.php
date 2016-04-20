@@ -34,6 +34,10 @@ abstract class Graph
     protected $require_structured = false;
     protected $require_integer_keys = true;
     protected $multi_graph = null;
+    /**
+     * @var SVGGraphColours
+     */
+    public $colours;
 
     public function __construct($w, $h, $settings = null)
     {
