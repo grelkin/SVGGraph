@@ -332,7 +332,7 @@ class PopulationPyramid extends HorizontalStackedBarGraph
         if (!is_numeric($max_h) || !is_numeric($min_h) ||
             !is_numeric($max_v) || !is_numeric($min_v)
         ) {
-            throw new Exception('Non-numeric min/max');
+            throw new \Exception('Non-numeric min/max');
         }
 
         if (!is_numeric($this->grid_division_h)) {

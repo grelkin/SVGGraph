@@ -75,7 +75,7 @@ class SVGGraphCoords
         $grid_graph = method_exists($this->graph, 'GridX');
 
         if (!$grid_graph && ($first == 'u' || $first == 'g')) {
-            throw new Exception('Invalid dimensions (non-grid graph)');
+            throw new \Exception('Invalid dimensions (non-grid graph)');
         }
 
         if ($first == 'u') {

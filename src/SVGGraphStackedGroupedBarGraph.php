@@ -193,7 +193,7 @@ class StackedGroupedBarGraph extends StackedBarGraph
     {
         parent::CheckValues();
         if (empty($this->stack_group)) {
-            throw new Exception('stack_group not set for StackedGroupedBarGraph');
+            throw new \Exception('stack_group not set for StackedGroupedBarGraph');
         }
 
         // make sure the group details are stored in an array
@@ -208,7 +208,7 @@ class StackedGroupedBarGraph extends StackedBarGraph
         $last_start = 0;
         foreach ($this->stack_group as $group_start) {
             if ($group_start <= $last_start) {
-                throw new Exception('Invalid stack_group option');
+                throw new \Exception('Invalid stack_group option');
             }
             if ($group_start < $datasets) {
                 $this->groups[] = $group_start;
@@ -218,7 +218,7 @@ class StackedGroupedBarGraph extends StackedBarGraph
 
         // without this check there will be an invalid axis error
         if (count($this->groups) == 1) {
-            throw new Exception('Too few datasets for grouping');
+            throw new \Exception('Too few datasets for grouping');
         }
     }
 

@@ -57,7 +57,7 @@ class BezierGraph extends PointGraph
         parent::CheckValues();
 
         if ($this->values->ItemsCount() <= 1) {
-            throw new Exception('Not enough values for ' . get_class($this));
+            throw new \Exception('Not enough values for ' . get_class($this));
         }
     }
 

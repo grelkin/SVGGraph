@@ -100,12 +100,12 @@ class MultiGraph implements \Countable, \ArrayAccess, \Iterator
      */
     public function offsetSet($offset, $value)
     {
-        throw new Exception('Read-only');
+        throw new \Exception('Read-only');
     }
 
     public function offsetUnset($offset)
     {
-        throw new Exception('Read-only');
+        throw new \Exception('Read-only');
     }
 
     /**

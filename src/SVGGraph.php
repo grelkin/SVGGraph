@@ -149,12 +149,8 @@ class SVGGraph
      */
     private function Setup($class)
     {
-        // load the relevant class file
-        if (!class_exists($class, false)) {
-            include 'SVGGraph' . $class . '.php';
-        }
-
-        $g = new $class($this->width, $this->height, $this->settings);
+        $class_name = 'GGS\\SVGGraph\\'.$class;
+        $g = new $class_name($this->width, $this->height, $this->settings);
         $g->Values($this->values);
         $g->Links($this->links);
         if (is_object($this->colours)) {
@@ -1356,7 +1352,7 @@ abstract class Graph
             } else {
                 $err = array_diff_key($colour, array_keys(array_keys($colour)));
                 if ($err) {
-                    throw new Exception('Malformed gradient/pattern');
+                    throw new \Exception('Malformed gradient/pattern');
                 }
                 $gradient_id = $this->AddGradient($colour, $key, $radial_gradient);
                 $colour      = "url(#{$gradient_id})";
@@ -1410,7 +1406,7 @@ abstract class Graph
     protected function CheckValues()
     {
         if ($this->values->error) {
-            throw new Exception($this->values->error);
+            throw new \Exception($this->values->error);
         }
     }
 
@@ -2014,7 +2010,7 @@ abstract class Graph
 
             // get the body content from the subclass
             $body = $this->DrawGraph();
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             $err = $e->getMessage();
             if ($this->exception_details) {
                 $err .= ' [' . basename($e->getFile()) . ' #' . $e->getLine() . ']';
@@ -2115,7 +2111,7 @@ abstract class Graph
                 header($mime_header);
             }
             echo $content;
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             if ($content_type) {
                 header($mime_header);
             }

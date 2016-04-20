@@ -96,7 +96,7 @@ class SVGGraphColours implements \Countable
      */
     public function count()
     {
-        throw new Exception('Cannot count SVGGraphColours class');
+        throw new \Exception('Cannot count SVGGraphColours class');
     }
 
     /**
@@ -206,7 +206,7 @@ class SVGGraphColours implements \Countable
     }
 }
 
-class SVGGraphColourArray implements ArrayAccess
+class SVGGraphColourArray implements \ArrayAccess
 {
     private $colours;
     private $count;
@@ -248,14 +248,14 @@ class SVGGraphColourArray implements ArrayAccess
 
     public function offsetUnset($offset)
     {
-        throw new Exception('Unexpected offsetUnset');
+        throw new \Exception('Unexpected offsetUnset');
     }
 }
 
 /**
  * Abstract class implements common methods.
  */
-abstract class SVGGraphColourRange implements ArrayAccess
+abstract class SVGGraphColourRange implements \ArrayAccess
 {
     protected $count = 2;
 
@@ -277,12 +277,12 @@ abstract class SVGGraphColourRange implements ArrayAccess
 
     public function offsetSet($offset, $value)
     {
-        throw new Exception('Unexpected offsetSet');
+        throw new \Exception('Unexpected offsetSet');
     }
 
     public function offsetUnset($offset)
     {
-        throw new Exception('Unexpected offsetUnset');
+        throw new \Exception('Unexpected offsetUnset');
     }
 
     /**

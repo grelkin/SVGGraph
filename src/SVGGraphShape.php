@@ -28,7 +28,7 @@ class SVGGraphShapeList
         }
 
         if (!is_array($settings['shape']) || !isset($settings['shape'][0])) {
-            throw new Exception('Malformed shape option');
+            throw new \Exception('Malformed shape option');
         }
 
         if (!is_array($settings['shape'][0])) {
@@ -89,7 +89,7 @@ class SVGGraphShapeList
             unset($shape_array['depth'], $shape_array['clip_to_grid']);
             $this->shapes[] = new $class_map[$shape]($shape_array, $depth);
         } else {
-            throw new Exception("Unknown shape [{$shape}]");
+            throw new \Exception("Unknown shape [{$shape}]");
         }
     }
 }
@@ -147,7 +147,7 @@ abstract class SVGGraphShape
         }
 
         if (count($missing)) {
-            throw new Exception(
+            throw new \Exception(
                 "{$this->element} attribute(s) not found: " .
                 implode(', ', $missing)
             );
@@ -301,7 +301,7 @@ class SVGGraphPolyLine extends SVGGraphShape
         }
         $count = count($this->attrs['points']);
         if ($count < 4 || $count % 2 == 1) {
-            throw new Exception('Shape must have at least 2 pairs of points');
+            throw new \Exception('Shape must have at least 2 pairs of points');
         }
     }
 

@@ -14,7 +14,7 @@ class StackedBarGraph extends BarGraph
     protected function Draw()
     {
         if ($this->log_axis_y) {
-            throw new Exception('log_axis_y not supported by StackedBarGraph');
+            throw new \Exception('log_axis_y not supported by StackedBarGraph');
         }
 
         $body      = $this->Grid() . $this->UnderShapes();

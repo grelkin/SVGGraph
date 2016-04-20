@@ -30,13 +30,13 @@ class AxisLog extends Axis
         $divisions
     ) {
         if ($min_val == 0 || $max_val == 0) {
-            throw new Exception('0 value on log axis');
+            throw new \Exception('0 value on log axis');
         }
         if ($min_val < 0 && $max_val > 0) {
-            throw new Exception('-ve and +ve on log axis');
+            throw new \Exception('-ve and +ve on log axis');
         }
         if ($max_val <= $min_val && $min_unit == 0) {
-            throw new Exception('Zero length axis (min >= max)');
+            throw new \Exception('Zero length axis (min >= max)');
         }
         $this->length         = $length;
         $this->min_unit       = $min_unit;

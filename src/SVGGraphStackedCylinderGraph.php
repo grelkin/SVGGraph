@@ -10,7 +10,7 @@ class StackedCylinderGraph extends CylinderGraph
     protected function Draw()
     {
         if ($this->log_axis_y) {
-            throw new Exception('log_axis_y not supported by StackedCylinderGraph');
+            throw new \Exception('log_axis_y not supported by StackedCylinderGraph');
         }
 
         $body = $this->Grid() . $this->UnderShapes();

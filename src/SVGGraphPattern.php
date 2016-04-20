@@ -51,12 +51,12 @@ class SVGGraphPatternList
             $e = strpos($pattern['pattern'], '>', $s);
         }
         if (false === $s || false === $e) {
-            throw new Exception('Invalid pattern');
+            throw new \Exception('Invalid pattern');
         }
 
         // validate width and height
         if (!isset($pattern['width']) || !isset($pattern['height'])) {
-            throw new Exception('Pattern width and height not set');
+            throw new \Exception('Pattern width and height not set');
         }
 
         $id = $this->graph->NewID();

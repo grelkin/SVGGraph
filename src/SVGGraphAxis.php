@@ -334,7 +334,7 @@ class Axis
 
         if ($dlength / $spacing > 10000) {
             $pcount = $dlength / $spacing;
-            throw new Exception("Too many grid points ({$this->min_value}->{$this->max_value} = {$pcount})");
+            throw new \Exception("Too many grid points ({$this->min_value}->{$this->max_value} = {$pcount})");
         }
 
         while ($pos < $dlength) {
@@ -377,7 +377,7 @@ class Axis
     public function GetGridSubdivisions($min_space, $min_unit, $start, $fixed)
     {
         if (!$this->grid_spacing) {
-            throw new Exception('grid_spacing not set');
+            throw new \Exception('grid_spacing not set');
         }
 
         $subdivs = array();

@@ -613,7 +613,7 @@ abstract class GridGraph extends Graph
             if (is_numeric($fixed_min) && is_numeric($fixed_max) &&
                 $fixed_max < $fixed_min
             ) {
-                throw new Exception('Invalid Y axis options: min > max');
+                throw new \Exception('Invalid Y axis options: min > max');
             }
 
             if (is_numeric($fixed_min)) {
@@ -646,7 +646,7 @@ abstract class GridGraph extends Graph
                 $v_max[] = max($maxv_list);
             }
             if ($v_max[$i] < $v_min[$i]) {
-                throw new Exception('Invalid Y axis: min > max');
+                throw new \Exception('Invalid Y axis: min > max');
             }
         }
 
@@ -658,7 +658,7 @@ abstract class GridGraph extends Graph
             if (is_numeric($fixed_min) && is_numeric($fixed_max) &&
                 $fixed_max < $fixed_min
             ) {
-                throw new Exception('Invalid X axis options: min > max');
+                throw new \Exception('Invalid X axis options: min > max');
             }
 
             if (is_numeric($fixed_max)) {
@@ -672,7 +672,7 @@ abstract class GridGraph extends Graph
                 $k_min[] = min(0, $this->GetAxisMinKey($i), (float)$this->min_guide['x']);
             }
             if ($k_max[$i] < $k_min[$i]) {
-                throw new Exception('Invalid X axis: min > max');
+                throw new \Exception('Invalid X axis: min > max');
             }
         }
 
@@ -701,7 +701,7 @@ abstract class GridGraph extends Graph
             $grid_division = $this->ArrayOption($this->grid_division_h, $i);
             if (is_numeric($grid_division)) {
                 if ($grid_division <= 0) {
-                    throw new Exception('Invalid grid division');
+                    throw new \Exception('Invalid grid division');
                 }
                 // if fixed grid spacing is specified, make the min spacing 1 pixel
                 $this->minimum_grid_spacing_h = 1;
@@ -740,7 +740,7 @@ abstract class GridGraph extends Graph
             }
 
             if (!is_numeric($max_h) || !is_numeric($min_h)) {
-                throw new Exception('Non-numeric min/max');
+                throw new \Exception('Non-numeric min/max');
             }
 
             if ($this->ArrayOption($this->log_axis_y, $i) && $this->flip_axes) {
@@ -770,7 +770,7 @@ abstract class GridGraph extends Graph
             $grid_division = $this->ArrayOption($this->grid_division_v, $i);
             if (is_numeric($grid_division)) {
                 if ($grid_division <= 0) {
-                    throw new Exception('Invalid grid division');
+                    throw new \Exception('Invalid grid division');
                 }
                 // if fixed grid spacing is specified, make the min spacing 1 pixel
                 $this->minimum_grid_spacing_v[$i] = 1;
@@ -811,7 +811,7 @@ abstract class GridGraph extends Graph
             }
 
             if (!is_numeric($max_v) || !is_numeric($min_v)) {
-                throw new Exception('Non-numeric min/max');
+                throw new \Exception('Non-numeric min/max');
             }
 
             if ($this->ArrayOption($this->log_axis_y, $i) && !$this->flip_axes) {

@@ -178,7 +178,7 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
      */
     private function notIterator()
     {
-        throw new Exception('Cannot iterate ' . __CLASS__);
+        throw new \Exception('Cannot iterate ' . __CLASS__);
     }
 
     public function current()
@@ -224,12 +224,12 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
      */
     public function offsetSet($offset, $value)
     {
-        throw new Exception('Read-only');
+        throw new \Exception('Read-only');
     }
 
     public function offsetUnset($offset)
     {
-        throw new Exception('Read-only');
+        throw new \Exception('Read-only');
     }
 
     /**
@@ -462,7 +462,7 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
     public function GetMinMaxSumValues($start = 0, $end = null)
     {
         if ($start >= $this->datasets || (!is_null($end) && $end >= $this->datasets)) {
-            throw new Exception('Dataset not found');
+            throw new \Exception('Dataset not found');
         }
 
         if (is_null($end)) {
@@ -480,7 +480,7 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
                 }
                 $value = $item[$vfield];
                 if (!is_null($value) && !is_numeric($value)) {
-                    throw new Exception('Non-numeric value');
+                    throw new \Exception('Non-numeric value');
                 }
                 if ($value > 0) {
                     $smax += $value;

@@ -336,7 +336,7 @@ class PieGraph extends Graph
     {
         parent::CheckValues();
         if ($this->GetMinValue() < 0) {
-            throw new Exception('Negative value for pie chart');
+            throw new \Exception('Negative value for pie chart');
         }
 
         $sum = 0;
@@ -344,7 +344,7 @@ class PieGraph extends Graph
             $sum += $item->value;
         }
         if ($sum <= 0) {
-            throw new Exception('Empty pie chart');
+            throw new \Exception('Empty pie chart');
         }
 
         $this->total = $sum;

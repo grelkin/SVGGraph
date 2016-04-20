@@ -112,7 +112,7 @@ class DataLabels
         }
 
         if (!isset($label_array[0]) || !isset($label_array[1]) || !isset($label_array[2])) {
-            throw new Exception('Malformed label option - required fields missing');
+            throw new \Exception('Malformed label option - required fields missing');
         }
 
         $x       = $label_array[0];
@@ -194,7 +194,7 @@ class DataLabels
     public function Load(&$settings)
     {
         if (!is_array($settings['label']) || !isset($settings['label'][0])) {
-            throw new Exception('Malformed label option');
+            throw new \Exception('Malformed label option');
         }
 
         $count = 0;

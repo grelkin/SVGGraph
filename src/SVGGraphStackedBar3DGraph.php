@@ -10,7 +10,7 @@ class StackedBar3DGraph extends Bar3DGraph
     protected function Draw()
     {
         if ($this->log_axis_y) {
-            throw new Exception('log_axis_y not supported by StackedBar3DGraph');
+            throw new \Exception('log_axis_y not supported by StackedBar3DGraph');
         }
 
         $body = $this->Grid() . $this->UnderShapes();

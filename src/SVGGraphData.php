@@ -5,7 +5,7 @@ namespace GGS\SVGGraph;
 /**
  * Class for standard data.
  */
-class SVGGraphData implements Countable, ArrayAccess, Iterator
+class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 {
     private $datasets = 0;
     private $data;
@@ -39,7 +39,7 @@ class SVGGraphData implements Countable, ArrayAccess, Iterator
      */
     private function notIterator()
     {
-        throw new Exception('Cannot iterate ' . __CLASS__);
+        throw new \Exception('Cannot iterate ' . __CLASS__);
     }
 
     public function current()
@@ -85,12 +85,12 @@ class SVGGraphData implements Countable, ArrayAccess, Iterator
      */
     public function offsetSet($offset, $value)
     {
-        throw new Exception('Read-only');
+        throw new \Exception('Read-only');
     }
 
     public function offsetUnset($offset)
     {
-        throw new Exception('Read-only');
+        throw new \Exception('Read-only');
     }
 
     /**
@@ -230,7 +230,7 @@ class SVGGraphData implements Countable, ArrayAccess, Iterator
     public function GetMinMaxSumValues($start = 0, $end = null)
     {
         if ($start != 0 || (!is_null($end) && $end != 0)) {
-            throw new Exception('Dataset not found');
+            throw new \Exception('Dataset not found');
         }
 
         // structured data is used for multi-data, so just
@@ -242,7 +242,7 @@ class SVGGraphData implements Countable, ArrayAccess, Iterator
 /**
  * Class to iterate over standard data.
  */
-class SVGGraphDataIterator implements Iterator
+class SVGGraphDataIterator implements \Iterator
 {
     private $data = 0;
     private $dataset = 0;

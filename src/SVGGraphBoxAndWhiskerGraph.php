@@ -170,7 +170,7 @@ class BoxAndWhiskerGraph extends PointGraph
             $b  = $item->Data('bottom');
             $t  = $item->Data('top');
             if ($wb > $b || $wt < $t || $item->value < $b || $item->value > $t) {
-                throw new Exception("Data problem: $wb $b {$item->value} $t $wt");
+                throw new \Exception("Data problem: $wb $b {$item->value} $t $wt");
             }
         }
     }

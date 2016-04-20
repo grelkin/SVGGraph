@@ -761,7 +761,7 @@ JAVASCRIPT;
 
             default :
                 // Trying to add a function that doesn't exist?
-                throw new Exception("Unknown function '$name'");
+                throw new \Exception("Unknown function '$name'");
         }
 
         $this->InsertFunction($name, $fn);
