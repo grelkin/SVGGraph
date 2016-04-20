@@ -1,26 +1,8 @@
 <?php
-/**
- * Copyright (C) 2009-2016 Graham Breach.
- *
- * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
- */
-/**
- * For more information, please contact <graham@goat1000.com>.
- */
-define('SVGGRAPH_VERSION', 'SVGGraph 2.21');
 
-require_once 'SVGGraphColours.php';
+namespace GGS\SVGGraph;
+
+define('SVGGRAPH_VERSION', 'SVGGraph 2.21');
 
 class SVGGraph
 {
@@ -372,7 +354,7 @@ abstract class Graph
 
         if ($this->structured_data || is_array($this->structure)) {
             $this->structured_data = true;
-            require_once 'SVGGraphStructuredData.php';
+
             if (is_array($this->structure)) {
                 $this->structure['_before']   = $this->units_before_x;
                 $this->structure['_after']    = $this->units_x;
@@ -384,7 +366,6 @@ abstract class Graph
                 $this->require_integer_keys, $this->require_structured
             );
         } else {
-            require_once 'SVGGraphData.php';
             $this->values = new SVGGraphData($new_values, $this->force_assoc);
             if (!$this->values->error && !empty($this->require_structured)) {
                 $this->values->error = get_class($this) . ' requires structured data';
@@ -1548,7 +1529,6 @@ abstract class Graph
     public function AddPattern($pattern)
     {
         if (is_null($this->pattern_list)) {
-            require_once 'SVGGraphPattern.php';
             $this->pattern_list = new SVGGraphPatternList($this);
         }
 
