@@ -78,7 +78,18 @@ class AxisDoubleEnded extends Axis
             }
         }
 
-        usort($new_points, ($this->direction < 0 ? 'gridpoint_rsort' : 'gridpoint_sort'));
+        usort(
+            $new_points,
+            $this->direction < 0
+                ?
+                function($a, $b) {
+                    return $b->position - $a->position;
+                }
+                :
+                function($a, $b) {
+                    return $a->position - $b->position;
+                }
+        );
 
         return $new_points;
     }
