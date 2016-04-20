@@ -28,7 +28,6 @@ class BoxAndWhiskerGraph extends PointGraph
             if (!is_null($item->value) && !is_null($bar_pos)) {
                 $box_style['fill'] = $this->GetColour($item, $bnum);
                 $this->SetStroke($box_style, $item);
-                $style = array();
                 $shape = $this->WhiskerBox(
                     $bspace + $bar_pos,
                     $bar_width,
