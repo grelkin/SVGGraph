@@ -5,6 +5,7 @@
   "license": "LGPL-3.0",
   "require": {
     "php": ">=5.2.0",
+    "ext-mbstring": "*",
     "lib-pcre": "*"
   },
   "require-dev": {
