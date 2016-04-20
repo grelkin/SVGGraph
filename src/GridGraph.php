@@ -7,6 +7,9 @@ define('SVGG_GUIDELINE_BELOW', 0);
 
 abstract class GridGraph extends Graph
 {
+    /**
+     * @var Axis[]
+     */
     protected $x_axes;
     protected $y_axes;
     protected $main_x_axis = 0;
