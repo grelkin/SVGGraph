@@ -97,7 +97,12 @@ class PieGraph extends Graph
             }
         }
         if ($this->sort) {
-            uasort($values, 'pie_rsort');
+            uasort(
+                $values,
+                function ($a, $b) {
+                    return $b[1] - $a[1];
+                }
+            );
         }
 
         $body     = $this->UnderShapes();
@@ -445,48 +450,5 @@ class PieGraph extends Graph
 
         // fall back to default
         return parent::DataLabelTailDirection($dataset, $index, $hpos, $vpos);
-    }
-}
-
-/**
- *  Sort callback function reverse-sorts by value.
- */
-function pie_rsort($a, $b)
-{
-    return $b[1] - $a[1];
-}
-
-/**
- * Class for details of each pie slice.
- */
-class SVGGraphSliceInfo
-{
-    public $start_angle;
-    public $end_angle;
-    public $radius_x;
-    public $radius_y;
-
-    public function __construct($start, $end, $rx, $ry)
-    {
-        $this->start_angle = $start;
-        $this->end_angle   = $end;
-        $this->radius_x    = $rx;
-        $this->radius_y    = $ry;
-    }
-
-    /*
-     * Calculates the middle angle of the slice
-     */
-    public function MidAngle()
-    {
-        return $this->start_angle + ($this->end_angle - $this->start_angle) / 2;
-    }
-
-    /**
-     * Returns the slice angle in degrees.
-     */
-    public function Degrees()
-    {
-        return rad2deg($this->end_angle - $this->start_angle);
     }
 }

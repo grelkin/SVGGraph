@@ -122,8 +122,18 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
             $this->data = array_values($this->data);
         } elseif (!is_null($this->key_field)) {
             // if not associative, sort by key field
-            $GLOBALS['SVGGraphFieldSortField'] = $this->key_field;
-            usort($this->data, 'SVGGraphFieldSort');
+            $key_field = $this->key_field;
+            usort($this->data, function($a, $b) use ($key_field)
+            {
+                if (!isset($a[$key_field]) || !isset($b[$key_field])) {
+                    return 0;
+                }
+                if ($a[$key_field] == $b[$key_field]) {
+                    return 0;
+                }
+
+                return $a[$key_field] > $b[$key_field] ? 1 : -1;
+            });
         }
 
         if ($this->RepeatedKeys()) {
@@ -519,187 +529,3 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
         return $label;
     }
 }
-
-/**
- * For iterating over structured data.
- */
-class SVGGraphStructuredDataIterator implements Iterator
-{
-    private $data = 0;
-    private $dataset = 0;
-    private $position = 0;
-    private $count = 0;
-    private $structure = null;
-    private $key_field = 0;
-    private $dataset_fields = array();
-
-    public function __construct(&$data, $dataset, $structure)
-    {
-        $this->dataset   = $dataset;
-        $this->data      = &$data;
-        $this->count     = count($data);
-        $this->structure = $structure;
-
-        $this->key_field      = $structure['key'];
-        $this->dataset_fields = $structure['value'];
-    }
-
-    public function current()
-    {
-        return $this->GetItemByIndex($this->position);
-    }
-
-    public function key()
-    {
-        return $this->position;
-    }
-
-    public function next()
-    {
-        ++$this->position;
-    }
-
-    public function rewind()
-    {
-        $this->position = 0;
-    }
-
-    public function valid()
-    {
-        return $this->position < $this->count;
-    }
-
-    /**
-     * Returns an item by index.
-     */
-    public function GetItemByIndex($index)
-    {
-        if (isset($this->data[$index])) {
-            $item = $this->data[$index];
-            $key  = is_null($this->key_field) ? $index : null;
-
-            return new SVGGraphStructuredDataItem(
-                $this->data[$index],
-                $this->structure, $this->dataset, $key
-            );
-        }
-
-        return;
-    }
-
-    /**
-     * Returns an item by key.
-     */
-    public function GetItemByKey($key)
-    {
-        if (is_null($this->key_field)) {
-            if (isset($this->data[$key])) {
-                return new SVGGraphStructuredDataItem(
-                    $this->data[$key],
-                    $this->structure, $this->dataset, $key
-                );
-            }
-        } else {
-            foreach ($this->data as $item) {
-                if (isset($item[$this->key_field]) && $item[$this->key_field] == $key) {
-                    return new SVGGraphStructuredDataItem(
-                        $item, $this->structure,
-                        $this->dataset, $key
-                    );
-                }
-            }
-        }
-
-        return;
-    }
-}
-
-/**
- * Class for structured data items.
- */
-class SVGGraphStructuredDataItem
-{
-    private $item;
-    private $dataset = 0;
-    private $key_field = 0;
-    private $dataset_fields = array();
-    private $structure;
-    public $key = 0;
-    public $value = null;
-
-    public function __construct($item, &$structure, $dataset, $key = null)
-    {
-        $this->item           = $item;
-        $this->key_field      = $structure['key'];
-        $this->dataset_fields = $structure['value'];
-        $this->key            = is_null($this->key_field) ? $key : $item[$this->key_field];
-        if (isset($this->dataset_fields[$dataset]) &&
-            isset($item[$this->dataset_fields[$dataset]])
-        ) {
-            $this->value = $item[$this->dataset_fields[$dataset]];
-        }
-
-        $this->dataset   = $dataset;
-        $this->structure = &$structure;
-    }
-
-    /**
-     * Constructs a new data item with a different dataset.
-     */
-    public function NewFrom($dataset)
-    {
-        return new self(
-            $this->item, $this->structure,
-            $dataset, $this->key
-        );
-    }
-
-    /**
-     * Returns some extra data from item.
-     */
-    public function Data($field)
-    {
-        if (!isset($this->structure[$field])) {
-            return;
-        }
-        $item_field = $this->structure[$field];
-        if (is_array($item_field)) {
-            if (!isset($item_field[$this->dataset])) {
-                return;
-            }
-            $item_field = $item_field[$this->dataset];
-        }
-
-        return isset($this->item[$item_field]) ? $this->item[$item_field] : null;
-    }
-
-    /**
-     * Returns a value from the item without translating structure.
-     */
-    public function RawData($field)
-    {
-        return isset($this->item[$field]) ? $this->item[$field] : null;
-    }
-}
-
-/**
- * Function for sorting by fields.
- */
-function SVGGraphFieldSort($a, $b)
-{
-    $f = $GLOBALS['SVGGraphFieldSortField'];
-    // check that fields are present
-    if (!isset($a[$f]) || !isset($b[$f])) {
-        return 0;
-    }
-    if ($a[$f] == $b[$f]) {
-        return 0;
-    }
-
-    return $a[$f] > $b[$f] ? 1 : -1;
-}
-
-/*
- * Field to sort by
- */
-$SVGGraphFieldSortField = 0;

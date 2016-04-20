@@ -796,12 +796,12 @@ JAVASCRIPT;
         // convert XML char entities to JS unicode
         $string = preg_replace_callback(
             '/&#x([a-f0-9]+);/',
-            'SVGGraphJavascript::hex2js',
+            'GGS\SVGGraph\SVGGraphJavascript::hex2js',
             $string
         );
         $string = preg_replace_callback(
             '/&#([0-9]+);/',
-            'SVGGraphJavascript::dec2js',
+            'GGS\SVGGraph\SVGGraphJavascript::dec2js',
             $string
         );
 

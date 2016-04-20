@@ -149,8 +149,8 @@ class SVGGraph
      */
     private function Setup($class)
     {
-        $class_name = 'GGS\\SVGGraph\\'.$class;
-        $g = new $class_name($this->width, $this->height, $this->settings);
+        $class_name = 'GGS\\SVGGraph\\' . $class;
+        $g          = new $class_name($this->width, $this->height, $this->settings);
         $g->Values($this->values);
         $g->Links($this->links);
         if (is_object($this->colours)) {
@@ -240,10 +240,12 @@ abstract class Graph
             die("Ini file [{$ini_file}] not found -- exiting");
         }
 
-        $class     = get_class($this);
+        $reflect   = new \ReflectionClass($this);
+        $class     = $reflect->getShortName();
         $hierarchy = array($class);
-        while ($class = get_parent_class($class)) {
-            array_unshift($hierarchy, $class);
+        while ($parent = $reflect->getParentClass()) {
+            array_unshift($hierarchy, $parent->getShortName());
+            $reflect = $parent;
         }
 
         while (count($hierarchy)) {
@@ -1456,7 +1458,6 @@ abstract class Graph
     private function LoadJavascript()
     {
         if (!isset(self::$javascript)) {
-            include_once 'SVGGraphJavascript.php';
             self::$javascript = new SVGGraphJavascript($this->settings, $this);
         }
     }
@@ -1735,7 +1736,6 @@ abstract class Graph
             return false;
         }
         if (!isset($this->data_labels)) {
-            include_once 'SVGGraphDataLabels.php';
             $this->data_labels = new DataLabels($this);
         }
 
@@ -1797,7 +1797,6 @@ abstract class Graph
     protected function AddContentLabel($dataset, $index, $x, $y, $w, $h, $content)
     {
         if (!isset($this->data_labels)) {
-            include_once 'SVGGraphDataLabels.php';
             $this->data_labels = new DataLabels($this);
         }
 
@@ -1821,7 +1820,6 @@ abstract class Graph
     {
         if (isset($this->settings['label'])) {
             if (!isset($this->data_labels)) {
-                include_once 'SVGGraphDataLabels.php';
                 $this->data_labels = new DataLabels($this);
             }
             $this->data_labels->Load($this->settings);
@@ -1857,7 +1855,6 @@ abstract class Graph
 
     public function LoadShapes()
     {
-        include_once 'SVGGraphShape.php';
         $this->shapes = new SVGGraphShapeList($this);
 
         $this->shapes->Load($this->settings);
