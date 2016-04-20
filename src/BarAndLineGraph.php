@@ -2,9 +2,17 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class BarAndLineGraph
+ *
+ * @property mixed line_dataset
+ */
 class BarAndLineGraph extends GroupedBarGraph
 {
-    protected $linegraph = null;
+    /**
+     * @var LineGraph|null
+     */
+    protected $lineGraph = null;
 
     /**
      * We need an instance of the LineGraph class.
@@ -19,7 +27,7 @@ class BarAndLineGraph extends GroupedBarGraph
 
         // prevent repeated labels
         unset($settings['label']);
-        $this->linegraph = new LineGraph($w, $h, $settings);
+        $this->lineGraph = new LineGraph($w, $h, $settings);
     }
 
     protected function Draw()
@@ -36,13 +44,13 @@ class BarAndLineGraph extends GroupedBarGraph
             'main_y_axis',
         );
         foreach ($copy as $member) {
-            $this->linegraph->{$member} = $this->{$member};
+            $this->lineGraph->{$member} = $this->{$member};
         }
 
         // keep gradients and patterns synced
-        $this->linegraph->gradients    = &$this->gradients;
-        $this->linegraph->pattern_list = &$this->pattern_list;
-        $this->linegraph->defs         = &$this->defs;
+        $this->lineGraph->gradients    = &$this->gradients;
+        $this->lineGraph->pattern_list = &$this->pattern_list;
+        $this->lineGraph->defs         = &$this->defs;
 
         // find the lines and reduce the bar count by the number of lines
         $bar_count = $chunk_count = count($this->multi_graph);
@@ -63,10 +71,10 @@ class BarAndLineGraph extends GroupedBarGraph
         $y_bottom   = min($y_axis_pos, $this->height - $this->pad_bottom);
 
         if ($bar_count == 0) {
-            $chunk_width = $bspace = $chunk_unit_width = 1;
+            $chunk_width = $bSpace = $chunk_unit_width = 1;
         } else {
             // this would have problems if there are no bars
-            list($chunk_width, $bspace, $chunk_unit_width) =
+            list($chunk_width, $bSpace, $chunk_unit_width) =
                 GroupedBarGraph::BarPosition(
                     $this->bar_width,
                     $this->bar_width_min,
@@ -82,7 +90,7 @@ class BarAndLineGraph extends GroupedBarGraph
         $this->ColourSetup($this->multi_graph->ItemsCount(-1), $chunk_count);
         $marker_offset = $this->x_axes[$this->main_x_axis]->Unit() / 2;
 
-        $bnum       = 0;
+        $bNum       = 0;
         $bars_shown = array_fill(0, $chunk_count, 0);
         $bars       = '';
 
@@ -90,7 +98,7 @@ class BarAndLineGraph extends GroupedBarGraph
         $points = array();
         foreach ($this->multi_graph as $itemlist) {
             $k       = $itemlist[0]->key;
-            $bar_pos = $this->GridPosition($k, $bnum);
+            $bar_pos = $this->GridPosition($k, $bNum);
             if (!is_null($bar_pos)) {
                 for ($j = 0, $b = 0; $j < $chunk_count; ++$j) {
                     $y_axis = $this->DatasetYAxis($j);
@@ -100,12 +108,12 @@ class BarAndLineGraph extends GroupedBarGraph
                         if (!is_null($item->value)) {
                             $x            = $bar_pos + $marker_offset;
                             $y            = $this->GridY($item->value, $y_axis);
-                            $points[$j][] = array($x, $y, $item, $j, $bnum);
+                            $points[$j][] = array($x, $y, $item, $j, $bNum);
                         }
                     } else {
-                        $bar['x'] = $bspace + $bar_pos + ($b * $chunk_unit_width);
+                        $bar['x'] = $bSpace + $bar_pos + ($b * $chunk_unit_width);
                         $this->SetStroke($bar_style, $item, $j);
-                        $bar_style['fill'] = $this->GetColour($item, $bnum, $j);
+                        $bar_style['fill'] = $this->GetColour($item, $bNum, $j);
 
                         if (!is_null($item->value)) {
                             $this->Bar($item->value, $bar, null, $y_axis);
@@ -115,7 +123,7 @@ class BarAndLineGraph extends GroupedBarGraph
 
                                 $show_label = $this->AddDataLabel(
                                     $j,
-                                    $bnum,
+                                    $bNum,
                                     $bar,
                                     $item,
                                     $bar['x'],
@@ -146,13 +154,13 @@ class BarAndLineGraph extends GroupedBarGraph
                     }
                 }
             }
-            ++$bnum;
+            ++$bNum;
         }
 
         // draw lines clipped to grid
         $graph_line = '';
         foreach ($points as $dataset => $p) {
-            $graph_line .= $this->linegraph->DrawLine($dataset, $p, $y_bottom);
+            $graph_line .= $this->lineGraph->DrawLine($dataset, $p, $y_bottom);
         }
         $group = array();
         $this->ClipGrid($group);
@@ -175,7 +183,7 @@ class BarAndLineGraph extends GroupedBarGraph
         $body .= $this->Axes();
 
         // add in the markers created by line graph
-        $body .= $this->linegraph->DrawMarkers();
+        $body .= $this->lineGraph->DrawMarkers();
 
         return $body;
     }
@@ -197,7 +205,7 @@ class BarAndLineGraph extends GroupedBarGraph
             return parent::DrawLegendEntry($set, $x, $y, $w, $h);
         }
 
-        return $this->linegraph->DrawLegendEntry($set, $x, $y, $w, $h);
+        return $this->lineGraph->DrawLegendEntry($set, $x, $y, $w, $h);
     }
 
     /**
@@ -206,7 +214,7 @@ class BarAndLineGraph extends GroupedBarGraph
     protected function DrawDataLabels()
     {
         $labels = parent::DrawDataLabels();
-        $labels .= $this->linegraph->DrawDataLabels();
+        $labels .= $this->lineGraph->DrawDataLabels();
 
         return $labels;
     }

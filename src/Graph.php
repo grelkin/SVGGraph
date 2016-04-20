@@ -11,6 +11,7 @@ namespace GGS\SVGGraph;
  * @property string pad_bottom
  * @property string empty_use
  * @property string data_label_min_space
+ * @property string compat_events
  */
 abstract class Graph
 {
@@ -40,6 +41,10 @@ abstract class Graph
     protected $repeated_keys = 'error';
     protected $require_structured = false;
     protected $require_integer_keys = true;
+
+    /**
+     * @var null|MultiGraph
+     */
     protected $multi_graph = null;
     /**
      * @var SVGGraphColours

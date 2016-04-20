@@ -2,6 +2,11 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class GroupedBarGraph
+ *
+ * @property mixed group_space
+ */
 class GroupedBarGraph extends BarGraph
 {
     protected function Draw()

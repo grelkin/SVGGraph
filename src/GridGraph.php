@@ -11,6 +11,10 @@ abstract class GridGraph extends Graph
      * @var Axis[]
      */
     protected $x_axes;
+
+    /**
+     * @var Axis[]
+     */
     protected $y_axes;
     protected $main_x_axis = 0;
     protected $main_y_axis = 0;
