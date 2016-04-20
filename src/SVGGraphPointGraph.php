@@ -166,7 +166,7 @@ abstract class PointGraph extends GridGraph
 
         // check for image marker
         if (strncmp($type, 'image:', 6) == 0) {
-            $image_path = SVGGraphSubstr($type, 6, null, $this->encoding);
+            $image_path = mb_substr($type, 6, null, $this->encoding);
             $type       = 'image';
         }
 

@@ -1196,7 +1196,7 @@ abstract class GridGraph extends Graph
                 $key = '';
             }
 
-            if (SVGGraphStrlen($key, $this->encoding) > 0 && $x - $x_prev >= $min_space
+            if (mb_strlen($key, $this->encoding) > 0 && $x - $x_prev >= $min_space
                 && (++$p < $count || !$label_centre_x)
             ) {
                 $position['x'] = $x + $xoff;
@@ -1277,7 +1277,7 @@ abstract class GridGraph extends Graph
                 $key = '';
             }
 
-            if (SVGGraphStrlen($key, $this->encoding) && $y_prev - $y >= $min_space &&
+            if (mb_strlen($key, $this->encoding) && $y_prev - $y >= $min_space &&
                 (++$p < $count || !$label_centre_y)
             ) {
                 $position['y'] = $y + $text_centre + $yoff;

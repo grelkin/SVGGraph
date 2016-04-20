@@ -506,14 +506,14 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
         $before = $this->before_label;
         $after  = $this->after_label;
         $enc    = $this->encoding;
-        $llen   = SVGGraphStrlen($label, $enc);
-        $blen   = SVGGraphStrlen($before, $enc);
-        $alen   = SVGGraphStrlen($after, $enc);
-        if ($alen > 0 && SVGGraphSubstr($label, $llen - $alen, $alen, $enc) == $after) {
-            $label = SVGGraphSubstr($label, 0, $llen - $alen, $enc);
+        $llen   = mb_strlen($label, $enc);
+        $blen   = mb_strlen($before, $enc);
+        $alen   = mb_strlen($after, $enc);
+        if ($alen > 0 && mb_substr($label, $llen - $alen, $alen, $enc) == $after) {
+            $label = mb_substr($label, 0, $llen - $alen, $enc);
         }
-        if ($blen > 0 && SVGGraphSubstr($label, 0, $blen, $enc) == $before) {
-            $label = SVGGraphSubstr($label, $blen, null, $enc);
+        if ($blen > 0 && mb_substr($label, 0, $blen, $enc) == $before) {
+            $label = mb_substr($label, $blen, null, $enc);
         }
 
         return $label;

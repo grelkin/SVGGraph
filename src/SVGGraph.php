@@ -26,31 +26,6 @@ class SVGGraph
             }
             $this->settings = $settings;
         }
-
-        // use mbstring if available, or fall back to 1-byte char strings
-        if (!function_exists('SVGGraphStrlen')) {
-            if (extension_loaded('mbstring')) {
-                function SVGGraphStrlen($s, $e)
-                {
-                    return mb_strlen($s, $e);
-                }
-
-                function SVGGraphSubstr($s, $b, $l, $e)
-                {
-                    return mb_substr($s, $b, $l, $e);
-                }
-            } else {
-                function SVGGraphStrlen($s, $e)
-                {
-                    return strlen($s);
-                }
-
-                function SVGGraphSubstr($s, $b, $l, $e)
-                {
-                    return is_null($l) ? substr($s, $b) : substr($s, $b, $l);
-                }
-            }
-        }
     }
 
     public function Values($values)
@@ -474,8 +449,8 @@ abstract class Graph
             $entry = $this->DrawLegendEntry($key, 0, 0, 20, 20);
             if ($entry != '') {
                 ++$entry_count;
-                if (SVGGraphStrlen($value, $this->encoding) > $longest) {
-                    $longest = SVGGraphStrlen($value, $this->encoding);
+                if (mb_strlen($value, $this->encoding) > $longest) {
+                    $longest = mb_strlen($value, $this->encoding);
                 }
             }
         }
@@ -515,7 +490,7 @@ abstract class Graph
             $start_y += $title_font_size + $this->legend_padding;
             $title_width = $this->legend_padding * 2 +
                            $title_font_size * $title_font_adjust *
-                           SVGGraphStrlen($this->legend_title, $this->encoding);
+                           mb_strlen($this->legend_title, $this->encoding);
         }
 
         $columns    = max(1, min(ceil($this->legend_columns), $entry_count));
@@ -877,7 +852,7 @@ abstract class Graph
     protected function DrawTitle()
     {
         // graph_title is available for all graph types
-        if (SVGGraphStrlen($this->graph_title, $this->encoding) <= 0) {
+        if (mb_strlen($this->graph_title, $this->encoding) <= 0) {
             return '';
         }
 
@@ -1124,13 +1099,13 @@ abstract class Graph
                 $len   = 0;
                 $lines = explode("\n", $text);
                 foreach ($lines as $l) {
-                    if (SVGGraphStrlen($l, $encoding) > $len) {
-                        $len = SVGGraphStrlen($l, $encoding);
+                    if (mb_strlen($l, $encoding) > $len) {
+                        $len = mb_strlen($l, $encoding);
                     }
                 }
                 $height += $line_spacing * (count($lines) - 1);
             } else {
-                $len = SVGGraphStrlen($text, $encoding);
+                $len = mb_strlen($text, $encoding);
             }
         }
         $width = $len * $font_size * $font_adjust;
