@@ -448,7 +448,7 @@ class Axis
             return $subdivs;
         }
 
-        $c = $pos1 = $pos2 = 0;
+        $c    = $pos1 = $pos2 = 0;
         $pos1 = $c * $this->grid_spacing;
         while ($pos1 + $spacing < $this->length) {
             $d    = 1;
