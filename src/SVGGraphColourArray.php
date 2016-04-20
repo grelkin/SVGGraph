@@ -15,6 +15,8 @@ class SVGGraphColourArray implements \ArrayAccess
 
     /**
      * Not used by this class.
+     *
+     * @param $count
      */
     public function Setup($count)
     {
@@ -23,6 +25,8 @@ class SVGGraphColourArray implements \ArrayAccess
 
     /**
      * always true, because it wraps around.
+     * @param mixed $offset
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -31,6 +35,8 @@ class SVGGraphColourArray implements \ArrayAccess
 
     /**
      * return the colour.
+     * @param mixed $offset
+     * @return mixed
      */
     public function offsetGet($offset)
     {

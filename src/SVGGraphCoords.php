@@ -16,6 +16,11 @@ class SVGGraphCoords
 
     /**
      * Returns TRUE if (x,y) is grid-based.
+     *
+     * @param $x
+     * @param $y
+     *
+     * @return bool
      */
     public function IsGrid($x, $y)
     {
@@ -36,7 +41,9 @@ class SVGGraphCoords
 
     /**
      * splits $value, removing leading char and updating $axis.
-     */
+     * @param $value
+     * @param $axis
+*/
     private function ValueAxis(&$value, &$axis)
     {
         // strip leading u or g
@@ -51,7 +58,11 @@ class SVGGraphCoords
 
     /**
      * Transform coordinate pair to SVG coords.
-     */
+     * @param $x
+     * @param $y
+     * @return array
+     * @throws \Exception
+*/
     public function TransformCoords($x, $y)
     {
         $xy = array($this->Transform($x, 'x'), $this->Transform($y, 'y'));
@@ -64,7 +75,11 @@ class SVGGraphCoords
 
     /**
      * Transform from grid space etc. to SVG space.
-     */
+     * @param $value
+     * @param $axis
+     * @return int|string
+     * @throws \Exception
+*/
     public function Transform($value, $axis)
     {
         if (is_numeric($value)) {

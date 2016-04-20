@@ -174,6 +174,8 @@ class StackedGroupedBarGraph extends StackedBarGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {

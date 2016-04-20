@@ -137,6 +137,12 @@ class StackedGroupedBar3DGraph extends StackedBar3DGraph
 
     /**
      * Override AdjustAxes to change depth.
+     *
+     * @param $x_len
+     * @param $y_len
+     *
+     * @return array
+     * @throws \Exception
      */
     protected function AdjustAxes(&$x_len, &$y_len)
     {
@@ -160,7 +166,8 @@ class StackedGroupedBar3DGraph extends StackedBar3DGraph
 
     /**
      * construct multigraph.
-     */
+     * @param $values
+*/
     public function Values($values)
     {
         parent::Values($values);

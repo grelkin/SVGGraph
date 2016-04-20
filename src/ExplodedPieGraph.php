@@ -24,6 +24,16 @@ class ExplodedPieGraph extends PieGraph
 
     /**
      * Returns a single slice of pie.
+     *
+     * @param $item
+     * @param $angle_start
+     * @param $angle_end
+     * @param $radius_x
+     * @param $radius_y
+     * @param $attr
+     * @param $single_slice
+     *
+     * @return string
      */
     protected function GetSlice(
         $item,
@@ -78,7 +88,11 @@ class ExplodedPieGraph extends PieGraph
 
     /**
      * Returns the x,y offset caused by explosion.
-     */
+     * @param $item
+     * @param $angle_start
+     * @param $angle_end
+     * @return array
+*/
     protected function GetExplode($item, $angle_start, $angle_end)
     {
         $range = $this->largest_value - $this->smallest_value;
@@ -115,7 +129,17 @@ class ExplodedPieGraph extends PieGraph
 
     /**
      * Returns the position for the label.
-     */
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     * @return string
+*/
     public function DataLabelPosition(
         $dataset,
         $index,

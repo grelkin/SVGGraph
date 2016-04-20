@@ -12,6 +12,8 @@ class Histogram extends BarGraph
 
     /**
      * Process the values.
+     *
+     * @param $values
      */
     public function Values($values)
     {
@@ -105,6 +107,9 @@ class Histogram extends BarGraph
 
     /**
      * Returns the start (or next) interval for a value.
+     * @param      $value
+     * @param bool $next
+     * @return float
      */
     public function Interval($value, $next = false)
     {
@@ -118,6 +123,8 @@ class Histogram extends BarGraph
 
     /**
      * Sets up the colour class with corrected number of colours.
+     * @param      $count
+     * @param null $datasets
      */
     protected function ColourSetup($count, $datasets = null)
     {
@@ -127,6 +134,9 @@ class Histogram extends BarGraph
 
     /**
      * Override because of the shifted numbering.
+     * @param $key
+     * @param $ikey
+     * @return null
      */
     protected function GridPosition($key, $ikey)
     {
@@ -157,6 +167,8 @@ class Histogram extends BarGraph
 
     /**
      * Returns the space before a bar.
+     * @param $bar_width
+     * @return mixed
      */
     protected function BarSpace($bar_width)
     {

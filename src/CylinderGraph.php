@@ -47,6 +47,11 @@ class CylinderGraph extends Bar3DGraph
 
     /**
      * Creates the ellipse for the top of the cylinder.
+     *
+     * @param $ellipse
+     * @param $angle
+     *
+     * @return array
      */
     protected function CreateEllipse($ellipse, $angle)
     {
@@ -73,7 +78,10 @@ class CylinderGraph extends Bar3DGraph
 
     /**
      * Calculates the a and b radii of the ellipse filling the parallelogram.
-     */
+     * @param $angle
+     * @param $length
+     * @return array
+*/
     protected function FindEllipse($angle, $length)
     {
         $alpha = deg2rad($angle / 2);
@@ -111,7 +119,15 @@ class CylinderGraph extends Bar3DGraph
 
     /**
      * Returns the SVG code for a 3D cylinder.
-     */
+     * @param      $item
+     * @param      $bar
+     * @param      $top
+     * @param      $index
+     * @param null $dataset
+     * @param null $start
+     * @param null $axis
+     * @return string
+*/
     protected function Bar3D(
         $item,
         &$bar,

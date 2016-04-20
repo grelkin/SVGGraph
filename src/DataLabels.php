@@ -31,6 +31,10 @@ class DataLabels
     /**
      * Retrieves properties from the graph if they are not
      * already available as properties.
+     *
+     * @param $name
+     *
+     * @return
      */
     public function __get($name)
     {
@@ -39,6 +43,10 @@ class DataLabels
 
     /**
      * Make empty($this->option) more robust.
+     *
+     * @param $name
+     *
+     * @return bool
      */
     public function __isset($name)
     {
@@ -47,6 +55,18 @@ class DataLabels
 
     /**
      * Adds a label to the list.
+     *
+     * @param      $dataset
+     * @param      $index
+     * @param      $item
+     * @param      $x
+     * @param      $y
+     * @param      $w
+     * @param      $h
+     * @param null $id
+     * @param null $content
+     * @param null $fade_in
+     * @param null $click
      */
     public function AddLabel(
         $dataset,
@@ -83,6 +103,14 @@ class DataLabels
 
     /**
      * Adds a content (non-data) label.
+     *
+     * @param $dataset
+     * @param $index
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $content
      */
     public function AddContentLabel($dataset, $index, $x, $y, $w, $h, $content)
     {
@@ -104,6 +132,10 @@ class DataLabels
 
     /**
      * Adds a user-defined label from a label option.
+     *
+     * @param $label_array
+     *
+     * @throws \Exception
      */
     public function AddUserLabel($label_array)
     {
@@ -139,6 +171,10 @@ class DataLabels
 
     /**
      * Updates filter information from label.
+     *
+     * @param $dataset
+     * @param $index
+     * @param $value
      */
     protected function SetupFilters($dataset, $index, $value)
     {
@@ -190,6 +226,10 @@ class DataLabels
 
     /**
      * Load user-defined labels.
+     *
+     * @param $settings
+     *
+     * @throws \Exception
      */
     public function Load(&$settings)
     {
@@ -249,6 +289,12 @@ class DataLabels
 
     /**
      * Draws a label.
+     *
+     * @param $dataset
+     * @param $index
+     * @param $gobject
+     *
+     * @return string
      */
     protected function DrawLabel($dataset, $index, &$gobject)
     {
@@ -515,6 +561,9 @@ class DataLabels
 
     /**
      * Individual label styles from the structured data item.
+     *
+     * @param $style
+     * @param $item
      */
     protected function ItemStyles(&$style, &$item)
     {
@@ -556,6 +605,9 @@ class DataLabels
 
     /**
      * Styles from the label option.
+     *
+     * @param $style
+     * @param $label_array
      */
     protected function UserStyles(&$style, &$label_array)
     {
@@ -594,6 +646,13 @@ class DataLabels
 
     /**
      * Returns TRUE if the label should be shown.
+     *
+     * @param $filter
+     * @param $dataset
+     * @param $label
+     * @param $index
+     *
+     * @return bool
      */
     protected function Filter($filter, $dataset, &$label, $index)
     {
@@ -674,6 +733,15 @@ class DataLabels
 
     /**
      * Straight line label style.
+     *
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $style
+     * @param $surround
+     *
+     * @return string
      */
     protected function LineLabel($x, $y, $w, $h, &$style, &$surround)
     {
@@ -707,6 +775,15 @@ class DataLabels
 
     /**
      * Simple box label style.
+     *
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $style
+     * @param $surround
+     *
+     * @return string
      */
     protected function BoxLabel($x, $y, $w, $h, &$style, &$surround)
     {
@@ -728,6 +805,15 @@ class DataLabels
 
     /**
      * Speech bubble label style.
+     *
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $style
+     * @param $surround
+     *
+     * @return string
      */
     protected function BubbleLabel($x, $y, $w, $h, &$style, &$surround)
     {

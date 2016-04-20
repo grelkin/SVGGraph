@@ -18,6 +18,8 @@ class SVGGraphDataItem
 
     /**
      * Returns NULL because standard data doesn't support extra fields.
+     *
+     * @param $field
      */
     public function Data($field)
     {

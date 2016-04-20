@@ -12,6 +12,13 @@ class SVGGraphColourRangeHSL extends SVGGraphColourRange
 
     /**
      * HSL range.
+     *
+     * @param $h1
+     * @param $s1
+     * @param $l1
+     * @param $h2
+     * @param $s2
+     * @param $l2
      */
     public function __construct($h1, $s1, $l1, $h2, $s2, $l2)
     {
@@ -38,6 +45,8 @@ class SVGGraphColourRangeHSL extends SVGGraphColourRange
 
     /**
      * Return the colour from the range.
+     * @param mixed $offset
+     * @return mixed|string
      */
     public function offsetGet($offset)
     {
@@ -54,6 +63,13 @@ class SVGGraphColourRangeHSL extends SVGGraphColourRange
 
     /**
      * Factory method creates an instance from RGB values.
+     * @param $r1
+     * @param $g1
+     * @param $b1
+     * @param $r2
+     * @param $g2
+     * @param $b2
+     * @return SVGGraphColourRangeHSL
      */
     public static function FromRGB($r1, $g1, $b1, $r2, $g2, $b2)
     {
@@ -65,6 +81,10 @@ class SVGGraphColourRangeHSL extends SVGGraphColourRange
 
     /**
      * Convert RGB to HSL (0-360, 0-1, 0-1).
+     * @param $r
+     * @param $g
+     * @param $b
+     * @return array
      */
     public static function RGBtoHSL($r, $g, $b)
     {
@@ -95,6 +115,10 @@ class SVGGraphColourRangeHSL extends SVGGraphColourRange
 
     /**
      * Convert HSL to RGB.
+     * @param $h
+     * @param $s
+     * @param $l
+     * @return array
      */
     public static function HSLtoRGB($h, $s, $l)
     {

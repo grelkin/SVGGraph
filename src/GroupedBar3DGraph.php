@@ -104,6 +104,8 @@ class GroupedBar3DGraph extends Bar3DGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {
@@ -118,6 +120,10 @@ class GroupedBar3DGraph extends Bar3DGraph
 
     /**
      * Override AdjustAxes to change depth.
+     * @param $x_len
+     * @param $y_len
+     * @return array
+     * @throws \Exception
      */
     protected function AdjustAxes(&$x_len, &$y_len)
     {

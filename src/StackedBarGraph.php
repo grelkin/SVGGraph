@@ -159,6 +159,8 @@ class StackedBarGraph extends BarGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {
@@ -173,6 +175,16 @@ class StackedBarGraph extends BarGraph
 
     /**
      * Overridden to prevent drawing on other bars.
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     * @return mixed|null|string
      */
     public function DataLabelPosition(
         $dataset,
@@ -237,6 +249,10 @@ class StackedBarGraph extends BarGraph
 
     /**
      * Returns the style options for bar labels (and totals).
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @return array
      */
     public function DataLabelStyle($dataset, $index, &$item)
     {

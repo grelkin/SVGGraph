@@ -31,6 +31,12 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Adds a marker to the list.
+     *
+     * @param      $x
+     * @param      $y
+     * @param      $item
+     * @param null $extra
+     * @param int  $set
      */
     public function AddMarker($x, $y, $item, $extra = null, $set = 0)
     {
@@ -71,6 +77,9 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Draws a single set of markers.
+     * @param $set
+     * @param $marker_data
+     * @return string
      */
     protected function DrawMarkerSet($set, &$marker_data)
     {
@@ -84,6 +93,9 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Returns a marker element.
+     * @param $marker
+     * @param $set
+     * @return string
      */
     private function GetMarker($marker, $set)
     {
@@ -124,6 +136,12 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Return a centred marker for the given set.
+     * @param $set
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @return string
      */
     public function DrawLegendEntry($set, $x, $y, $w, $h)
     {
@@ -142,6 +160,12 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Creates a single marker element and its link version.
+     * @param $type
+     * @param $size
+     * @param $fill
+     * @param $stroke_width
+     * @param $stroke_colour
+     * @return string
      */
     private function CreateMarker(
         $type,
@@ -305,6 +329,9 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Returns true if a marker is different to others in its set.
+     * @param $set
+     * @param $item
+     * @return bool
      */
     private function SpecialMarker($set, &$item)
     {
@@ -334,6 +361,9 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Creates a single marker for the data set.
+     * @param      $set
+     * @param null $item
+     * @return string
      */
     private function CreateSingleMarker($set, &$item = null)
     {
@@ -376,6 +406,16 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Returns the position for a data label.
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     * @return mixed|string
      */
     public function DataLabelPosition(
         $dataset,
@@ -419,6 +459,12 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Add a marker label.
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @return bool|void
      */
     public function MarkerLabel($dataset, $index, &$item, $x, $y)
     {
@@ -558,6 +604,13 @@ abstract class PointGraph extends GridGraph
     /**
      * Find the best fit line for the data points
      * Returns array of two paths: best fit and projection.
+     * @param $type
+     * @param $dataset
+     * @param $start
+     * @param $end
+     * @param $project_start
+     * @param $project_end
+     * @return array
      */
     protected function BestFit(
         $type,
@@ -674,6 +727,13 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Returns the coordinates of a line that passes through a box.
+     * @param $x_min
+     * @param $x_max
+     * @param $y_min
+     * @param $y_max
+     * @param $slope
+     * @param $y_int
+     * @return array|void
      */
     protected function BoxLine($x_min, $x_max, $y_min, $y_max, $slope, $y_int)
     {
@@ -706,6 +766,11 @@ abstract class PointGraph extends GridGraph
 
     /**
      * Override to show key and value.
+     * @param $item
+     * @param $dataset
+     * @param $key
+     * @param $value
+     * @return string
      */
     protected function FormatTooltip(&$item, $dataset, $key, $value)
     {

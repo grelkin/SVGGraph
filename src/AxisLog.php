@@ -68,6 +68,11 @@ class AxisLog extends Axis
     /**
      * Returns the grid points as an associative array:
      * array($value => $position).
+     *
+     * @param $min_space
+     * @param $start
+     *
+     * @return array
      */
     public function GetGridPoints($min_space, $start)
     {
@@ -122,6 +127,13 @@ class AxisLog extends Axis
 
     /**
      * Returns the grid subdivision points as an array.
+     *
+     * @param $min_space
+     * @param $min_unit
+     * @param $start
+     * @param $fixed
+     *
+     * @return array
      */
     public function GetGridSubdivisions($min_space, $min_unit, $start, $fixed)
     {
@@ -152,6 +164,10 @@ class AxisLog extends Axis
     /**
      * Returns the position of a value on the axis, or NULL if the position is
      * not possible.
+     *
+     * @param $value
+     *
+     * @return float|void
      */
     public function Position($value)
     {
@@ -185,6 +201,10 @@ class AxisLog extends Axis
 
     /**
      * Returns the value at a position on the axis.
+     *
+     * @param $position
+     *
+     * @return float|number
      */
     public function Value($position)
     {
@@ -195,6 +215,12 @@ class AxisLog extends Axis
 
     /**
      * Finds an even division of the given space that is >= min_space.
+     *
+     * @param     $space
+     * @param     $min_space
+     * @param int $main_division
+     *
+     * @return int
      */
     private function FindDivision($space, $min_space, $main_division = 0)
     {

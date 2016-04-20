@@ -95,6 +95,8 @@ class GroupedBarGraph extends BarGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {
@@ -110,6 +112,13 @@ class GroupedBarGraph extends BarGraph
     /**
      * Calculates the bar width, gap to first bar, gap between bars
      * returns an array containing all three.
+     * @param $bar_width
+     * @param $bar_width_min
+     * @param $unit_width
+     * @param $group_size
+     * @param $bar_space
+     * @param $group_space
+     * @return array
      */
     public static function BarPosition(
         $bar_width,
@@ -155,6 +164,11 @@ class GroupedBarGraph extends BarGraph
 
     /**
      * Calculate bar width, gaps, using fixed bar width.
+     * @param $bar_width
+     * @param $unit_width
+     * @param $group_size
+     * @param $group_space
+     * @return array
      */
     public static function BarPositionFixed(
         $bar_width,

@@ -10,6 +10,12 @@ abstract class ThreeDGraph extends GridGraph
 
     /**
      * Converts x,y,z coordinates into flat x,y.
+     *
+     * @param $x
+     * @param $y
+     * @param $z
+     *
+     * @return array
      */
     protected function Project($x, $y, $z)
     {
@@ -22,7 +28,11 @@ abstract class ThreeDGraph extends GridGraph
 
     /**
      * Adjust axes for block spacing, setting the depth unit.
-     */
+     * @param $x_len
+     * @param $y_len
+     * @return array
+     * @throws \Exception
+*/
     protected function AdjustAxes(&$x_len, &$y_len)
     {
         // make sure project_angle is in range
@@ -209,7 +219,9 @@ abstract class ThreeDGraph extends GridGraph
 
     /**
      * clamps a value to the grid boundaries.
-     */
+     * @param $val
+     * @return mixed
+*/
     protected function ClampVertical($val)
     {
         return max(
@@ -228,7 +240,15 @@ abstract class ThreeDGraph extends GridGraph
 
     /**
      * Returns the path for a guideline, and sets dimensions of the straight bit.
-     */
+     * @param $axis
+     * @param $value
+     * @param $depth
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @return string
+*/
     protected function GuidelinePath($axis, $value, $depth, &$x, &$y, &$w, &$h)
     {
         if ($depth == SVGG_GUIDELINE_ABOVE) {

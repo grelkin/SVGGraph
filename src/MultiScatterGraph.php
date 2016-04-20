@@ -52,6 +52,8 @@ class MultiScatterGraph extends PointGraph
 
     /**
      * Sets up values array.
+     *
+     * @param $values
      */
     public function Values($values)
     {

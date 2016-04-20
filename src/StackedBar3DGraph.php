@@ -115,6 +115,8 @@ class StackedBar3DGraph extends Bar3DGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {

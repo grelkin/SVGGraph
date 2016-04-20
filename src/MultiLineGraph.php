@@ -59,6 +59,8 @@ class MultiLineGraph extends LineGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {

@@ -12,6 +12,13 @@ class SVGGraphColourRangeRGB extends SVGGraphColourRange
 
     /**
      * RGB range.
+     *
+     * @param $r1
+     * @param $g1
+     * @param $b1
+     * @param $r2
+     * @param $g2
+     * @param $b2
      */
     public function __construct($r1, $g1, $b1, $r2, $g2, $b2)
     {
@@ -25,6 +32,8 @@ class SVGGraphColourRangeRGB extends SVGGraphColourRange
 
     /**
      * Return the colour from the range.
+     * @param mixed $offset
+     * @return mixed|string
      */
     public function offsetGet($offset)
     {

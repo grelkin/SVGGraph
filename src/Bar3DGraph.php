@@ -138,6 +138,16 @@ class Bar3DGraph extends ThreeDGraph
 
     /**
      * Returns the SVG code for a 3D bar.
+     *
+     * @param      $item
+     * @param      $bar
+     * @param      $top
+     * @param      $index
+     * @param null $dataset
+     * @param null $start
+     * @param null $axis
+     *
+     * @return string
      */
     protected function Bar3D(
         $item,
@@ -265,6 +275,19 @@ class Bar3DGraph extends ThreeDGraph
 
     /**
      * Override to check minimum space requirement.
+     *
+     * @param      $dataset
+     * @param      $index
+     * @param      $element
+     * @param      $item
+     * @param      $x
+     * @param      $y
+     * @param      $w
+     * @param      $h
+     * @param null $content
+     * @param bool $duplicate
+     *
+     * @return bool
      */
     protected function AddDataLabel(
         $dataset,
@@ -298,6 +321,14 @@ class Bar3DGraph extends ThreeDGraph
 
     /**
      * Return box for legend.
+     *
+     * @param $set
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     *
+     * @return string
      */
     protected function DrawLegendEntry($set, $x, $y, $w, $h)
     {

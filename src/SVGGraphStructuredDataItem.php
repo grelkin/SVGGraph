@@ -33,6 +33,10 @@ class SVGGraphStructuredDataItem
 
     /**
      * Constructs a new data item with a different dataset.
+     *
+     * @param $dataset
+     *
+     * @return SVGGraphStructuredDataItem
      */
     public function NewFrom($dataset)
     {
@@ -44,7 +48,9 @@ class SVGGraphStructuredDataItem
 
     /**
      * Returns some extra data from item.
-     */
+     * @param $field
+     * @return null|void
+*/
     public function Data($field)
     {
         if (!isset($this->structure[$field])) {
@@ -63,7 +69,9 @@ class SVGGraphStructuredDataItem
 
     /**
      * Returns a value from the item without translating structure.
-     */
+     * @param $field
+     * @return null
+*/
     public function RawData($field)
     {
         return isset($this->item[$field]) ? $this->item[$field] : null;

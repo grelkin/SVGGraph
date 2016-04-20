@@ -101,6 +101,14 @@ class BubbleGraph extends PointGraph
 
     /**
      * Return bubble for legend.
+     *
+     * @param $set
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     *
+     * @return string
      */
     public function DrawLegendEntry($set, $x, $y, $w, $h)
     {

@@ -21,6 +21,16 @@ class Pie3DGraph extends PieGraph
 
     /**
      * Override the parent to draw 3D slice.
+     *
+     * @param $item
+     * @param $angle_start
+     * @param $angle_end
+     * @param $radius_x
+     * @param $radius_y
+     * @param $attr
+     * @param $single_slice
+     *
+     * @return string
      */
     protected function GetSlice(
         $item,
@@ -103,7 +113,13 @@ class Pie3DGraph extends PieGraph
 
     /**
      * Returns the path for an edge.
-     */
+     * @param      $angle_start
+     * @param      $angle_end
+     * @param      $radius_x
+     * @param      $radius_y
+     * @param bool $double_curve
+     * @return string
+*/
     protected function GetEdge(
         $angle_start,
         $angle_end,
@@ -141,7 +157,9 @@ class Pie3DGraph extends PieGraph
 
     /**
      * Returns TRUE if the angle is in the lower half of the pie.
-     */
+     * @param $angle
+     * @return bool
+*/
     protected function LowerHalf($angle)
     {
         $angle = fmod($angle, M_PI * 2);

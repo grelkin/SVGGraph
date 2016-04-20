@@ -51,6 +51,10 @@ class SVGGraphDataIterator implements \Iterator
 
     /**
      * Returns an item by index.
+     *
+     * @param $index
+     *
+     * @return SVGGraphDataItem|void
      */
     public function GetItemByIndex($index)
     {
@@ -65,7 +69,9 @@ class SVGGraphDataIterator implements \Iterator
 
     /**
      * Returns an item by its key.
-     */
+     * @param $key
+     * @return SVGGraphDataItem|void
+*/
     public function GetItemByKey($key)
     {
         if (isset($this->data[$this->dataset][$key])) {

@@ -106,6 +106,16 @@ class BoxAndWhiskerGraph extends PointGraph
 
     /**
      * Returns the code for a box with whiskers.
+     *
+     * @param $x
+     * @param $w
+     * @param $median
+     * @param $top
+     * @param $bottom
+     * @param $wtop
+     * @param $wbottom
+     *
+     * @return string
      */
     protected function WhiskerBox(
         $x,
@@ -177,6 +187,14 @@ class BoxAndWhiskerGraph extends PointGraph
 
     /**
      * Return box for legend.
+     *
+     * @param $set
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     *
+     * @return string
      */
     public function DrawLegendEntry($set, $x, $y, $w, $h)
     {
@@ -239,6 +257,10 @@ class BoxAndWhiskerGraph extends PointGraph
 
     /**
      * Returns the list of outliers for an item.
+     *
+     * @param $item
+     *
+     * @return array
      */
     protected function GetOutliers(&$item)
     {

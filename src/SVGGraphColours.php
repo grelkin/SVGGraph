@@ -43,6 +43,9 @@ class SVGGraphColours implements \Countable
 
     /**
      * Setup based on graph requirements.
+     *
+     * @param      $count
+     * @param null $datasets
      */
     public function Setup($count, $datasets = null)
     {
@@ -65,6 +68,9 @@ class SVGGraphColours implements \Countable
 
     /**
      * Returns the colour for an index and dataset.
+     * @param      $index
+     * @param null $dataset
+     * @return
      */
     public function GetColour($index, $dataset = null)
     {
@@ -101,6 +107,8 @@ class SVGGraphColours implements \Countable
 
     /**
      * Assign a colour array for a dataset.
+     * @param $dataset
+     * @param $colours
      */
     public function Set($dataset, $colours)
     {
@@ -117,6 +125,13 @@ class SVGGraphColours implements \Countable
 
     /**
      * Set up RGB colour range.
+     * @param $dataset
+     * @param $r1
+     * @param $g1
+     * @param $b1
+     * @param $r2
+     * @param $g2
+     * @param $b2
      */
     public function RangeRGB($dataset, $r1, $g1, $b1, $r2, $g2, $b2)
     {
@@ -127,6 +142,14 @@ class SVGGraphColours implements \Countable
 
     /**
      * HSL colour range, with option to go the long way.
+     * @param      $dataset
+     * @param      $h1
+     * @param      $s1
+     * @param      $l1
+     * @param      $h2
+     * @param      $s2
+     * @param      $l2
+     * @param bool $reverse
      */
     public function RangeHSL(
         $dataset,
@@ -148,6 +171,14 @@ class SVGGraphColours implements \Countable
 
     /**
      * HSL colour range from RGB values, with option to go the long way.
+     * @param      $dataset
+     * @param      $r1
+     * @param      $g1
+     * @param      $b1
+     * @param      $r2
+     * @param      $g2
+     * @param      $b2
+     * @param bool $reverse
      */
     public function RangeRGBtoHSL(
         $dataset,
@@ -169,6 +200,9 @@ class SVGGraphColours implements \Countable
 
     /**
      * RGB colour range from two RGB hex codes.
+     * @param $dataset
+     * @param $c1
+     * @param $c2
      */
     public function RangeHexRGB($dataset, $c1, $c2)
     {
@@ -179,6 +213,10 @@ class SVGGraphColours implements \Countable
 
     /**
      * HSL colour range from RGB hex codes.
+     * @param      $dataset
+     * @param      $c1
+     * @param      $c2
+     * @param bool $reverse
      */
     public function RangeHexHSL($dataset, $c1, $c2, $reverse = false)
     {
@@ -189,6 +227,8 @@ class SVGGraphColours implements \Countable
 
     /**
      * Convert a colour code to RGB array.
+     * @param $c
+     * @return array
      */
     public static function HexRGB($c)
     {

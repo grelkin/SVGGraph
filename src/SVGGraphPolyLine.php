@@ -21,6 +21,8 @@ class SVGGraphPolyLine extends SVGGraphShape
 
     /**
      * Override to transform pairs of points.
+     *
+     * @param $attributes
      */
     protected function TransformCoordinates(&$attributes)
     {
@@ -36,6 +38,9 @@ class SVGGraphPolyLine extends SVGGraphShape
 
     /**
      * Override to build the points attribute.
+     * @param $graph
+     * @param $attributes
+     * @return
      */
     protected function DrawElement(&$graph, &$attributes)
     {

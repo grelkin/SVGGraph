@@ -88,6 +88,8 @@ class MultiRadarGraph extends RadarGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {

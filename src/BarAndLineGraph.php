@@ -8,6 +8,10 @@ class BarAndLineGraph extends GroupedBarGraph
 
     /**
      * We need an instance of the LineGraph class.
+     *
+     * @param      $w
+     * @param      $h
+     * @param null $settings
      */
     public function __construct($w, $h, $settings = null)
     {
@@ -178,6 +182,14 @@ class BarAndLineGraph extends GroupedBarGraph
 
     /**
      * Return box or line for legend.
+     *
+     * @param $set
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     *
+     * @return string
      */
     protected function DrawLegendEntry($set, $x, $y, $w, $h)
     {

@@ -161,6 +161,18 @@ class PopulationPyramid extends HorizontalStackedBarGraph
 
     /**
      * Overridden to prevent drawing on other bars.
+     *
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     *
+     * @return mixed|null|string
      */
     public function DataLabelPosition(
         $dataset,
@@ -207,7 +219,8 @@ class PopulationPyramid extends HorizontalStackedBarGraph
 
     /**
      * construct multigraph.
-     */
+     * @param $values
+*/
     public function Values($values)
     {
         parent::Values($values);
@@ -275,7 +288,12 @@ class PopulationPyramid extends HorizontalStackedBarGraph
 
     /**
      * Returns the X and Y axis class instances as a list.
-     */
+     * @param $ends
+     * @param $x_len
+     * @param $y_len
+     * @return array
+     * @throws \Exception
+*/
     protected function GetAxes($ends, &$x_len, &$y_len)
     {
         // always assoc, no units

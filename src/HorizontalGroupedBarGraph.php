@@ -96,6 +96,8 @@ class HorizontalGroupedBarGraph extends HorizontalBarGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {

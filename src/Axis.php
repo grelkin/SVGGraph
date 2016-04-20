@@ -49,6 +49,8 @@ class Axis
 
     /**
      * Allow length adjustment.
+     *
+     * @param $l
      */
     public function SetLength($l)
     {
@@ -89,6 +91,10 @@ class Axis
      * Subdivide when the divisions are too large.
      *
      * @param $length
+     * @param $min
+     * @param $count
+     * @param $neg_count
+     * @param $magnitude
      */
     private function sub_division(
         $length,
@@ -105,6 +111,12 @@ class Axis
 
     /**
      * Determine the axis divisions.
+     *
+     * @param $length
+     * @param $min
+     * @param $count
+     * @param $neg_count
+     * @param $magnitude
      */
     private function find_division(
         $length,
@@ -173,6 +185,10 @@ class Axis
 
     /**
      * Returns the grid spacing.
+     *
+     * @param $min
+     *
+     * @return float
      */
     protected function Grid($min)
     {
@@ -289,6 +305,10 @@ class Axis
 
     /**
      * Returns the position of a value on the axis.
+     *
+     * @param $value
+     *
+     * @return
      */
     public function Position($value)
     {
@@ -306,6 +326,10 @@ class Axis
 
     /**
      * Returns the value at a position on the axis.
+     *
+     * @param $position
+     *
+     * @return float
      */
     public function Value($position)
     {
@@ -330,6 +354,12 @@ class Axis
 
     /**
      * Returns the grid points as an array of GridPoints.
+     *
+     * @param $min_space
+     * @param $start
+     *
+     * @return array
+     * @throws \Exception
      */
     public function GetGridPoints($min_space, $start)
     {
@@ -390,6 +420,14 @@ class Axis
 
     /**
      * Returns the grid subdivision points as an array.
+     *
+     * @param $min_space
+     * @param $min_unit
+     * @param $start
+     * @param $fixed
+     *
+     * @return array
+     * @throws \Exception
      */
     public function GetGridSubdivisions($min_space, $min_unit, $start, $fixed)
     {
@@ -428,6 +466,13 @@ class Axis
 
     /**
      * Find the subdivision size.
+     *
+     * @param $grid_div
+     * @param $min
+     * @param $min_unit
+     * @param $fixed
+     *
+     * @return float|void
      */
     private function FindSubdiv($grid_div, $min, $min_unit, $fixed)
     {

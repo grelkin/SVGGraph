@@ -28,6 +28,15 @@ class PolarAreaGraph extends PieGraph
 
     /**
      * Sets up the angles and radii for slice.
+     *
+     * @param $num
+     * @param $item
+     * @param $angle_start
+     * @param $angle_end
+     * @param $radius_x
+     * @param $radius_y
+     *
+     * @return bool
      */
     protected function GetSliceInfo(
         $num,
@@ -53,7 +62,17 @@ class PolarAreaGraph extends PieGraph
 
     /**
      * Returns the position for the label.
-     */
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     * @return string
+*/
     public function DataLabelPosition(
         $dataset,
         $index,

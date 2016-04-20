@@ -137,6 +137,12 @@ class StackedGroupedCylinderGraph extends StackedCylinderGraph
 
     /**
      * Override AdjustAxes to change depth.
+     *
+     * @param $x_len
+     * @param $y_len
+     *
+     * @return array
+     * @throws \Exception
      */
     protected function AdjustAxes(&$x_len, &$y_len)
     {
@@ -160,7 +166,8 @@ class StackedGroupedCylinderGraph extends StackedCylinderGraph
 
     /**
      * construct multigraph.
-     */
+     * @param $values
+*/
     public function Values($values)
     {
         parent::Values($values);

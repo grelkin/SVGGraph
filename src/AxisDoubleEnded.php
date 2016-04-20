@@ -9,6 +9,18 @@ class AxisDoubleEnded extends Axis
 {
     /**
      * Constructor calls Axis constructor with 1/5 length.
+     *
+     * @param $length
+     * @param $max_val
+     * @param $min_val
+     * @param $min_unit
+     * @param $fit
+     * @param $units_before
+     * @param $units_after
+     * @param $decimal_digits
+     * @param $label_callback
+     *
+     * @throws \Exception
      */
     public function __construct(
         $length,
@@ -47,6 +59,12 @@ class AxisDoubleEnded extends Axis
 
     /**
      * Returns the grid points as an array of GridPoints.
+     *
+     * @param $min_space
+     * @param $start
+     *
+     * @return array
+     * @throws \Exception
      */
     public function GetGridPoints($min_space, $start)
     {
@@ -67,6 +85,14 @@ class AxisDoubleEnded extends Axis
 
     /**
      * Returns the grid subdivision points as an array.
+     *
+     * @param $min_space
+     * @param $min_unit
+     * @param $start
+     * @param $fixed
+     *
+     * @return array
+     * @throws \Exception
      */
     public function GetGridSubdivisions($min_space, $min_unit, $start, $fixed)
     {

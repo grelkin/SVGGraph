@@ -112,6 +112,8 @@ class StackedCylinderGraph extends CylinderGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {

@@ -84,6 +84,10 @@ class MultiGraph implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * ArrayAccess methods.
+     *
+     * @param mixed $offset
+     *
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -97,7 +101,10 @@ class MultiGraph implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Don't allow writing to the data.
-     */
+     * @param mixed $offset
+     * @param mixed $value
+     * @throws \Exception
+*/
     public function offsetSet($offset, $value)
     {
         throw new \Exception('Read-only');
@@ -127,7 +134,9 @@ class MultiGraph implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the key for an item.
-     */
+     * @param $index
+     * @return int|void
+*/
     public function GetKey($index)
     {
         return $this->values->GetKey($index);

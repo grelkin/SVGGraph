@@ -101,6 +101,8 @@ class GroupedCylinderGraph extends CylinderGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {
@@ -115,6 +117,10 @@ class GroupedCylinderGraph extends CylinderGraph
 
     /**
      * Override AdjustAxes to change depth.
+     * @param $x_len
+     * @param $y_len
+     * @return array
+     * @throws \Exception
      */
     protected function AdjustAxes(&$x_len, &$y_len)
     {

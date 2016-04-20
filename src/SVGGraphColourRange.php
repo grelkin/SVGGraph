@@ -11,6 +11,8 @@ abstract class SVGGraphColourRange implements \ArrayAccess
 
     /**
      * Sets up the length of the range.
+     *
+     * @param $count
      */
     public function Setup($count)
     {
@@ -19,6 +21,8 @@ abstract class SVGGraphColourRange implements \ArrayAccess
 
     /**
      * always true, because it wraps around.
+     * @param mixed $offset
+     * @return bool
      */
     public function offsetExists($offset)
     {
@@ -37,6 +41,10 @@ abstract class SVGGraphColourRange implements \ArrayAccess
 
     /**
      * Clamps a value to range $min-$max.
+     * @param $val
+     * @param $min
+     * @param $max
+     * @return mixed
      */
     protected static function Clamp($val, $min, $max)
     {

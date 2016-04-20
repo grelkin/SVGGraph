@@ -6,6 +6,16 @@ class DonutGraph extends PieGraph
 {
     /**
      * Override the parent to draw doughnut slice.
+     *
+     * @param $item
+     * @param $angle_start
+     * @param $angle_end
+     * @param $radius_x
+     * @param $radius_y
+     * @param $attr
+     * @param $single_slice
+     *
+     * @return string
      */
     protected function GetSlice(
         $item,
@@ -93,7 +103,17 @@ class DonutGraph extends PieGraph
 
     /**
      * Overridden to keep inner text in the middle.
-     */
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     * @return string
+*/
     public function DataLabelPosition(
         $dataset,
         $index,
@@ -124,7 +144,11 @@ class DonutGraph extends PieGraph
 
     /**
      * Returns the style options for the inner text label.
-     */
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @return array
+*/
     public function DataLabelStyle($dataset, $index, &$item)
     {
         $style = parent::DataLabelStyle($dataset, $index, $item);

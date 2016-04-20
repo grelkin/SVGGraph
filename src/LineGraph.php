@@ -67,6 +67,13 @@ class LineGraph extends PointGraph
     /**
      * Returns the SVG fragemnt for a line
      * $points = array of array($x, $y, $item, $dataset, $index).
+     *
+     * @param      $dataset
+     * @param      $points
+     * @param      $y_bottom
+     * @param bool $stroke_colour
+     *
+     * @return string
      */
     public function DrawLine($dataset, $points, $y_bottom, $stroke_colour = false)
     {
@@ -132,7 +139,13 @@ class LineGraph extends PointGraph
 
     /**
      * Return line and marker for legend.
-     */
+     * @param $set
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @return string
+*/
     public function DrawLegendEntry($set, $x, $y, $w, $h)
     {
         if (!isset($this->line_styles[$set])) {

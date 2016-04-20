@@ -94,6 +94,11 @@ class RadarGraph extends LineGraph
 
     /**
      * Finds the grid position for radar graphs, returns NULL if not on graph.
+     *
+     * @param $key
+     * @param $ikey
+     *
+     * @return null|void
      */
     protected function GridPosition($key, $ikey)
     {
@@ -109,7 +114,10 @@ class RadarGraph extends LineGraph
 
     /**
      * Returns the $x value as a grid position.
-     */
+     * @param      $x
+     * @param null $axis_no
+     * @return null|void
+*/
     public function GridX($x, $axis_no = null)
     {
         $p = $this->UnitsX($x, $axis_no);
@@ -119,7 +127,9 @@ class RadarGraph extends LineGraph
 
     /**
      * Returns the $y value as a grid position.
-     */
+     * @param      $y
+     * @param null $axis_no
+*/
     public function GridY($y, $axis_no = null)
     {
         $p = $this->UnitsY($y, $axis_no);
@@ -129,7 +139,10 @@ class RadarGraph extends LineGraph
 
     /**
      * Convert X, Y in grid space to radial position.
-     */
+     * @param $x
+     * @param $y
+     * @return array
+*/
     public function TransformCoords($x, $y)
     {
         $angle = $x / $this->g_height;
@@ -163,7 +176,12 @@ class RadarGraph extends LineGraph
 
     /**
      * Find the bounding box of the axis text for given axis lengths.
-     */
+     * @param $length_x
+     * @param $length_y
+     * @param $x_axes
+     * @param $y_axes
+     * @return array
+*/
     protected function FindAxisTextBBox($length_x, $length_y, $x_axes, $y_axes)
     {
         $this->xc     = $length_x / 2;
@@ -309,7 +327,9 @@ class RadarGraph extends LineGraph
 
     /**
      * Draws concentric Y grid lines.
-     */
+     * @param $y_points
+     * @return string
+*/
     protected function YGrid(&$y_points)
     {
         $path = '';
@@ -350,7 +370,9 @@ class RadarGraph extends LineGraph
 
     /**
      * Draws radiating X grid lines.
-     */
+     * @param $x_points
+     * @return string
+*/
     protected function XGrid(&$x_points)
     {
         $path = '';
@@ -509,7 +531,9 @@ class RadarGraph extends LineGraph
 
     /**
      * Calculate the extra details for radar axes.
-     */
+     * @param bool $h_by_count
+     * @param bool $bar
+*/
     protected function CalcAxes($h_by_count = false, $bar = false)
     {
         $this->arad       = (90 + $this->start_angle) * M_PI / 180;
@@ -519,7 +543,9 @@ class RadarGraph extends LineGraph
 
     /**
      * The X-axis is wrapped around the graph.
-     */
+     * @param $yoff
+     * @return string
+*/
     protected function XAxis($yoff)
     {
         if (!$this->show_x_axis) {
@@ -544,7 +570,9 @@ class RadarGraph extends LineGraph
 
     /**
      * The Y-axis is at start angle.
-     */
+     * @param $i
+     * @return string
+*/
     protected function YAxis($i)
     {
         $radius = $this->radius + $this->axis_overlap;
@@ -566,7 +594,12 @@ class RadarGraph extends LineGraph
 
     /**
      * Division marks around the graph.
-     */
+     * @param $points
+     * @param $style
+     * @param $size
+     * @param $yoff
+     * @return string
+*/
     protected function XAxisDivisions(&$points, $style, $size, $yoff)
     {
         $r1   = $this->radius;
@@ -591,7 +624,12 @@ class RadarGraph extends LineGraph
 
     /**
      * Draws Y-axis divisions at whatever angle the Y-axis is.
-     */
+     * @param $points
+     * @param $xoff
+     * @param $subdiv
+     * @param $axis_no
+     * @return string
+*/
     protected function YAxisDivisions(&$points, $xoff, $subdiv, $axis_no)
     {
         $dz  = 'division_size';
@@ -631,7 +669,13 @@ class RadarGraph extends LineGraph
 
     /**
      * Returns the positions of the X-axis text.
-     */
+     * @param $points
+     * @param $xoff
+     * @param $yoff
+     * @param $angle
+     * @param $inside
+     * @return array
+*/
     protected function XAxisTextPositions(&$points, $xoff, $yoff, $angle, $inside)
     {
         $positions   = array();
@@ -727,7 +771,12 @@ class RadarGraph extends LineGraph
 
     /**
      * Text labels for the wrapped X-axis.
-     */
+     * @param $points
+     * @param $xoff
+     * @param $yoff
+     * @param $angle
+     * @return string
+*/
     protected function XAxisText(&$points, $xoff, $yoff, $angle)
     {
         $inside    = ('inside' == $this->GetFirst(
@@ -769,7 +818,14 @@ class RadarGraph extends LineGraph
 
     /**
      * Returns the positions of the Y-axis text.
-     */
+     * @param $points
+     * @param $xoff
+     * @param $yoff
+     * @param $angle
+     * @param $inside
+     * @param $axis_no
+     * @return array
+*/
     protected function YAxisTextPositions(&$points, $xoff, $yoff, $angle, $inside, $axis_no)
     {
         $positions   = array();
@@ -818,7 +874,14 @@ class RadarGraph extends LineGraph
 
     /**
      * Text labels for the Y-axis.
-     */
+     * @param $points
+     * @param $xoff
+     * @param $yoff
+     * @param $angle
+     * @param $right
+     * @param $axis_no
+     * @return string
+*/
     protected function YAxisText(&$points, $xoff, $yoff, $angle, $right, $axis_no)
     {
         $positions = $this->YAxisTextPositions($points, $xoff, $yoff, $angle, false, $axis_no);
@@ -849,7 +912,9 @@ class RadarGraph extends LineGraph
 
     /**
      * Returns what would be the vertical axis label.
-     */
+     * @param $attribs
+     * @return string
+*/
     protected function VLabel(&$attribs)
     {
         if (empty($this->label_v)) {
@@ -888,7 +953,9 @@ class RadarGraph extends LineGraph
 
     /**
      * Returns the grid points for a Y-axis.
-     */
+     * @param $axis
+     * @return
+*/
     protected function GetGridPointsY($axis)
     {
         $min_space_v = $this->GetFirst(
@@ -905,7 +972,9 @@ class RadarGraph extends LineGraph
 
     /**
      * Returns the subdivisions for a Y-axis.
-     */
+     * @param $axis
+     * @return
+*/
     protected function GetSubDivsY($axis)
     {
         $points = $this->y_axes[$axis]->GetGridSubdivisions(

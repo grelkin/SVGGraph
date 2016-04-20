@@ -79,6 +79,10 @@ abstract class SVGGraphShape
 
     /**
      * returns true if the depth is correct.
+     *
+     * @param $d
+     *
+     * @return bool
      */
     public function Depth($d)
     {
@@ -87,7 +91,10 @@ abstract class SVGGraphShape
 
     /**
      * draws the shape.
-     */
+     * @param $graph
+     * @return
+     * @throws \Exception
+*/
     public function Draw(&$graph)
     {
         $this->coords = new SVGGraphCoords($graph);
@@ -123,7 +130,8 @@ abstract class SVGGraphShape
 
     /**
      * Transform coordinate pairs.
-     */
+     * @param $attributes
+*/
     protected function TransformCoordinates(&$attributes)
     {
         if (count($this->transform_pairs)) {
@@ -140,7 +148,10 @@ abstract class SVGGraphShape
 
     /**
      * Performs the conversion to SVG fragment.
-     */
+     * @param $graph
+     * @param $attributes
+     * @return
+*/
     protected function DrawElement(&$graph, &$attributes)
     {
         return $graph->Element($this->element, $attributes);
@@ -148,7 +159,9 @@ abstract class SVGGraphShape
 
     /**
      * splits $value, removing leading char and updating $axis.
-     */
+     * @param $value
+     * @param $axis
+*/
     private function ValueAxis(&$value, &$axis)
     {
         // strip leading u or g

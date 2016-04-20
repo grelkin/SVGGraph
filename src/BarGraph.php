@@ -100,6 +100,10 @@ class BarGraph extends GridGraph
 
     /**
      * Returns the space before a bar.
+     *
+     * @param $bar_width
+     *
+     * @return mixed
      */
     protected function BarSpace($bar_width)
     {
@@ -144,6 +148,19 @@ class BarGraph extends GridGraph
 
     /**
      * Override to check minimum space requirement.
+     *
+     * @param      $dataset
+     * @param      $index
+     * @param      $element
+     * @param      $item
+     * @param      $x
+     * @param      $y
+     * @param      $w
+     * @param      $h
+     * @param null $content
+     * @param bool $duplicate
+     *
+     * @return bool
      */
     protected function AddDataLabel(
         $dataset,
@@ -177,6 +194,18 @@ class BarGraph extends GridGraph
 
     /**
      * Returns the position for a data label.
+     *
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     *
+     * @return mixed|null|string
      */
     public function DataLabelPosition(
         $dataset,
@@ -227,6 +256,12 @@ class BarGraph extends GridGraph
 
     /**
      * Returns the style options for bar labels.
+     *
+     * @param $dataset
+     * @param $index
+     * @param $item
+     *
+     * @return array
      */
     public function DataLabelStyle($dataset, $index, &$item)
     {
@@ -252,6 +287,14 @@ class BarGraph extends GridGraph
 
     /**
      * Return box for legend.
+     *
+     * @param $set
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     *
+     * @return string
      */
     protected function DrawLegendEntry($set, $x, $y, $w, $h)
     {

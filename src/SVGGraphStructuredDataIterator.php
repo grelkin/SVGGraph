@@ -53,6 +53,10 @@ class SVGGraphStructuredDataIterator implements \Iterator
 
     /**
      * Returns an item by index.
+     *
+     * @param $index
+     *
+     * @return SVGGraphStructuredDataItem|void
      */
     public function GetItemByIndex($index)
     {
@@ -71,7 +75,9 @@ class SVGGraphStructuredDataIterator implements \Iterator
 
     /**
      * Returns an item by key.
-     */
+     * @param $key
+     * @return SVGGraphStructuredDataItem|void
+*/
     public function GetItemByKey($key)
     {
         if (is_null($this->key_field)) {

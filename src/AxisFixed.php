@@ -40,6 +40,12 @@ class AxisFixed extends Axis
     /**
      * Calculates a grid based on min, max and step
      * min and max will be adjusted to fit step.
+     *
+     * @param      $min
+     * @param bool $round_up
+     *
+     * @return float
+     * @throws \Exception
      */
     protected function Grid($min, $round_up = false)
     {

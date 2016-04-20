@@ -242,6 +242,16 @@ class PieGraph extends Graph
 
     /**
      * Returns a single slice of pie.
+     *
+     * @param $item
+     * @param $angle_start
+     * @param $angle_end
+     * @param $radius_x
+     * @param $radius_y
+     * @param $attr
+     * @param $single_slice
+     *
+     * @return string
      */
     protected function GetSlice(
         $item,
@@ -284,7 +294,15 @@ class PieGraph extends Graph
 
     /**
      * Calculates start and end points of slice.
-     */
+     * @param $angle_start
+     * @param $angle_end
+     * @param $radius_x
+     * @param $radius_y
+     * @param $x_start
+     * @param $y_start
+     * @param $x_end
+     * @param $y_end
+*/
     protected function CalcSlice(
         $angle_start,
         $angle_end,
@@ -310,7 +328,14 @@ class PieGraph extends Graph
 
     /**
      * Finds the angles and radii for a slice.
-     */
+     * @param $num
+     * @param $item
+     * @param $angle_start
+     * @param $angle_end
+     * @param $radius_x
+     * @param $radius_y
+     * @return bool
+*/
     protected function GetSliceInfo(
         $num,
         $item,
@@ -365,7 +390,13 @@ class PieGraph extends Graph
 
     /**
      * Return box for legend.
-     */
+     * @param $set
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @return string
+*/
     protected function DrawLegendEntry($set, $x, $y, $w, $h)
     {
         if (!isset($this->slice_styles[$set])) {
@@ -379,7 +410,17 @@ class PieGraph extends Graph
 
     /**
      * Returns the position for the label.
-     */
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     * @return string
+*/
     public function DataLabelPosition(
         $dataset,
         $index,
@@ -410,7 +451,11 @@ class PieGraph extends Graph
 
     /**
      * Returns the style options for bar labels.
-     */
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @return array
+*/
     public function DataLabelStyle($dataset, $index, &$item)
     {
         $style = parent::DataLabelStyle($dataset, $index, $item);
@@ -434,7 +479,12 @@ class PieGraph extends Graph
 
     /**
      * Overload to return the firection of the pie centre.
-     */
+     * @param $dataset
+     * @param $index
+     * @param $hpos
+     * @param $vpos
+     * @return int
+*/
     public function DataLabelTailDirection($dataset, $index, $hpos, $vpos)
     {
         if (isset($this->slice_info[$index])) {

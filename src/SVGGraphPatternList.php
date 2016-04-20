@@ -18,6 +18,11 @@ class SVGGraphPatternList
 
     /**
      * Adds a pattern to the list.
+     *
+     * @param $pattern
+     *
+     * @return
+     * @throws \Exception
      */
     public function Add($pattern)
     {
@@ -109,7 +114,8 @@ class SVGGraphPatternList
 
     /**
      * Adds the stored patterns to the list of definitions.
-     */
+     * @param $defs
+*/
     public function MakePatterns(&$defs)
     {
         foreach ($this->patterns as $pat) {
@@ -119,7 +125,10 @@ class SVGGraphPatternList
 
     /**
      * Spots - circles with diameter half of pattern size.
-     */
+     * @param       $pattern
+     * @param float $scale
+     * @return
+*/
     private function Spot($pattern, $scale = 0.25)
     {
         $spot         = array('cx' => $pattern['size'] * $scale);
@@ -135,7 +144,10 @@ class SVGGraphPatternList
 
     /**
      * Polka dots - spots in a checked pattern.
-     */
+     * @param       $pattern
+     * @param float $scale
+     * @return
+*/
     private function PolkaDot($pattern, $scale = 0.25)
     {
         $spot         = array('cx' => $pattern['size'] * $scale);
@@ -154,7 +166,9 @@ class SVGGraphPatternList
 
     /**
      * Check pattern.
-     */
+     * @param $pattern
+     * @return
+*/
     private function Check($pattern)
     {
         $rect           = array('width' => $pattern['size'] / 2);
@@ -172,7 +186,10 @@ class SVGGraphPatternList
 
     /**
      * Squares.
-     */
+     * @param       $pattern
+     * @param float $scale
+     * @return
+*/
     private function Square($pattern, $scale = 0.8)
     {
         $rect           = array('width' => $pattern['size'] * $scale);
@@ -188,7 +205,10 @@ class SVGGraphPatternList
 
     /**
      * Hatching using a single line.
-     */
+     * @param       $pattern
+     * @param float $thickness
+     * @return
+*/
     private function Line($pattern, $thickness = 0.8)
     {
         $w    = $pattern['size'];
@@ -208,7 +228,10 @@ class SVGGraphPatternList
 
     /**
      * Hatching using crossed lines.
-     */
+     * @param       $pattern
+     * @param float $thickness
+     * @return
+*/
     private function Cross($pattern, $thickness = 0.4)
     {
         $w    = $pattern['size'];
@@ -228,7 +251,9 @@ class SVGGraphPatternList
 
     /**
      * Spot2, Spot3 use smaller spots.
-     */
+     * @param $pattern
+     * @return
+*/
     private function Spot2($pattern)
     {
         return $this->Spot($pattern, 0.16666);
@@ -241,7 +266,9 @@ class SVGGraphPatternList
 
     /**
      * Circles are bigger spots.
-     */
+     * @param $pattern
+     * @return
+*/
     private function Circle($pattern)
     {
         return $this->Spot($pattern, 0.45);
@@ -259,7 +286,9 @@ class SVGGraphPatternList
 
     /**
      * PolkaDot2 etc use smaller dots.
-     */
+     * @param $pattern
+     * @return
+*/
     private function PolkaDot2($pattern)
     {
         return $this->PolkaDot($pattern, 0.16666);
@@ -272,7 +301,9 @@ class SVGGraphPatternList
 
     /**
      * Differently proportioned squares.
-     */
+     * @param $pattern
+     * @return
+*/
     private function Square2($pattern)
     {
         return $this->Square($pattern, 0.6);
@@ -290,7 +321,9 @@ class SVGGraphPatternList
 
     /**
      * Thinner lines.
-     */
+     * @param $pattern
+     * @return
+*/
     private function Line2($pattern)
     {
         return $this->Line($pattern, 0.6);

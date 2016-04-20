@@ -160,6 +160,18 @@ class HorizontalStackedBarGraph extends HorizontalBarGraph
 
     /**
      * Overridden to prevent drawing on other bars.
+     *
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     *
+     * @return mixed|null|string
      */
     public function DataLabelPosition(
         $dataset,
@@ -229,7 +241,11 @@ class HorizontalStackedBarGraph extends HorizontalBarGraph
 
     /**
      * Returns the style options for labels.
-     */
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @return array
+*/
     public function DataLabelStyle($dataset, $index, &$item)
     {
         $style = parent::DataLabelStyle($dataset, $index, $item);
@@ -275,7 +291,8 @@ class HorizontalStackedBarGraph extends HorizontalBarGraph
 
     /**
      * construct multigraph.
-     */
+     * @param $values
+*/
     public function Values($values)
     {
         parent::Values($values);

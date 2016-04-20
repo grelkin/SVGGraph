@@ -47,6 +47,8 @@ class SVGGraph
 
     /**
      * Assign a single colour set for use across datasets.
+     *
+     * @param $colours
      */
     public function Colours($colours)
     {
@@ -55,6 +57,8 @@ class SVGGraph
 
     /**
      * Sets colours for a single dataset.
+     * @param $dataset
+     * @param $colours
      */
     public function ColourSet($dataset, $colours)
     {
@@ -66,6 +70,13 @@ class SVGGraph
 
     /**
      * Sets up RGB colour range.
+     * @param $dataset
+     * @param $r1
+     * @param $g1
+     * @param $b1
+     * @param $r2
+     * @param $g2
+     * @param $b2
      */
     public function ColourRangeRGB($dataset, $r1, $g1, $b1, $r2, $g2, $b2)
     {
@@ -77,6 +88,9 @@ class SVGGraph
 
     /**
      * RGB colour range from hex codes.
+     * @param $dataset
+     * @param $c1
+     * @param $c2
      */
     public function ColourRangeHexRGB($dataset, $c1, $c2)
     {
@@ -88,6 +102,14 @@ class SVGGraph
 
     /**
      * Sets up HSL colour range.
+     * @param      $dataset
+     * @param      $h1
+     * @param      $s1
+     * @param      $l1
+     * @param      $h2
+     * @param      $s2
+     * @param      $l2
+     * @param bool $reverse
      */
     public function ColourRangeHSL(
         $dataset,
@@ -107,6 +129,10 @@ class SVGGraph
 
     /**
      * HSL colour range from hex codes.
+     * @param      $dataset
+     * @param      $c1
+     * @param      $c2
+     * @param bool $reverse
      */
     public function ColourRangeHexHSL($dataset, $c1, $c2, $reverse = false)
     {
@@ -118,6 +144,14 @@ class SVGGraph
 
     /**
      * Sets up HSL colour range from RGB values.
+     * @param      $dataset
+     * @param      $r1
+     * @param      $g1
+     * @param      $b1
+     * @param      $r2
+     * @param      $g2
+     * @param      $b2
+     * @param bool $reverse
      */
     public function ColourRangeRGBtoHSL(
         $dataset,
@@ -146,6 +180,8 @@ class SVGGraph
 
     /**
      * Instantiate the correct class.
+     * @param $class
+     * @return
      */
     private function Setup($class)
     {
@@ -164,6 +200,10 @@ class SVGGraph
 
     /**
      * Fetch the content.
+     * @param      $class
+     * @param bool $header
+     * @param bool $defer_js
+     * @return
      */
     public function Fetch($class, $header = true, $defer_js = true)
     {
@@ -174,6 +214,11 @@ class SVGGraph
 
     /**
      * Pass in the type of graph to display.
+     * @param      $class
+     * @param bool $header
+     * @param bool $content_type
+     * @param bool $defer_js
+     * @return
      */
     public function Render(
         $class,
@@ -263,6 +308,8 @@ abstract class Graph
     /**
      * Retrieves properties from the settings array if they are not
      * already available as properties.
+     * @param $name
+     * @return null
      */
     public function __get($name)
     {
@@ -273,6 +320,8 @@ abstract class Graph
 
     /**
      * Make empty($this->option) more robust.
+     * @param $name
+     * @return bool
      */
     public function __isset($name)
     {
@@ -281,6 +330,7 @@ abstract class Graph
 
     /**
      * Sets the options.
+     * @param $settings
      */
     public function Settings(&$settings)
     {
@@ -292,6 +342,7 @@ abstract class Graph
 
     /**
      * Sets the graph values.
+     * @param $values
      */
     public function Values($values)
     {
@@ -643,6 +694,11 @@ abstract class Graph
 
     /**
      * Parses a position string, returning x and y coordinates.
+     * @param     $pos
+     * @param int $w
+     * @param int $h
+     * @param int $pad
+     * @return array
      */
     protected function ParsePosition($pos, $w = 0, $h = 0, $pad = 0)
     {
@@ -686,6 +742,8 @@ abstract class Graph
     /**
      * Returns [hpos,vpos,offset_x,offset_y] positions derived from full
      * position string.
+     * @param $pos
+     * @return array
      */
     public static function TranslatePosition($pos)
     {
@@ -746,6 +804,16 @@ abstract class Graph
      * Returns [x,y,text-anchor,hpos,vpos] position that is $pos relative to the
      * top, left, bottom and right.
      * When $text is true, x and y are adjusted for text-anchor position.
+     * @param      $pos
+     * @param      $top
+     * @param      $left
+     * @param      $bottom
+     * @param      $right
+     * @param      $width
+     * @param      $height
+     * @param      $pad
+     * @param bool $text
+     * @return array
      */
     public static function RelativePosition(
         $pos,
@@ -837,6 +905,12 @@ abstract class Graph
 
     /**
      * Subclasses must draw the entry, if they can.
+     * @param $key
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @return string
      */
     protected function DrawLegendEntry($key, $x, $y, $w, $h)
     {
@@ -954,6 +1028,9 @@ abstract class Graph
 
     /**
      * Displays the background.
+     * @param $id
+     * @return string
+     * @throws \Exception
      */
     protected function Canvas($id)
     {
@@ -1013,6 +1090,14 @@ abstract class Graph
 
     /**
      * Fits text to a box - text will be bottom-aligned.
+     * @param      $text
+     * @param      $x
+     * @param      $y
+     * @param      $w
+     * @param      $h
+     * @param null $attribs
+     * @param null $styles
+     * @return string
      */
     protected function TextFit(
         $text,
@@ -1041,6 +1126,11 @@ abstract class Graph
 
     /**
      * Returns a text element, with tspans for multiple lines.
+     * @param      $text
+     * @param      $line_spacing
+     * @param      $attribs
+     * @param null $styles
+     * @return string
      */
     public function Text($text, $line_spacing, $attribs, $styles = null)
     {
@@ -1077,6 +1167,13 @@ abstract class Graph
     /**
      * Returns [width,height] of text
      * $text = string OR text length.
+     * @param     $text
+     * @param     $font_size
+     * @param     $font_adjust
+     * @param     $encoding
+     * @param int $angle
+     * @param int $line_spacing
+     * @return array
      */
     public static function TextSize(
         $text,
@@ -1127,6 +1224,8 @@ abstract class Graph
 
     /**
      * Returns the number of lines in a string.
+     * @param $text
+     * @return int
      */
     public static function CountLines($text)
     {
@@ -1142,6 +1241,8 @@ abstract class Graph
 
     /**
      * Displays readable (hopefully) error message.
+     * @param $error
+     * @return string
      */
     protected function ErrorText($error)
     {
@@ -1166,6 +1267,14 @@ abstract class Graph
 
     /**
      * Displays high-contrast text.
+     * @param        $x
+     * @param        $y
+     * @param        $text
+     * @param string $fcolour
+     * @param string $bcolour
+     * @param null   $properties
+     * @param null   $styles
+     * @return string
      */
     protected function ContrastText(
         $x,
@@ -1197,6 +1306,11 @@ abstract class Graph
 
     /**
      * Builds an element.
+     * @param      $name
+     * @param null $attribs
+     * @param null $styles
+     * @param null $content
+     * @return string
      */
     public function Element(
         $name,
@@ -1261,6 +1375,10 @@ abstract class Graph
 
     /**
      * Returns a link URL or NULL if none.
+     * @param     $item
+     * @param     $key
+     * @param int $row
+     * @return null|string
      */
     protected function GetLinkURL($item, $key, $row = 0)
     {
@@ -1281,6 +1399,11 @@ abstract class Graph
 
     /**
      * Retrieves a link.
+     * @param     $item
+     * @param     $key
+     * @param     $content
+     * @param int $row
+     * @return string
      */
     protected function GetLink($item, $key, $content, $row = 0)
     {
@@ -1296,6 +1419,8 @@ abstract class Graph
 
     /**
      * Sets up the colour class.
+     * @param      $count
+     * @param null $datasets
      */
     protected function ColourSetup($count, $datasets = null)
     {
@@ -1304,6 +1429,13 @@ abstract class Graph
 
     /**
      * Returns a colour reference.
+     * @param      $item
+     * @param      $key
+     * @param null $dataset
+     * @param bool $no_gradient
+     * @param bool $allow_pattern
+     * @return string
+     * @throws \Exception
      */
     protected function GetColour(
         $item,
@@ -1334,6 +1466,13 @@ abstract class Graph
 
     /**
      * Converts a SVGGraph colour/gradient/pattern to a SVG attribute.
+     * @param      $colour
+     * @param null $key
+     * @param bool $no_gradient
+     * @param bool $allow_pattern
+     * @param bool $radial_gradient
+     * @return string
+     * @throws \Exception
      */
     public function ParseColour(
         $colour,
@@ -1366,6 +1505,8 @@ abstract class Graph
 
     /**
      * Returns the solid colour from a gradient.
+     * @param $c
+     * @return string
      */
     protected static function SolidColour($c)
     {
@@ -1396,6 +1537,9 @@ abstract class Graph
 
     /**
      * Returns an option from array, or non-array option.
+     * @param $o
+     * @param $i
+     * @return
      */
     protected static function ArrayOption($o, $i)
     {
@@ -1414,6 +1558,10 @@ abstract class Graph
 
     /**
      * Sets the stroke options for an element.
+     * @param      $attr
+     * @param      $item
+     * @param int  $set
+     * @param null $line_join
      */
     protected function SetStroke(&$attr, &$item, $set = 0, $line_join = null)
     {
@@ -1446,6 +1594,7 @@ abstract class Graph
 
     /**
      * Adds markup to be inserted between graph and legend.
+     * @param $fragment
      */
     public function AddBackMatter($fragment)
     {
@@ -1464,6 +1613,7 @@ abstract class Graph
 
     /**
      * Adds one or more javascript functions.
+     * @param $name
      */
     protected function AddFunction($name)
     {
@@ -1478,6 +1628,10 @@ abstract class Graph
      * Adds a Javascript variable
      * - use $value:$more for assoc
      * - use null:$more for array.
+     * @param      $var
+     * @param      $value
+     * @param null $more
+     * @param bool $quote
      */
     public function InsertVariable($var, $value, $more = null, $quote = true)
     {
@@ -1487,6 +1641,7 @@ abstract class Graph
 
     /**
      * Insert a comment into the Javascript section - handy for debugging!
+     * @param $details
      */
     public function InsertComment($details)
     {
@@ -1496,6 +1651,9 @@ abstract class Graph
 
     /**
      * Adds a pattern, returning the element ID.
+     * @param $pattern
+     * @return
+     * @throws \Exception
      */
     public function AddPattern($pattern)
     {
@@ -1508,6 +1666,10 @@ abstract class Graph
 
     /**
      * Adds a gradient to the list, returning the element ID for use in url.
+     * @param      $colours
+     * @param null $key
+     * @param bool $radial
+     * @return string
      */
     public function AddGradient($colours, $key = null, $radial = false)
     {
@@ -1546,6 +1708,8 @@ abstract class Graph
 
     /**
      * Creates a linear gradient element.
+     * @param $key
+     * @return string
      */
     private function MakeLinearGradient($key)
     {
@@ -1604,6 +1768,9 @@ abstract class Graph
 
     /**
      * Adds an inline event handler to an element's array.
+     * @param $array
+     * @param $evt
+     * @param $code
      */
     protected function AddEventHandler(&$array, $evt, $code)
     {
@@ -1613,6 +1780,7 @@ abstract class Graph
 
     /**
      * Makes an item draggable.
+     * @param $element
      */
     protected function SetDraggable(&$element)
     {
@@ -1622,6 +1790,7 @@ abstract class Graph
 
     /**
      * Makes something auto-hide.
+     * @param $element
      */
     protected function AutoHide(&$element)
     {
@@ -1632,6 +1801,12 @@ abstract class Graph
     /**
      * Default tooltip contents are key and value, or whatever
      * $key is if $value is not set.
+     * @param      $element
+     * @param      $item
+     * @param      $dataset
+     * @param      $key
+     * @param null $value
+     * @param bool $duplicate
      */
     protected function SetTooltip(
         &$element,
@@ -1661,6 +1836,11 @@ abstract class Graph
 
     /**
      * Default format is value only.
+     * @param $item
+     * @param $dataset
+     * @param $key
+     * @param $value
+     * @return string
      */
     protected function FormatTooltip(&$item, $dataset, $key, $value)
     {
@@ -1674,8 +1854,9 @@ abstract class Graph
      * @param array  &$element  Element that should cause fading
      * @param number $in        Fade in speed
      * @param number $out       Fade out speed
-     * @param string $id        ID of element to be faded
+     * @param null   $target
      * @param bool   $duplicate TRUE to create transparent overlay
+     * @internal param string $id ID of element to be faded
      */
     protected function SetFader(
         &$element,
@@ -1690,6 +1871,10 @@ abstract class Graph
 
     /**
      * Sets click visibility for $target when $element is clicked.
+     * @param      $element
+     * @param      $target
+     * @param      $hidden
+     * @param bool $duplicate
      */
     protected function SetClickShow(
         &$element,
@@ -1710,6 +1895,8 @@ abstract class Graph
     /**
      * Add an overlaid copy of an element, with opacity of 0
      * $from and $to are the IDs of the source and destination.
+     * @param $from
+     * @param $to
      */
     protected function AddOverlay($from, $to)
     {
@@ -1719,6 +1906,17 @@ abstract class Graph
 
     /**
      * Adds a data label to the list.
+     * @param      $dataset
+     * @param      $index
+     * @param      $element
+     * @param      $item
+     * @param      $x
+     * @param      $y
+     * @param      $w
+     * @param      $h
+     * @param null $content
+     * @param bool $duplicate
+     * @return bool
      */
     protected function AddDataLabel(
         $dataset,
@@ -1793,6 +1991,14 @@ abstract class Graph
 
     /**
      * Adds a label for non-data text.
+     * @param $dataset
+     * @param $index
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $content
+     * @return bool
      */
     protected function AddContentLabel($dataset, $index, $x, $y, $w, $h, $content)
     {
@@ -1833,6 +2039,16 @@ abstract class Graph
 
     /**
      * Returns the position for a data label.
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @param $x
+     * @param $y
+     * @param $w
+     * @param $h
+     * @param $label_w
+     * @param $label_h
+     * @return string
      */
     public function DataLabelPosition(
         $dataset,
@@ -1876,6 +2092,8 @@ abstract class Graph
 
     /**
      * Returns TRUE if the position is inside the item.
+     * @param $pos
+     * @return bool
      */
     public static function IsPositionInside($pos)
     {
@@ -1886,6 +2104,10 @@ abstract class Graph
 
     /**
      * Sets the styles for data labels.
+     * @param $dataset
+     * @param $index
+     * @param $item
+     * @return array
      */
     public function DataLabelStyle($dataset, $index, &$item)
     {
@@ -1923,6 +2145,11 @@ abstract class Graph
 
     /**
      * Tail direction is required for some types of label.
+     * @param $dataset
+     * @param $index
+     * @param $hpos
+     * @param $vpos
+     * @return int
      */
     public function DataLabelTailDirection($dataset, $index, $hpos, $vpos)
     {
@@ -1962,6 +2189,9 @@ abstract class Graph
 
     /**
      * Returns the SVG document.
+     * @param bool $header
+     * @param bool $defer_javascript
+     * @return mixed|string
      */
     public function Fetch($header = true, $defer_javascript = true)
     {
@@ -2095,6 +2325,9 @@ abstract class Graph
 
     /**
      * Renders the SVG document.
+     * @param bool $header
+     * @param bool $content_type
+     * @param bool $defer_javascript
      */
     public function Render(
         $header = true,
@@ -2119,6 +2352,10 @@ abstract class Graph
     /**
      * When using the defer_javascript option, this returns the
      * Javascript block.
+     * @param bool $onload_immediate
+     * @param bool $cdata_wrap
+     * @param bool $no_namespace
+     * @return string
      */
     public function FetchJavascript(
         $onload_immediate = true,
@@ -2159,6 +2396,11 @@ abstract class Graph
 
     /**
      * Returns a value from the $item, or the member % set.
+     * @param      $member
+     * @param      $set
+     * @param      $item
+     * @param null $ikey
+     * @return null
      */
     protected function GetFromItemOrMember($member, $set, &$item, $ikey = null)
     {
@@ -2176,6 +2418,10 @@ abstract class Graph
 
     /**
      * Converts number to string.
+     * @param      $n
+     * @param null $decimals
+     * @param null $precision
+     * @return string
      */
     public static function NumString($n, $decimals = null, $precision = null)
     {
@@ -2213,6 +2459,8 @@ abstract class Graph
 
     /**
      * Sets the number format characters.
+     * @param $decimal
+     * @param $thousands
      */
     public static function SetNumStringOptions($decimal, $thousands)
     {
@@ -2222,6 +2470,8 @@ abstract class Graph
 
     /**
      * Returns the minimum value in the array, ignoring NULLs.
+     * @param $a
+     * @return null
      */
     public static function min(&$a)
     {

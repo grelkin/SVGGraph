@@ -15,6 +15,9 @@ class SVGGraphJavascript
 
     /**
      * Constructor takes array of settings and graph instance as arguments.
+     *
+     * @param $settings
+     * @param $graph
      */
     public function __construct(&$settings, &$graph)
     {
@@ -24,6 +27,8 @@ class SVGGraphJavascript
 
     /**
      * Return the settings as properties.
+     * @param $name
+     * @return null
      */
     public function __get($name)
     {
@@ -34,6 +39,9 @@ class SVGGraphJavascript
 
     /**
      * Adds a javascript function.
+     * @param $name
+     * @return bool|void
+     * @throws \Exception
      */
     public function AddFunction($name)
     {
@@ -769,6 +777,8 @@ JAVASCRIPT;
 
     /**
      * Inserts a Javascript function into the list.
+     * @param $name
+     * @param $fn
      */
     public function InsertFunction($name, $fn)
     {
@@ -777,6 +787,8 @@ JAVASCRIPT;
 
     /**
      * Convert hex from regex matched entity to javascript escape sequence.
+     * @param $m
+     * @return string
      */
     public static function hex2js($m)
     {
@@ -785,6 +797,8 @@ JAVASCRIPT;
 
     /**
      * Convert decimal from regex matched entity to javascript escape sequence.
+     * @param $m
+     * @return string
      */
     public static function dec2js($m)
     {
@@ -812,6 +826,10 @@ JAVASCRIPT;
      * Adds a Javascript variable
      * - use $value:$more for assoc
      * - use NULL:$more for array.
+     * @param      $var
+     * @param      $value
+     * @param null $more
+     * @param bool $quote
      */
     public function InsertVariable($var, $value, $more = null, $quote = true)
     {
@@ -827,6 +845,7 @@ JAVASCRIPT;
 
     /**
      * Insert a comment into the Javascript section - handy for debugging!
+     * @param $details
      */
     public function InsertComment($details)
     {
@@ -835,6 +854,9 @@ JAVASCRIPT;
 
     /**
      * Adds an inline event handler to an element's array.
+     * @param $array
+     * @param $evt
+     * @param $code
      */
     public function AddEventHandler(&$array, $evt, $code)
     {
@@ -902,6 +924,10 @@ JAVASCRIPT;
 
     /**
      * Sets the tooltip for an element.
+     * @param      $element
+     * @param      $text
+     * @param bool $duplicate
+     * @throws \Exception
      */
     public function SetTooltip(&$element, $text, $duplicate = false)
     {
@@ -936,6 +962,11 @@ JAVASCRIPT;
     /**
      * Sets click show/hide for an element
      * If using with fading, this must be used first.
+     * @param      $element
+     * @param      $target
+     * @param      $hidden
+     * @param bool $duplicate
+     * @throws \Exception
      */
     public function SetClickShow(&$element, $target, $hidden, $duplicate = false)
     {
@@ -960,6 +991,10 @@ JAVASCRIPT;
 
     /**
      * Sets pop to front for $target when mouse over $element.
+     * @param      $element
+     * @param      $target
+     * @param bool $duplicate
+     * @throws \Exception
      */
     public function SetPopFront(&$element, $target, $duplicate = false)
     {
@@ -983,6 +1018,12 @@ JAVASCRIPT;
     /**
      * Sets the fader for an element
      * If using with clickShow, that must be used first.
+     * @param      $element
+     * @param      $in
+     * @param      $out
+     * @param null $target
+     * @param bool $duplicate
+     * @throws \Exception
      */
     public function SetFader(
         &$element,
@@ -1041,6 +1082,8 @@ JAVASCRIPT;
 
     /**
      * Makes an item draggable.
+     * @param $element
+     * @throws \Exception
      */
     public function SetDraggable(&$element)
     {
@@ -1075,6 +1118,8 @@ JAVASCRIPT;
 
     /**
      * Makes something auto-hide.
+     * @param $element
+     * @throws \Exception
      */
     public function AutoHide(&$element)
     {
@@ -1102,6 +1147,9 @@ JAVASCRIPT;
 
     /**
      * Add an overlaid copy of an element, with opacity of 0.
+     * @param $from
+     * @param $to
+     * @throws \Exception
      */
     public function AddOverlay($from, $to)
     {

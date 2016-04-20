@@ -56,6 +56,8 @@ class MultiBezierGraph extends BezierGraph
 
     /**
      * construct multigraph.
+     *
+     * @param $values
      */
     public function Values($values)
     {

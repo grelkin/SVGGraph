@@ -17,6 +17,10 @@ class SVGGraphShapeList
 
     /**
      * Load shapes from options list.
+     *
+     * @param $settings
+     *
+     * @throws \Exception
      */
     public function Load(&$settings)
     {
@@ -39,7 +43,9 @@ class SVGGraphShapeList
 
     /**
      * Draw all the shapes for the selected depth.
-     */
+     * @param $depth
+     * @return string
+*/
     public function Draw($depth)
     {
         $content = array();
@@ -54,7 +60,9 @@ class SVGGraphShapeList
 
     /**
      * Adds a shape from config array.
-     */
+     * @param $shape_array
+     * @throws \Exception
+*/
     private function AddShape(&$shape_array)
     {
         $shape = $shape_array[0];
