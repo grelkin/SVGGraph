@@ -77,7 +77,6 @@ class AxisLog extends Axis
     public function GetGridPoints($min_space, $start)
     {
         $points  = array();
-        $max_div = $this->length / $min_space;
         $pow_div = $this->lgmax - $this->lgmin;
 
         $div              = 1;
@@ -184,18 +183,18 @@ class AxisLog extends Axis
     {
         if ($this->negative) {
             if ($value >= 0) {
-                return;
+                return null;
             }
             $abs_value = abs($value);
             if ($abs_value < $this->min_value) {
-                return;
+                return null;
             }
 
             return $this->length - (log($abs_value, $this->base) - $this->lgmin) *
                                    $this->lgmul;
         }
         if ($value <= 0 || $value < $this->min_value) {
-            return;
+            return null;
         }
 
         return (log($value, $this->base) - $this->lgmin) * $this->lgmul;
