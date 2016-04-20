@@ -57,8 +57,12 @@ class Axis
 
     /**
      * Returns TRUE if the number $n is 'nice'.
+     *
+     * @param int $n
+     *
+     * @return bool
      */
-    private function nice($n, $m)
+    private function nice($n)
     {
         if (is_integer($n) && ($n % 100 == 0 || $n % 10 == 0 || $n % 5 == 0)) {
             return true;
@@ -83,6 +87,8 @@ class Axis
 
     /**
      * Subdivide when the divisions are too large.
+     *
+     * @param $length
      */
     private function sub_division(
         $length,
@@ -117,7 +123,7 @@ class Axis
             $m          = ($count + $inc) / $c;
             $l          = $length / $c;
             $test_below = $neg_count ? $c * $neg_count / $count : 1;
-            if ($this->nice($m, $count + $inc)) {
+            if ($this->nice($m)) {
                 if ($l >= $min && $test_below - floor($test_below) == 0) {
                     $magnitude *= ($count + $inc) / $c;
                     $neg_count *= $c / $count;
