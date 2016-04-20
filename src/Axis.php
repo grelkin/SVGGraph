@@ -20,7 +20,15 @@ class Axis
     protected $uneven = false;
     protected $rounded_up = false;
     protected $direction = 1;
+    /**
+     * @var callable|bool
+     */
     protected $label_callback = false;
+
+    /**
+     * @var float
+     */
+    private $grid_spacing;
 
     public function __construct(
         $length,
@@ -90,15 +98,11 @@ class Axis
     /**
      * Subdivide when the divisions are too large.
      *
-     * @param $length
-     * @param $min
      * @param $count
      * @param $neg_count
      * @param $magnitude
      */
     private function sub_division(
-        $length,
-        $min,
         &$count,
         &$neg_count,
         &$magnitude
@@ -253,8 +257,6 @@ class Axis
         ) {
             // division still seems a bit coarse
             $this->sub_division(
-                $this->length,
-                $min_sub,
                 $count,
                 $neg_count,
                 $magnitude
@@ -447,7 +449,6 @@ class Axis
         }
 
         $c = $pos1 = $pos2 = 0;
-        $this;
         $pos1 = $c * $this->grid_spacing;
         while ($pos1 + $spacing < $this->length) {
             $d    = 1;
@@ -472,7 +473,7 @@ class Axis
      * @param $min_unit
      * @param $fixed
      *
-     * @return float|void
+     * @return float|bool
      */
     private function FindSubdiv($grid_div, $min, $min_unit, $fixed)
     {
@@ -486,7 +487,7 @@ class Axis
 
         // can we subdivide at all?
         if ($max_divisions <= 1) {
-            return;
+            return false;
         }
 
         // convert $D to an integer in the 100's range
@@ -499,6 +500,6 @@ class Axis
             }
         }
 
-        return;
+        return false;
     }
 }
