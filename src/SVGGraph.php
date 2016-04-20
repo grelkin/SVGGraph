@@ -12,7 +12,6 @@ class SVGGraph
     public $values = array();
     public $links = null;
     public $colours = null;
-    private $colour_sets = 0;
 
     public function __construct($w, $h, $settings = null)
     {
