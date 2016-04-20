@@ -2,6 +2,20 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class Bar3DGraph
+ *
+ * @property mixed bar_width
+ * @property mixed bar_space
+ * @property mixed bar_width_min
+ * @property mixed skew_top
+ * @property mixed skew_side
+ * @property mixed bar_side_overlay_opacity
+ * @property mixed bar_side_overlay_colour
+ * @property mixed bar_top_overlay_colour
+ * @property mixed bar_front_overlay_colour
+ * @property mixed bar_front_overlay_opacity
+ */
 class Bar3DGraph extends ThreeDGraph
 {
     protected $label_centre = true;
@@ -19,12 +33,12 @@ class Bar3DGraph extends ThreeDGraph
         list($this->bx, $this->by) = $this->Project(0, 0, $bar_width);
         $top = $this->BarTop();
 
-        $bnum   = 0;
-        $bspace = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
+        $bNum   = 0;
+        $bSpace = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
         $this->ColourSetup($this->values->ItemsCount());
 
         // get the translation for the whole bar
-        list($tx, $ty) = $this->Project(0, 0, $bspace);
+        list($tx, $ty) = $this->Project(0, 0, $bSpace);
         $all_group = array();
         if ($tx || $ty) {
             $all_group['transform'] = "translate($tx,$ty)";
@@ -38,10 +52,10 @@ class Bar3DGraph extends ThreeDGraph
             $group['class']     = 'series0';
         }
         foreach ($this->values[0] as $item) {
-            $bar_pos = $this->GridPosition($item->key, $bnum);
+            $bar_pos = $this->GridPosition($item->key, $bNum);
 
             if ($this->legend_show_empty || !is_null($item->value)) {
-                $bar_style = array('fill' => $this->GetColour($item, $bnum));
+                $bar_style = array('fill' => $this->GetColour($item, $bNum));
                 $this->SetStroke($bar_style, $item);
             } else {
                 $bar_style = null;
@@ -49,13 +63,13 @@ class Bar3DGraph extends ThreeDGraph
             $this->bar_styles[] = $bar_style;
 
             if (!is_null($item->value) && !is_null($bar_pos)) {
-                $bar['x'] = $bspace + $bar_pos;
+                $bar['x'] = $bSpace + $bar_pos;
 
-                $bar_sections = $this->Bar3D($item, $bar, $top, $bnum);
+                $bar_sections = $this->Bar3D($item, $bar, $top, $bNum);
                 if ($bar_sections != '') {
-                    $show_label = $this->AddDataLabel(
+                    $this->AddDataLabel(
                         0,
-                        $bnum,
+                        $bNum,
                         $group,
                         $item,
                         $bar['x'] + $tx,
@@ -63,7 +77,7 @@ class Bar3DGraph extends ThreeDGraph
                         $bar['width'],
                         $bar['height']
                     );
-                    $link       = $this->GetLink($item, $item->key, $bar_sections);
+                    $link = $this->GetLink($item, $item->key, $bar_sections);
 
                     $group = array_merge($group, $bar_style);
                     if ($this->show_tooltips) {
@@ -74,7 +88,7 @@ class Bar3DGraph extends ThreeDGraph
                     unset($group['id']); // make sure a new one is generated
                 }
             }
-            ++$bnum;
+            ++$bNum;
         }
 
         if (count($all_group)) {
@@ -217,10 +231,10 @@ class Bar3DGraph extends ThreeDGraph
 
             if ($top_overlay) {
                 unset($top['stroke']);
-                $otop                 = $top;
-                $otop['fill-opacity'] = $top_overlay;
-                $otop['fill']         = $this->bar_top_overlay_colour;
-                $bar_top .= $this->Element('use', $otop, null, $this->empty_use ? '' : null);
+                $oTop                 = $top;
+                $oTop['fill-opacity'] = $top_overlay;
+                $oTop['fill']         = $this->bar_top_overlay_colour;
+                $bar_top .= $this->Element('use', $oTop, null, $this->empty_use ? '' : null);
             }
         }
 
@@ -256,15 +270,15 @@ class Bar3DGraph extends ThreeDGraph
             $value += $start;
         }
 
-        $startpos = is_null($start)
+        $startPos = is_null($start)
             ? $this->OriginY($axis)
-            :
-            $this->GridY($start, $axis);
-        $pos      = $this->GridY($value, $axis);
+            : $this->GridY($start, $axis);
+
+        $pos = $this->GridY($value, $axis);
         if (is_null($pos)) {
             $bar['height'] = 0;
         } else {
-            $l1            = $this->ClampVertical($startpos);
+            $l1            = $this->ClampVertical($startPos);
             $l2            = $this->ClampVertical($pos);
             $bar['y']      = min($l1, $l2);
             $bar['height'] = abs($l1 - $l2);

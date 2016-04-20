@@ -253,12 +253,14 @@ abstract class GridGraph extends Graph
 
     /**
      * Find the bounding box of the axis text for given axis lengths.
+     *
      * @param $length_x
      * @param $length_y
      * @param $x_axes
      * @param $y_axes
+     *
      * @return array
-*/
+     */
     protected function FindAxisTextBBox($length_x, $length_y, $x_axes, $y_axes)
     {
         $min_space_h = $this->GetFirst(
@@ -390,10 +392,12 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the amount of overlap the divisions and subdivisions use.
+     *
      * @param $x_axes
      * @param $y_axes
+     *
      * @return array
-*/
+     */
     protected function DivisionOverlap($x_axes, $y_axes)
     {
         $l = $r = $t = $b = 0;
@@ -470,10 +474,12 @@ abstract class GridGraph extends Graph
 
     /**
      * Calculates the overlap of a division or subdivision.
+     *
      * @param $style
      * @param $size
+     *
      * @return int
-*/
+     */
     protected function DOverlap($style, $size)
     {
         $overlap = 0;
@@ -532,9 +538,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the Y-axis for a dataset.
+     *
      * @param $dataset
+     *
      * @return int
-*/
+     */
     protected function DatasetYAxis($dataset)
     {
         if (!empty($this->dataset_axis) && isset($this->dataset_axis[$dataset])) {
@@ -546,9 +554,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the minimum key value for an axis.
+     *
      * @param $axis
+     *
      * @return
-*/
+     */
     protected function GetAxisMinKey($axis)
     {
         return $this->GetMinKey();
@@ -561,9 +571,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the minimum value for an axis.
+     *
      * @param $axis
+     *
      * @return mixed|null
-*/
+     */
     protected function GetAxisMinValue($axis)
     {
         if ($this->single_axis || empty($this->dataset_axis) ||
@@ -585,9 +597,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the maximum value for an axis.
+     *
      * @param $axis
+     *
      * @return mixed|null
-*/
+     */
     protected function GetAxisMaxValue($axis)
     {
         if ($this->single_axis || empty($this->dataset_axis) ||
@@ -708,12 +722,14 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the X and Y axis class instances as a list.
+     *
      * @param $ends
      * @param $x_len
      * @param $y_len
+     *
      * @return array
      * @throws \Exception
-*/
+     */
     protected function GetAxes($ends, &$x_len, &$y_len)
     {
         // disable units for associative keys
@@ -955,9 +971,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the grid points for a Y-axis.
+     *
      * @param $axis
+     *
      * @return
-*/
+     */
     protected function GetGridPointsY($axis)
     {
         $min_space_v = $this->GetFirst(
@@ -973,9 +991,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the grid points for an X-axis.
+     *
      * @param $axis
+     *
      * @return
-*/
+     */
     protected function GetGridPointsX($axis)
     {
         $min_space_h = $this->GetFirst(
@@ -988,9 +1008,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the subdivisions for a Y-axis.
+     *
      * @param $axis
+     *
      * @return
-*/
+     */
     protected function GetSubDivsY($axis)
     {
         return $this->y_axes[$axis]->GetGridSubdivisions(
@@ -1003,9 +1025,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the subdivisions for an X-axis.
+     *
      * @param $axis
+     *
      * @return
-*/
+     */
     protected function GetSubDivsX($axis)
     {
         return $this->x_axes[$axis]->GetGridSubdivisions(
@@ -1018,9 +1042,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the X axis SVG fragment.
+     *
      * @param $yoff
+     *
      * @return string
-*/
+     */
     protected function XAxis($yoff)
     {
         $x    = $this->pad_left - $this->axis_overlap;
@@ -1039,9 +1065,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the Y axis SVG fragment.
+     *
      * @param $i
+     *
      * @return string
-*/
+     */
     protected function YAxis($i)
     {
         if ($i > 0) {
@@ -1071,6 +1099,7 @@ abstract class GridGraph extends Graph
      * Returns the position and size of divisions.
      *
      * @retval array('pos' => $position, 'sz' => $size)
+     *
      * @param $style
      * @param $size
      * @param $fullsize
@@ -1078,8 +1107,9 @@ abstract class GridGraph extends Graph
      * @param $axis_offset
      * @param $axis_opposite
      * @param $secondary_axis
+     *
      * @return array
-*/
+     */
     protected function DivisionsPositions(
         $style,
         $size,
@@ -1128,12 +1158,14 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns X-axis divisions as a path.
+     *
      * @param $points
      * @param $style
      * @param $size
      * @param $yoff
+     *
      * @return string
-*/
+     */
     protected function XAxisDivisions(&$points, $style, $size, $yoff)
     {
         $path = '';
@@ -1161,12 +1193,14 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns Y-axis divisions as a path.
+     *
      * @param $points
      * @param $xoff
      * @param $subdiv
      * @param $axis_no
+     *
      * @return string
-*/
+     */
     protected function YAxisDivisions(&$points, $xoff, $subdiv, $axis_no)
     {
         $dz  = 'division_size';
@@ -1207,13 +1241,15 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the X-axis text positions.
+     *
      * @param $points
      * @param $xoff
      * @param $yoff
      * @param $angle
      * @param $inside
+     *
      * @return array
-*/
+     */
     protected function XAxisTextPositions(&$points, $xoff, $yoff, $angle, $inside)
     {
         $positions      = array();
@@ -1295,14 +1331,16 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the Y-axis text positions.
+     *
      * @param $points
      * @param $xoff
      * @param $yoff
      * @param $angle
      * @param $inside
      * @param $axis_no
+     *
      * @return array
-*/
+     */
     protected function YAxisTextPositions(&$points, $xoff, $yoff, $angle, $inside, $axis_no)
     {
         $y_prev          = $this->height;
@@ -1382,12 +1420,14 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the X-axis text fragment.
+     *
      * @param $points
      * @param $xoff
      * @param $yoff
      * @param $angle
+     *
      * @return string
-*/
+     */
     protected function XAxisText(&$points, $xoff, $yoff, $angle)
     {
         $inside = ('inside' == $this->GetFirst(
@@ -1437,14 +1477,16 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the Y-axis text fragment.
+     *
      * @param $points
      * @param $xoff
      * @param $yoff
      * @param $angle
      * @param $right
      * @param $axis_no
+     *
      * @return string
-*/
+     */
     protected function YAxisText(&$points, $xoff, $yoff, $angle, $right, $axis_no)
     {
         $inside = ('inside' == $this->GetFirst(
@@ -1506,9 +1548,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the horizontal axis label.
+     *
      * @param $attribs
+     *
      * @return string
-*/
+     */
     protected function HLabel(&$attribs)
     {
         if (empty($this->label_h)) {
@@ -1529,9 +1573,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the vertical axis label.
+     *
      * @param $attribs
+     *
      * @return string
-*/
+     */
     protected function VLabel(&$attribs)
     {
         if (empty($this->label_v)) {
@@ -1589,9 +1635,11 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns the labels grouped with the provided axis division labels.
+     *
      * @param string $axis_text
+     *
      * @return string
-*/
+     */
     protected function Labels($axis_text = '')
     {
         $labels = $axis_text;
@@ -1841,12 +1889,14 @@ abstract class GridGraph extends Graph
 
     /**
      * Returns a set of gridlines.
+     *
      * @param      $path
      * @param      $colour
      * @param      $dash
      * @param null $fill
+     *
      * @return string
-*/
+     */
     protected function GridLines($path, $colour, $dash, $fill = null)
     {
         if ($path == '' || $colour == 'none') {
@@ -1865,10 +1915,12 @@ abstract class GridGraph extends Graph
 
     /**
      * Adds crosshairs to the grid.
+     *
      * @param $grid_group
+     *
      * @return string
      * @throws \Exception
-*/
+     */
     protected function GridCrossHairs(&$grid_group)
     {
         if (!$this->crosshairs ||
@@ -2212,9 +2264,11 @@ XML;
 
     /**
      * clamps a value to the grid boundaries.
+     *
      * @param $val
+     *
      * @return mixed
-*/
+     */
     protected function ClampVertical($val)
     {
         return max($this->pad_top, min($this->height - $this->pad_bottom, $val));
@@ -2227,8 +2281,9 @@ XML;
 
     /**
      * Sets the clipping path for the grid.
+     *
      * @param $attr
-*/
+     */
     protected function ClipGrid(&$attr)
     {
         $clip_id           = $this->GridClipPath();
@@ -2265,10 +2320,12 @@ XML;
      * Returns the grid position for a bar or point, or NULL if not on grid
      * $key  = actual value array index
      * $ikey = integer position in array.
+     *
      * @param $key
      * @param $ikey
+     *
      * @return null
-*/
+     */
     protected function GridPosition($key, $ikey)
     {
         $position = null;
@@ -2292,10 +2349,12 @@ XML;
 
     /**
      * Returns an X unit value as a SVG distance.
+     *
      * @param      $x
      * @param null $axis_no
+     *
      * @return
-*/
+     */
     public function UnitsX($x, $axis_no = null)
     {
         if (is_null($axis_no) || is_null($this->x_axes[$axis_no])) {
@@ -2308,10 +2367,12 @@ XML;
 
     /**
      * Returns a Y unit value as a SVG distance.
+     *
      * @param      $y
      * @param null $axis_no
+     *
      * @return
-*/
+     */
     public function UnitsY($y, $axis_no = null)
     {
         if (is_null($axis_no) || is_null($this->y_axes[$axis_no])) {
@@ -2324,10 +2385,12 @@ XML;
 
     /**
      * Returns the $x value as a grid position.
+     *
      * @param      $x
      * @param null $axis_no
-     * @return null|void
-*/
+     *
+     * @return null|int
+     */
     public function GridX($x, $axis_no = null)
     {
         $p = $this->UnitsX($x, $axis_no);
@@ -2335,14 +2398,17 @@ XML;
             return $this->pad_left + $p;
         }
 
-        return;
+        return null;
     }
 
     /**
      * Returns the $y value as a grid position.
+     *
      * @param      $y
      * @param null $axis_no
-*/
+     *
+     * @return null|int
+     */
     public function GridY($y, $axis_no = null)
     {
         $p = $this->UnitsY($y, $axis_no);
@@ -2350,14 +2416,16 @@ XML;
             return $this->height - $this->pad_bottom - $p;
         }
 
-        return;
+        return null;
     }
 
     /**
      * Returns the location of the X axis origin.
+     *
      * @param null $axis_no
+     *
      * @return null
-*/
+     */
     protected function OriginX($axis_no = null)
     {
         if (is_null($axis_no) || is_null($this->x_axes[$axis_no])) {
@@ -2370,9 +2438,11 @@ XML;
 
     /**
      * Returns the location of the Y axis origin.
+     *
      * @param null $axis_no
+     *
      * @return
-*/
+     */
     protected function OriginY($axis_no = null)
     {
         if (is_null($axis_no) || is_null($this->y_axes[$axis_no])) {
@@ -2385,8 +2455,9 @@ XML;
 
     /**
      * Converts guideline options to more useful member variables.
+     *
      * @param null $g
-*/
+     */
     protected function CalcGuidelines($g = null)
     {
         if (is_null($this->guidelines)) {
@@ -2490,9 +2561,11 @@ XML;
 
     /**
      * Returns the elements to draw the guidelines.
+     *
      * @param $depth
+     *
      * @return string
-*/
+     */
     protected function Guidelines($depth)
     {
         if (empty($this->guidelines)) {
@@ -2549,12 +2622,13 @@ XML;
 
     /**
      * Adds a single guideline and its title to content.
+     *
      * @param $line
      * @param $lines
      * @param $text
      * @param $path
      * @param $d
-*/
+     */
     protected function BuildGuideline(&$line, &$lines, &$text, &$path, &$d)
     {
         $length       = $this->guideline_length;
@@ -2656,6 +2730,7 @@ XML;
 
     /**
      * Creates the path data for a guideline and sets the dimensions.
+     *
      * @param $axis
      * @param $value
      * @param $depth
@@ -2663,8 +2738,9 @@ XML;
      * @param $y
      * @param $w
      * @param $h
+     *
      * @return string
-*/
+     */
     protected function GuidelinePath($axis, $value, $depth, &$x, &$y, &$w, &$h)
     {
         if ($axis == 'x') {
@@ -2711,10 +2787,11 @@ XML;
 
     /**
      * Updates $var with $array[$key] and removes it from array.
+     *
      * @param $var
      * @param $array
      * @param $key
-*/
+     */
     protected function UpdateAndUnset(&$var, &$array, $key)
     {
         if (isset($array[$key])) {

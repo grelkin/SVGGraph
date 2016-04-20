@@ -2,6 +2,11 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class ThreeDGraph
+ *
+ * @property mixed project_angle
+ */
 abstract class ThreeDGraph extends GridGraph
 {
     // Number of data ranges

@@ -2,6 +2,13 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class BarGraph
+ *
+ * @property mixed bar_width
+ * @property mixed bar_space
+ * @property mixed bar_width_min
+ */
 class BarGraph extends GridGraph
 {
     protected $bar_styles = array();
