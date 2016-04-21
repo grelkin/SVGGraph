@@ -2295,13 +2295,12 @@ abstract class GridGraph extends Graph
     protected function GridPosition($key, $ikey)
     {
         $position = null;
-        $gkey     = $this->values->AssociativeKeys() ? $ikey : $key;
+        $gKey     = $this->values->AssociativeKeys() ? $ikey : $key;
         $zero     = -0.01; // catch values close to 0
         $axis     = $this->flip_axes
             ? $this->y_axes[$this->main_y_axis]
-            :
-            $this->x_axes[$this->main_x_axis];
-        $offset   = $axis->Zero() + ($axis->Unit() * $gkey);
+            : $this->x_axes[$this->main_x_axis];
+        $offset   = $axis->Zero() + ($axis->Unit() * $gKey);
         if ($offset >= $zero && floor($offset) <= $this->grid_limit) {
             if ($this->flip_axes) {
                 $position = $this->height - $this->pad_bottom - $offset;

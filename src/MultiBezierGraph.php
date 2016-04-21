@@ -22,16 +22,16 @@ class MultiBezierGraph extends BezierGraph
         $this->ColourSetup($this->multi_graph->ItemsCount(-1), $chunk_count);
 
         for ($i = 0; $i < $chunk_count; ++$i) {
-            $bnum   = 0;
+            $bNum   = 0;
             $points = array();
             $axis   = $this->DatasetYAxis($i);
             foreach ($this->multi_graph[$i] as $item) {
-                $x = $this->GridPosition($item->key, $bnum);
+                $x = $this->GridPosition($item->key, $bNum);
                 if (!is_null($x) && !is_null($item->value)) {
                     $y        = $this->GridY($item->value, $axis);
-                    $points[] = array($x, $y, $item, $i, $bnum);
+                    $points[] = array($x, $y, $item, $i, $bNum);
                 }
-                ++$bnum;
+                ++$bNum;
             }
 
             $plot = $this->DrawLine($i, $points, $y_bottom);
