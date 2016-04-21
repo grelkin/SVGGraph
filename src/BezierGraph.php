@@ -16,20 +16,19 @@ class BezierGraph extends PointGraph
         $body = $this->Grid() . $this->Guidelines(SVGG_GUIDELINE_BELOW);
         $this->ColourSetup($this->values->ItemsCount());
 
-        $bnum       = 0;
-        $cmd        = 'M';
+        $bNum       = 0;
         $y_axis_pos = $this->height - $this->pad_bottom -
                       $this->y_axes[$this->main_y_axis]->Zero();
         $y_bottom   = min($y_axis_pos, $this->height - $this->pad_bottom);
 
         $points = array();
         foreach ($this->values[0] as $item) {
-            $x = $this->GridPosition($item->key, $bnum);
+            $x = $this->GridPosition($item->key, $bNum);
             if (!is_null($item->value) && !is_null($x)) {
                 $y        = $this->GridY($item->value);
-                $points[] = array($x, $y, $item, 0, $bnum);
+                $points[] = array($x, $y, $item, 0, $bNum);
             }
-            ++$bnum;
+            ++$bNum;
         }
 
         $graph_line = $this->DrawLine(0, $points, $y_bottom, true);
@@ -62,7 +61,7 @@ class BezierGraph extends PointGraph
     }
 
     /**
-     * Returns the SVG fragemnt for a line
+     * Returns the SVG fragment for a line
      * $points = array of array($x, $y, $item, $dataset, $index).
      *
      * @param      $dataset
@@ -82,16 +81,17 @@ class BezierGraph extends PointGraph
             $attr['stroke-dasharray'] = $dash;
         }
         $attr['stroke-width'] = $stroke_width <= 0 ? 1 : $stroke_width;
-        $path                 = $fillpath = '';
+        $path                 = $fillPath = '';
         $cmd                  = 'M';
+        $last_x               = '';
         foreach ($points as $point) {
             list($x, $y, $item, $dataset, $index) = $point;
 
-            if (empty($fillpath)) {
-                $fillpath = "M$x {$y_bottom}L";
+            if (empty($fillPath)) {
+                $fillPath = "M$x {$y_bottom}L";
             }
             $path .= "$cmd$x $y ";
-            $fillpath .= "$x $y ";
+            $fillPath .= "$x $y ";
 
             // no need to repeat same L command
             $cmd       = $cmd == 'M' ? 'Q' : '';
@@ -105,7 +105,7 @@ class BezierGraph extends PointGraph
         // So, just repeat the last point
         $q_points = count($points) - 1;
         if ($q_points % 4) {
-            list($x, $y, $__item, $__dataset, $__index) = end($points);
+            list($x, $y) = end($points);
             $path .= str_repeat("$cmd$x $y ", 4 - ($q_points % 4));
         }
 
@@ -122,10 +122,10 @@ class BezierGraph extends PointGraph
 
         if ($fill) {
             $opacity = $this->ArrayOption($this->fill_opacity, $dataset);
-            $fillpath .= "L{$last_x} {$y_bottom}z";
+            $fillPath .= "L{$last_x} {$y_bottom}z";
             $fill_style = array(
                 'fill'   => $this->GetColour(null, 0, $dataset),
-                'd'      => $fillpath,
+                'd'      => $fillPath,
                 'stroke' => 'none',
             );
             if ($opacity < 1) {

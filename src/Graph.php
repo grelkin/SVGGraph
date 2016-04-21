@@ -12,6 +12,11 @@ namespace GGS\SVGGraph;
  * @property string empty_use
  * @property string data_label_min_space
  * @property string compat_events
+ * @property string stroke_colour
+ * @property string fill_opacity
+ * @property string fill_under
+ * @property string line_dash
+ * @property string line_stroke_width
  */
 abstract class Graph
 {
