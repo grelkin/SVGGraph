@@ -384,7 +384,7 @@ abstract class Graph
 {
     protected $settings = array();
     /**
-     * @var SVGGraphData|SVGGraphStructuredData|SVGGraphDataIterator[]|SVGGraphDataItem[][]|SVGGraphStructuredDataItem[][]|SVGGraphStructuredDataIterator[]
+     * @var SVGGraphData|SVGGraphStructuredData|GraphDataIterator[]|SVGGraphDataItem[][]|SVGGraphStructuredDataItem[][]|SVGGraphStructuredDataIterator[]
      */
     protected $values = array();
     protected $link_base = '';
