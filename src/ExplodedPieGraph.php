@@ -2,6 +2,15 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class ExplodedPieGraph
+ *
+ * @property mixed  explode_amount
+ * @property bool   reverse
+ * @property string explode
+ * @property mixed  centre_x
+ * @property mixed  centre_y
+ */
 class ExplodedPieGraph extends PieGraph
 {
     protected $largest_value;
@@ -88,11 +97,13 @@ class ExplodedPieGraph extends PieGraph
 
     /**
      * Returns the x,y offset caused by explosion.
-     * @param $item
-     * @param $angle_start
-     * @param $angle_end
+     *
+     * @param SVGGraphDataItem|SVGGraphStructuredDataItem $item
+     * @param                                             $angle_start
+     * @param                                             $angle_end
+     *
      * @return array
-*/
+     */
     protected function GetExplode($item, $angle_start, $angle_end)
     {
         $range = $this->largest_value - $this->smallest_value;
@@ -110,13 +121,12 @@ class ExplodedPieGraph extends PieGraph
                 $diff = $this->largest_value - $item->value;
         }
         $amt  = $range > 0 ? $diff / $range : 0;
-        $iamt = $item->Data('explode');
-        if (!is_null($iamt)) {
-            $amt = $iamt;
+        $iAmt = $item->Data('explode');
+        if (!is_null($iAmt)) {
+            $amt = $iAmt;
         }
         $explode = $this->explode_amount * $amt;
 
-        $a        = $angle_end - $angle_start;
         $a_centre = $angle_start + ($angle_end - $angle_start) / 2;
         $xo       = $explode * cos($a_centre);
         $yo       = $explode * sin($a_centre);
@@ -129,6 +139,7 @@ class ExplodedPieGraph extends PieGraph
 
     /**
      * Returns the position for the label.
+     *
      * @param $dataset
      * @param $index
      * @param $item
@@ -138,8 +149,9 @@ class ExplodedPieGraph extends PieGraph
      * @param $h
      * @param $label_w
      * @param $label_h
+     *
      * @return string
-*/
+     */
     public function DataLabelPosition(
         $dataset,
         $index,
