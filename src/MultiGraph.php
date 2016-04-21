@@ -4,6 +4,9 @@ namespace GGS\SVGGraph;
 
 class MultiGraph implements \Countable, \ArrayAccess, \Iterator
 {
+    /**
+     * @var SVGGraphData|SVGGraphStructuredData|GraphDataIterator[]|SVGGraphDataItem[][]|SVGGraphStructuredDataItem[][]|SVGGraphStructuredDataIterator[]
+     */
     private $values;
     private $datasets = 0;
     private $force_assoc;
@@ -38,6 +41,8 @@ class MultiGraph implements \Countable, \ArrayAccess, \Iterator
                 $new_data, $force_assoc,
                 null, false, $int_keys, null
             );
+        } else {
+            $this->values = $values;
         }
         $this->datasets = count($this->values);
     }
@@ -99,10 +104,12 @@ class MultiGraph implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Don't allow writing to the data.
+     *
      * @param mixed $offset
      * @param mixed $value
+     *
      * @throws \Exception
-*/
+     */
     public function offsetSet($offset, $value)
     {
         throw new \Exception('Read-only');
@@ -132,9 +139,11 @@ class MultiGraph implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the key for an item.
+     *
      * @param $index
+     *
      * @return int|void
-*/
+     */
     public function GetKey($index)
     {
         return $this->values->GetKey($index);

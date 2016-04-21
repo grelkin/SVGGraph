@@ -289,7 +289,6 @@ class SVGGraphTest extends PHPUnit_Framework_TestCase
 
         $graph->Values($values);
 
-        file_put_contents(__DIR__ . '/fixtures/sample_jmeter.svg', $graph->Fetch('MultiBezierGraph'));
-        //$this->assertEquals(file_get_contents(__DIR__ . '/fixtures/sample_jmeter.svg'), $graph->Fetch('MultiBezierGraph'));
+        $this->assertEquals(file_get_contents(__DIR__ . '/fixtures/sample_jmeter.svg'), $graph->Fetch('MultiBezierGraph'));
     }
 }
