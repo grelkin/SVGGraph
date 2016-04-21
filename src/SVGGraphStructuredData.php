@@ -123,17 +123,16 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
         } elseif (!is_null($this->key_field)) {
             // if not associative, sort by key field
             $key_field = $this->key_field;
-            usort($this->data, function($a, $b) use ($key_field)
-            {
-                if (!isset($a[$key_field]) || !isset($b[$key_field])) {
-                    return 0;
-                }
-                if ($a[$key_field] == $b[$key_field]) {
-                    return 0;
-                }
+            usort(
+                $this->data,
+                function ($a, $b) use ($key_field) {
+                    if (!isset($a[$key_field]) || !isset($b[$key_field])) {
+                        return 0;
+                    }
 
-                return $a[$key_field] > $b[$key_field] ? 1 : -1;
-            });
+                    return $a[$key_field] - $b[$key_field];
+                }
+            );
         }
 
         if ($this->RepeatedKeys()) {
@@ -221,7 +220,9 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * ArrayAccess methods.
+     *
      * @param mixed $offset
+     *
      * @return bool
      */
     public function offsetExists($offset)
@@ -236,8 +237,10 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Don't allow writing to the data.
+     *
      * @param mixed $offset
      * @param mixed $value
+     *
      * @throws \Exception
      */
     public function offsetSet($offset, $value)
@@ -260,7 +263,9 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns minimum data value for a dataset.
+     *
      * @param int $dataset
+     *
      * @return null
      */
     public function GetMinValue($dataset = 0)
@@ -282,7 +287,9 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns maximum data value for a dataset.
+     *
      * @param int $dataset
+     *
      * @return null
      */
     public function GetMaxValue($dataset = 0)
@@ -304,7 +311,9 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the minimum key value.
+     *
      * @param int $dataset
+     *
      * @return int|null|string
      */
     public function GetMinKey($dataset = 0)
@@ -341,7 +350,9 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the maximum key value for a dataset.
+     *
      * @param int $dataset
+     *
      * @return int|null|string
      */
     public function GetMaxKey($dataset = 0)
@@ -378,8 +389,10 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the key (or axis text) at a given index/key.
+     *
      * @param     $index
      * @param int $dataset
+     *
      * @return int|void
      */
     public function GetKey($index, $dataset = 0)
@@ -438,7 +451,9 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
     /**
      * Returns the number of data items in a dataset
      * If $dataset is -1, returns number of items across all datasets.
+     *
      * @param int $dataset
+     *
      * @return int
      */
     public function ItemsCount($dataset = 0)
@@ -489,8 +504,10 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the min and max sum values for some datasets.
+     *
      * @param int  $start
      * @param null $end
+     *
      * @return array
      * @throws \Exception
      */
@@ -535,7 +552,9 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Strips units from before and after label.
+     *
      * @param $label
+     *
      * @return string
      */
     protected function StripLabel($label)

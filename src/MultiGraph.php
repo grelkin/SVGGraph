@@ -20,16 +20,14 @@ class MultiGraph implements \Countable, \ArrayAccess, \Iterator
 
     public function __construct($values, $force_assoc, $int_keys)
     {
-        $this->values      = &$values;
         $this->force_assoc = $force_assoc;
-        $keys              = array();
 
         // convert unstructured data to structured
-        if (count($values) > 1 && $this->values instanceof SVGGraphData) {
+        if (count($values) > 1 && $values instanceof SVGGraphData) {
             $new_data = array();
             $count    = count($values);
             for ($i = 0; $i < $count; ++$i) {
-                foreach ($this->values[$i] as $item) {
+                foreach ($values[$i] as $item) {
                     $new_data[$item->key][0]      = $item->key;
                     $new_data[$item->key][$i + 1] = $item->value;
                 }
