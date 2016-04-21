@@ -24,6 +24,361 @@ namespace GGS\SVGGraph;
  * @property mixed  structure
  * @property mixed  data_label_filter
  * @property mixed  data_label_max_count
+ * @property mixed  pad_left
+ * @property mixed  pad_top
+ * @property mixed  pad_right
+ * @property mixed  label_y
+ * @property mixed  label_x
+ * @property mixed  label_h
+ * @property mixed  label_v
+ * @property mixed  axis_right
+ * @property mixed  label_font_size_v
+ * @property mixed  label_font_size_h
+ * @property mixed  label_font_size
+ * @property mixed  label_space
+ * @property mixed  show_axes
+ * @property mixed  title
+ * @property mixed  description
+ * @property mixed  namespace
+ * @property mixed  doctype
+ * @property mixed  svg_class
+ * @property mixed  encoding
+ * @property mixed  id_prefix
+ * @property mixed  precision
+ * @property mixed  exception_details
+ * @property mixed  back_colour
+ * @property mixed  back_round
+ * @property mixed  back_round_clip
+ * @property mixed  back_stroke_width
+ * @property mixed  back_stroke_colour
+ * @property mixed  back_image
+ * @property mixed  back_image_opacity
+ * @property mixed  back_image_width
+ * @property mixed  back_image_height
+ * @property mixed  back_image_top
+ * @property mixed  back_image_left
+ * @property mixed  back_image_mode
+ * @property mixed  stroke_width
+ * @property mixed  stroke_dash
+ * @property mixed  tooltip_colour
+ * @property mixed  tooltip_stroke_width
+ * @property mixed  tooltip_back_colour
+ * @property mixed  tooltip_font
+ * @property mixed  tooltip_font_weight
+ * @property mixed  tooltip_font_size
+ * @property mixed  tooltip_offset
+ * @property mixed  tooltip_padding
+ * @property mixed  tooltip_round
+ * @property mixed  tooltip_shadow_opacity
+ * @property mixed  tooltip_callback
+ * @property mixed  units_tooltip
+ * @property mixed  units_tooltip_key
+ * @property mixed  units_before_tooltip
+ * @property mixed  units_before_tooltip_key
+ * @property mixed  graph_title
+ * @property mixed  graph_title_colour
+ * @property mixed  graph_title_font
+ * @property mixed  graph_title_font_size
+ * @property mixed  graph_title_font_weight
+ * @property mixed  graph_title_space
+ * @property mixed  graph_title_position
+ * @property mixed  legend_entries
+ * @property mixed  legend_columns
+ * @property mixed  legend_position
+ * @property mixed  legend_stroke_width
+ * @property mixed  legend_stroke_colour
+ * @property mixed  legend_back_colour
+ * @property mixed  legend_font
+ * @property mixed  legend_font_weight
+ * @property mixed  legend_font_size
+ * @property mixed  legend_font_adjust
+ * @property mixed  legend_colour
+ * @property mixed  legend_padding
+ * @property mixed  legend_round
+ * @property mixed  legend_entry_width
+ * @property mixed  legend_entry_height
+ * @property mixed  legend_title
+ * @property mixed  legend_title_font
+ * @property mixed  legend_title_font_size
+ * @property mixed  legend_title_font_weight
+ * @property mixed  legend_title_font_adjust
+ * @property mixed  legend_title_colour
+ * @property mixed  legend_text_side
+ * @property mixed  legend_shadow_opacity
+ * @property mixed  legend_draggable
+ * @property mixed  legend_autohide
+ * @property mixed  force_assoc
+ * @property mixed  structured_data
+ * @property mixed  decimal
+ * @property mixed  thousands
+ * @property mixed  minify
+ * @property mixed  minify_js
+ * @property mixed  auto_fit
+ * @property mixed  show_data_labels
+ * @property mixed  data_label_type
+ * @property mixed  data_label_space
+ * @property mixed  data_label_font
+ * @property mixed  data_label_font_size
+ * @property mixed  data_label_font_adjust
+ * @property mixed  data_label_font_weight
+ * @property mixed  data_label_colour
+ * @property mixed  data_label_colour_outside
+ * @property mixed  data_label_back_colour
+ * @property mixed  data_label_back_colour_outside
+ * @property mixed  data_label_position
+ * @property mixed  data_label_angle
+ * @property mixed  data_label_padding
+ * @property mixed  data_label_padding_x
+ * @property mixed  data_label_padding_y
+ * @property mixed  data_label_round
+ * @property mixed  data_label_fill
+ * @property mixed  data_label_outline_colour
+ * @property mixed  data_label_outline_thickness
+ * @property mixed  data_label_tail_length
+ * @property mixed  data_label_tail_width
+ * @property mixed  data_label_shadow_opacity
+ * @property mixed  data_label_fade_in_speed
+ * @property mixed  data_label_fade_out_speed
+ * @property mixed  data_label_click
+ * @property mixed  data_label_popfront
+ * @property mixed  data_label_callback
+ * @property mixed  units_label
+ * @property mixed  units_before_label
+ * @property mixed  show_axis_v
+ * @property mixed  show_axis_h
+ * @property mixed  axis_colour
+ * @property mixed  axis_colour_h
+ * @property mixed  axis_colour_v
+ * @property mixed  axis_stroke_width
+ * @property mixed  axis_stroke_width_h
+ * @property mixed  axis_stroke_width_v
+ * @property mixed  show_axis_text_h
+ * @property mixed  show_axis_text_v
+ * @property mixed  axis_text_colour
+ * @property mixed  axis_text_colour_h
+ * @property mixed  axis_text_colour_v
+ * @property mixed  axis_font
+ * @property mixed  axis_font_h
+ * @property mixed  axis_font_v
+ * @property mixed  axis_font_size
+ * @property mixed  axis_font_size_h
+ * @property mixed  axis_font_size_v
+ * @property mixed  axis_font_adjust
+ * @property mixed  axis_font_adjust_h
+ * @property mixed  axis_font_adjust_v
+ * @property mixed  axis_overlap
+ * @property mixed  axis_min_h
+ * @property mixed  axis_min_v
+ * @property mixed  axis_max_h
+ * @property mixed  axis_max_v
+ * @property mixed  axis_text_angle_h
+ * @property mixed  axis_text_angle_v
+ * @property mixed  axis_text_space
+ * @property mixed  axis_text_space_h
+ * @property mixed  axis_text_space_v
+ * @property mixed  axis_text_position
+ * @property mixed  axis_text_position_h
+ * @property mixed  axis_text_position_v
+ * @property mixed  axis_text_callback
+ * @property mixed  axis_text_callback_x
+ * @property mixed  axis_text_callback_y
+ * @property mixed  show_grid
+ * @property mixed  show_grid_subdivisions
+ * @property mixed  show_grid_h
+ * @property mixed  show_grid_v
+ * @property mixed  grid_colour
+ * @property mixed  grid_colour_h
+ * @property mixed  grid_colour_v
+ * @property mixed  grid_back_colour
+ * @property mixed  grid_back_opacity
+ * @property mixed  grid_back_stripe
+ * @property mixed  grid_back_stripe_colour
+ * @property mixed  grid_back_stripe_opacity
+ * @property mixed  grid_division_h
+ * @property mixed  grid_division_v
+ * @property mixed  grid_dash
+ * @property mixed  grid_dash_h
+ * @property mixed  grid_dash_v
+ * @property mixed  grid_subdivision_colour
+ * @property mixed  grid_subdivision_colour_h
+ * @property mixed  grid_subdivision_colour_v
+ * @property mixed  grid_subdivision_dash
+ * @property mixed  grid_subdivision_dash_h
+ * @property mixed  grid_subdivision_dash_v
+ * @property mixed  minimum_grid_spacing
+ * @property mixed  minimum_grid_spacing_h
+ * @property mixed  minimum_grid_spacing_v
+ * @property mixed  minimum_units_y
+ * @property mixed  show_divisions
+ * @property mixed  division_size
+ * @property mixed  division_size_h
+ * @property mixed  division_size_v
+ * @property mixed  division_colour
+ * @property mixed  division_colour_h
+ * @property mixed  division_colour_v
+ * @property mixed  division_style
+ * @property mixed  division_style_h
+ * @property mixed  division_style_v
+ * @property mixed  show_subdivisions
+ * @property mixed  subdivision_size
+ * @property mixed  subdivision_size_h
+ * @property mixed  subdivision_size_v
+ * @property mixed  subdivision_colour
+ * @property mixed  subdivision_colour_h
+ * @property mixed  subdivision_colour_v
+ * @property mixed  subdivision_h
+ * @property mixed  subdivision_v
+ * @property mixed  subdivision_style
+ * @property mixed  subdivision_style_h
+ * @property mixed  subdivision_style_v
+ * @property mixed  minimum_subdivision
+ * @property mixed  label_font
+ * @property mixed  label_font_h
+ * @property mixed  label_font_v
+ * @property mixed  label_font_weight
+ * @property mixed  label_font_weight_h
+ * @property mixed  label_font_weight_v
+ * @property mixed  label_colour
+ * @property mixed  label_colour_h
+ * @property mixed  label_colour_v
+ * @property mixed  guideline
+ * @property mixed  guideline_above
+ * @property mixed  guideline_colour
+ * @property mixed  guideline_opacity
+ * @property mixed  guideline_stroke_width
+ * @property mixed  guideline_dash
+ * @property mixed  guideline_font
+ * @property mixed  guideline_font_size
+ * @property mixed  guideline_font_adjust
+ * @property mixed  guideline_font_weight
+ * @property mixed  guideline_text_position
+ * @property mixed  guideline_text_padding
+ * @property mixed  guideline_text_colour
+ * @property mixed  guideline_text_angle
+ * @property mixed  guideline_text_align
+ * @property mixed  guideline_text_opacity
+ * @property mixed  guideline_length
+ * @property mixed  guideline_length_units
+ * @property mixed  units_x
+ * @property mixed  units_y
+ * @property mixed  units_before_x
+ * @property mixed  units_before_y
+ * @property mixed  decimal_digits
+ * @property mixed  decimal_digits_x
+ * @property mixed  decimal_digits_y
+ * @property mixed  log_axis_y
+ * @property mixed  log_axis_y_base
+ * @property mixed  crosshairs
+ * @property mixed  crosshairs_show_h
+ * @property mixed  crosshairs_show_v
+ * @property mixed  crosshairs_show_text
+ * @property mixed  crosshairs_stroke_width
+ * @property mixed  crosshairs_stroke_width_h
+ * @property mixed  crosshairs_stroke_width_v
+ * @property mixed  crosshairs_dash
+ * @property mixed  crosshairs_dash_h
+ * @property mixed  crosshairs_dash_v
+ * @property mixed  crosshairs_colour
+ * @property mixed  crosshairs_colour_h
+ * @property mixed  crosshairs_colour_v
+ * @property mixed  crosshairs_opacity
+ * @property mixed  crosshairs_opacity_h
+ * @property mixed  crosshairs_opacity_v
+ * @property mixed  crosshairs_text_precision_h
+ * @property mixed  crosshairs_text_precision_v
+ * @property mixed  crosshairs_text_colour
+ * @property mixed  crosshairs_text_stroke_width
+ * @property mixed  crosshairs_text_back_colour
+ * @property mixed  crosshairs_text_font
+ * @property mixed  crosshairs_text_font_size
+ * @property mixed  crosshairs_text_font_weight
+ * @property mixed  crosshairs_text_padding
+ * @property mixed  crosshairs_text_space
+ * @property mixed  crosshairs_text_round
+ * @property mixed  grid_left
+ * @property mixed  grid_right
+ * @property mixed  grid_top
+ * @property mixed  grid_bottom
+ * @property mixed  project_angle
+ * @property mixed  skew_side
+ * @property mixed  skew_top
+ * @property mixed  bar_side_overlay_colour
+ * @property mixed  bar_side_overlay_opacity
+ * @property mixed  bar_top_overlay_colour
+ * @property mixed  bar_top_overlay_opacity
+ * @property mixed  bar_front_overlay_colour
+ * @property mixed  bar_front_overlay_opacity
+ * @property mixed  depth_shade_gradient
+ * @property mixed  marker_size
+ * @property mixed  marker_type
+ * @property mixed  marker_colour
+ * @property mixed  marker_stroke_colour
+ * @property mixed  marker_stroke_width
+ * @property mixed  best_fit_line
+ * @property mixed  best_fit_width
+ * @property mixed  best_fit_colour
+ * @property mixed  best_fit_dash
+ * @property mixed  best_fit_opacity
+ * @property mixed  best_fit_above
+ * @property mixed  best_fit_range
+ * @property mixed  best_fit_project
+ * @property mixed  best_fit_project_width
+ * @property mixed  best_fit_project_colour
+ * @property mixed  best_fit_project_dash
+ * @property mixed  best_fit_project_opacity
+ * @property mixed  scatter_2d
+ * @property mixed  show_bar_totals
+ * @property mixed  bar_total_space
+ * @property mixed  bar_total_font
+ * @property mixed  bar_total_font_size
+ * @property mixed  bar_total_font_weight
+ * @property mixed  bar_total_colour
+ * @property mixed  bar_total_type
+ * @property mixed  bar_total_font_adjust
+ * @property mixed  bar_total_back_colour
+ * @property mixed  bar_total_angle
+ * @property mixed  bar_total_padding
+ * @property mixed  bar_total_padding_x
+ * @property mixed  bar_total_padding_y
+ * @property mixed  bar_total_round
+ * @property mixed  bar_total_outline_colour
+ * @property mixed  bar_total_outline_thickness
+ * @property mixed  bar_total_fill
+ * @property mixed  bar_total_tail_width
+ * @property mixed  bar_total_tail_length
+ * @property mixed  bar_total_shadow_opacity
+ * @property mixed  bar_total_callback
+ * @property mixed  group_space
+ * @property mixed  aspect_ratio
+ * @property mixed  sort
+ * @property mixed  reverse
+ * @property mixed  start_angle
+ * @property mixed  show_label_key
+ * @property mixed  show_label_amount
+ * @property mixed  show_label_percent
+ * @property mixed  label_percent_decimals
+ * @property mixed  label_position
+ * @property mixed  depth
+ * @property mixed  inner_radius
+ * @property mixed  inner_text
+ * @property mixed  inner_text_font
+ * @property mixed  inner_text_font_size
+ * @property mixed  inner_text_font_adjust
+ * @property mixed  inner_text_font_weight
+ * @property mixed  inner_text_colour
+ * @property mixed  inner_text_back_colour
+ * @property mixed  explode
+ * @property mixed  explode_amount
+ * @property mixed  grid_straight
+ * @property mixed  show_x_axis
+ * @property mixed  bubble_scale
+ * @property mixed  median_stroke_width
+ * @property mixed  whisker_width
+ * @property mixed  whisker_dash
+ * @property mixed  stack_group
+ * @property mixed  line_dataset
+ * @property mixed  increment
+ * @property mixed  percentage
  */
 abstract class Graph
 {
@@ -317,6 +672,7 @@ abstract class Graph
         $text_y_offset = $entry_height / 2 + $this->legend_font_size / 2;
 
         // make room for title
+        $title_font_size = $title_font = $title_font_adjust = $title_colour = null;
         if ($this->legend_title != '') {
             $title_font        = $this->GetFirst(
                 $this->legend_title_font,
@@ -632,18 +988,18 @@ abstract class Graph
         $pad,
         $text = false
     ) {
-        list($hpos, $vpos, $offset_x, $offset_y) = self::TranslatePosition($pos);
+        list($hPos, $vPos, $offset_x, $offset_y) = self::TranslatePosition($pos);
 
         // if the containers have no thickness, position outside
         $translate = array('l' => 'ol', 'r' => 'or', 't' => 'ot', 'b' => 'ob');
-        if ($top == $bottom && isset($translate[$vpos])) {
-            $vpos = $translate[$vpos];
+        if ($top == $bottom && isset($translate[$vPos])) {
+            $vPos = $translate[$vPos];
         }
-        if ($left == $right && isset($translate[$hpos])) {
-            $hpos = $translate[$hpos];
+        if ($left == $right && isset($translate[$hPos])) {
+            $hPos = $translate[$hPos];
         }
 
-        switch ($vpos) {
+        switch ($vPos) {
             case 'ot' :
                 $y = $top - $height - $pad;
                 break;
@@ -662,10 +1018,10 @@ abstract class Graph
                 break;
         }
 
-        if (($hpos == 'r' || $hpos == 'l') && $right - $left - $pad - $width < 0) {
-            $hpos = 'c';
+        if (($hPos == 'r' || $hPos == 'l') && $right - $left - $pad - $width < 0) {
+            $hPos = 'c';
         }
-        switch ($hpos) {
+        switch ($hPos) {
             case 'ol' :
                 $x = $left - $width - $pad;
                 break;
@@ -695,18 +1051,18 @@ abstract class Graph
             'r'  => 'end',
             'or' => 'start',
         );
-        $text_align = $align_map[$hpos];
+        $text_align = $align_map[$hPos];
 
         // in text mode, adjust X for text alignment
-        if ($text && $hpos != 'l' && $hpos != 'or') {
-            if ($hpos == 'c') {
+        if ($text && $hPos != 'l' && $hPos != 'or') {
+            if ($hPos == 'c') {
                 $x += $width / 2;
             } else {
                 $x += $width;
             }
         }
 
-        return array($x, $y, $text_align, $hpos, $vpos);
+        return array($x, $y, $text_align, $hPos, $vPos);
     }
 
     /**
@@ -720,10 +1076,7 @@ abstract class Graph
      *
      * @return string
      */
-    protected function DrawLegendEntry($key, $x, $y, $w, $h)
-    {
-        return '';
-    }
+    abstract protected function DrawLegendEntry($key, $x, $y, $w, $h);
 
     /**
      * Draws the graph title, if there is one.

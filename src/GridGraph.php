@@ -5,6 +5,26 @@ namespace GGS\SVGGraph;
 define('SVGG_GUIDELINE_ABOVE', 1);
 define('SVGG_GUIDELINE_BELOW', 0);
 
+/**
+ * Class GridGraph
+ *
+ * @property mixed grid_left
+ * @property mixed grid_right
+ * @property mixed grid_top
+ * @property mixed grid_bottom
+ * @property mixed minimum_grid_spacing_h
+ * @property mixed axis_text_position_h
+ * @property mixed axis_text_position
+ * @property mixed axis_font_size
+ * @property mixed show_axis_text_h
+ * @property mixed axis_text_angle_h
+ * @property mixed minimum_grid_spacing_v
+ * @property mixed axis_text_position_v
+ * @property mixed minimum_grid_spacing
+ * @property mixed axis_text_angle_v
+ * @property mixed show_axis_text_v
+ * @property mixed dataset_axis
+ */
 abstract class GridGraph extends Graph
 {
     /**
@@ -46,7 +66,6 @@ abstract class GridGraph extends Graph
     private $label_left_offset;
     private $label_bottom_offset;
     private $label_right_offset;
-    private $label_top_offset;
     private $grid_limit;
     private $grid_clip_id;
 
@@ -169,6 +188,7 @@ abstract class GridGraph extends Graph
             if ($this->show_axis_text_v || $this->show_axis_text_h) {
                 $extra_r = $extra_t = 0;
 
+                $x_axes = $y_axes = null;
                 for ($i = 0; $i < 10; ++$i) {
                     // find the text bounding box and add overlap to padding
                     // repeat with the new measurements in case overlap increases
@@ -179,20 +199,20 @@ abstract class GridGraph extends Graph
                     list($extra_r, $extra_t) = $this->AdjustAxes($x_len, $y_len);
 
                     list($x_axes, $y_axes) = $this->GetAxes($ends, $x_len, $y_len);
-                    $bbox = $this->FindAxisTextBBox($x_len, $y_len, $x_axes, $y_axes);
+                    $bBox = $this->FindAxisTextBBox($x_len, $y_len, $x_axes, $y_axes);
                     $pr   = $pl = $pb = $pt = 0;
 
-                    if ($bbox['max_x'] > $x_len) {
-                        $pr = ceil($bbox['max_x'] - $x_len);
+                    if ($bBox['max_x'] > $x_len) {
+                        $pr = ceil($bBox['max_x'] - $x_len);
                     }
-                    if ($bbox['min_x'] < 0) {
-                        $pl = ceil(abs($bbox['min_x']));
+                    if ($bBox['min_x'] < 0) {
+                        $pl = ceil(abs($bBox['min_x']));
                     }
-                    if ($bbox['min_y'] < 0) {
-                        $pt = ceil(abs($bbox['min_y']));
+                    if ($bBox['min_y'] < 0) {
+                        $pt = ceil(abs($bBox['min_y']));
                     }
-                    if ($bbox['max_y'] > $y_len) {
-                        $pb = ceil($bbox['max_y'] - $y_len);
+                    if ($bBox['max_y'] > $y_len) {
+                        $pb = ceil($bBox['max_y'] - $y_len);
                     }
 
                     if ($pr == $pad_r && $pl == $pad_l && $pt == $pad_t && $pb == $pad_b) {
@@ -258,10 +278,10 @@ abstract class GridGraph extends Graph
     /**
      * Find the bounding box of the axis text for given axis lengths.
      *
-     * @param $length_x
-     * @param $length_y
-     * @param $x_axes
-     * @param $y_axes
+     * @param        $length_x
+     * @param        $length_y
+     * @param Axis[] $x_axes
+     * @param Axis[] $y_axes
      *
      * @return array
      */
@@ -272,8 +292,7 @@ abstract class GridGraph extends Graph
             $this->minimum_grid_spacing
         );
 
-        // initialise maxima and minima
-        $min_x = $this->width;
+        // initialise max and min
         $min_y = $this->height;
         $max_x = $max_y = 0;
 
@@ -1933,7 +1952,6 @@ abstract class GridGraph extends Graph
             return '';
         }
 
-        $grid_id = $this->NewID();
         $this->AddFunction('crosshairs');
         $grid_group['class'] = 'grid';
 
@@ -2035,62 +2053,6 @@ abstract class GridGraph extends Graph
             )
         );
         $this->AddBackMatter($text);
-
-        // add in the details of the grid scales
-        $x_axis  = $this->x_axes[$this->main_x_axis];
-        $y_axis  = $this->y_axes[$this->main_y_axis];
-        $zero_x  = $x_axis->Zero();
-        $scale_x = $x_axis->Unit();
-        $zero_y  = $y_axis->Zero();
-        $scale_y = $y_axis->Unit();
-        $prec_x  = $this->GetFirst(
-            $this->crosshairs_text_precision_h,
-            max(0, ceil(log10($scale_x)))
-        );
-        $prec_y  = $this->GetFirst(
-            $this->crosshairs_text_precision_v,
-            max(0, ceil(log10($scale_y)))
-        );
-
-        $units = $base_y = $base_x = '';
-        $u     = $x_axis->AfterUnits();
-        if (!empty($u)) {
-            $units .= " unitsx=\"{$u}\"";
-        }
-        $u = $y_axis->AfterUnits();
-        if (!empty($u)) {
-            $units .= " unitsy=\"{$u}\"";
-        }
-        $u = $x_axis->BeforeUnits();
-        if (!empty($u)) {
-            $units .= " unitsbx=\"{$u}\"";
-        }
-        $u = $y_axis->BeforeUnits();
-        if (!empty($u)) {
-            $units .= " unitsby=\"{$u}\"";
-        }
-
-        if ($this->log_axis_y) {
-            if ($this->flip_axes) {
-                $base_x  = " base=\"{$this->log_axis_y_base}\"";
-                $zero_x  = $x_axis->Value(0);
-                $scale_x = $x_axis->Value($this->g_width);
-            } else {
-                $base_y  = " base=\"{$this->log_axis_y_base}\"";
-                $zero_y  = $y_axis->Value(0);
-                $scale_y = $y_axis->Value($this->g_height);
-            }
-        }
-
-        $this->defs[] = <<<XML
-<svggraph:data xmlns:svggraph="http://www.goat1000.com/svggraph">
-  <svggraph:gridx zero="{$zero_x}" scale="{$scale_x}" precision="{$prec_x}"{$base_x}/>
-  <svggraph:gridy zero="{$zero_y}" scale="{$scale_y}" precision="{$prec_y}"{$base_y}/>
-  <svggraph:chtext>
-    <svggraph:chtextitem type="xy" groupid="{$text_group['id']}"$units/>
-  </svggraph:chtext>
-</svggraph:data>
-XML;
 
         return $crosshairs;
     }

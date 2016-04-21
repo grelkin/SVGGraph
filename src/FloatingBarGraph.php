@@ -16,16 +16,16 @@ class FloatingBarGraph extends BarGraph
         $bar_style = array();
         $bar       = array('width' => $bar_width);
 
-        $bspace = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
-        $bnum   = 0;
+        $bSpace = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
+        $bNum   = 0;
         $this->ColourSetup($this->values->ItemsCount());
         $series = '';
 
         foreach ($this->values[0] as $item) {
-            $bar_pos = $this->GridPosition($item->key, $bnum);
+            $bar_pos = $this->GridPosition($item->key, $bNum);
 
             if (!is_null($item->value) && !is_null($bar_pos)) {
-                $bar['x'] = $bspace + $bar_pos;
+                $bar['x'] = $bSpace + $bar_pos;
 
                 $end   = $item->Data('end');
                 $start = $item->value;
@@ -33,11 +33,11 @@ class FloatingBarGraph extends BarGraph
                 $this->Bar($value, $bar, $start);
 
                 if ($bar['height'] > 0) {
-                    $bar_style['fill'] = $this->GetColour($item, $bnum);
+                    $bar_style['fill'] = $this->GetColour($item, $bNum);
                     $this->SetStroke($bar_style, $item);
                     $show_label = $this->AddDataLabel(
                         0,
-                        $bnum,
+                        $bNum,
                         $bar,
                         $item,
                         $bar['x'],
@@ -63,12 +63,12 @@ class FloatingBarGraph extends BarGraph
                     $series .= $this->GetLink($item, $item->key, $rect);
                     unset($bar['id']); // clear for next value
 
-                    if (!isset($this->bar_styles[$bnum])) {
-                        $this->bar_styles[$bnum] = $bar_style;
+                    if (!isset($this->bar_styles[$bNum])) {
+                        $this->bar_styles[$bNum] = $bar_style;
                     }
                 }
             }
-            ++$bnum;
+            ++$bNum;
         }
 
         if ($this->semantic_classes) {
