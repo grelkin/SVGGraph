@@ -215,4 +215,79 @@ class SVGGraphTest extends PHPUnit_Framework_TestCase
         $graph->Links($links);
         $this->assertEquals(file_get_contents(__DIR__ . '/fixtures/sample5.svg'), $graph->Fetch('BarGraph'));
     }
+
+    public function testJMeterGraph()
+    {
+        $numberOfPoints = 1000;
+        $start          = 1461224489;
+        $startMs        = $start * $numberOfPoints;
+        $endMs          = ($start + $numberOfPoints) * 1000;
+
+        $labels = array(
+            'Request 1',
+            'Request 2',
+            'Request 3',
+        );
+
+        $values = array();
+        for ($i = 0; $i < $numberOfPoints; $i++) {
+            $values[0][($start + $i) * 1000] = sin(M_PI * 3 / 360 * $i) * 300;
+            $values[1][($start + $i) * 1000] = cos(M_PI * 7 / 360 * $i) * 450;
+            $values[2][($start + $i) * 1000] = min(($i % 50) + $i, intval($i % 50) * $i);
+        }
+
+        $settings = array(
+            'back_colour'           => 'white',
+            'repeated_keys'         => 'accept',
+            'grid_back_stripe'      => false,
+            'grid_dash_h'           => '2,4',
+            'grid_dash_v'           => '2,4',
+            'marker_size'           => 0,
+            'line_stroke_width'     => 1,
+            'graph_title_font_size' => 20,
+            'label_font_size'       => 15,
+            'legend_font_size'      => 12,
+            'legend_entries'        => $labels,
+            'axis_text_callback_x'  => function ($value) use ($startMs) {
+                $seconds = intval(($value - $startMs) / 1000);
+
+                return sprintf(
+                    '%02d:%02d:%02d',
+                    floor($seconds / 3600),
+                    floor(($seconds / 60) % 60),
+                    $seconds % 60
+                );
+            },
+            'label_h'               => 'Elapsed time',
+            'label_v'               => 'Label V',
+            'graph_title'           => 'Graph title',
+            'axis_min_h'            => $startMs,
+            'axis_max_h'            => $endMs,
+            'grid_division_h'       => intval(($endMs - $startMs) / 10),
+        );
+        $graph    = new SVGGraph(2048, 1152, $settings);
+
+        $graph->colours = array(
+            '#d83362',
+            '#62d833',
+            '#d8a933',
+            '#3362d8',
+            '#a933d8',
+            '#33d8a9',
+            '#3a3a3a',
+            '#eb96ae',
+            '#aeeb96',
+            '#ebd396',
+            '#96aeeb',
+            '#d396eb',
+            '#96ebd3',
+        );
+
+        $graph->Values($values);
+
+        $this->assertEquals(
+            file_get_contents(__DIR__ . '/fixtures/sample_jmeter.svg'),
+            $graph->Fetch('MultiBezierGraph')
+        );
+    }
 }
