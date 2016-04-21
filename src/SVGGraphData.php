@@ -30,7 +30,7 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
             $this->assoc = true;
         }
         for ($i = 0; $i < $this->datasets; ++$i) {
-            $this->iterators[$i] = new SVGGraphDataIterator($this->data, $i);
+            $this->iterators[$i] = new GraphDataIterator($this->data[$i]);
         }
     }
 
@@ -86,10 +86,12 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Don't allow writing to the data.
+     *
      * @param mixed $offset
      * @param mixed $value
+     *
      * @throws \Exception
-*/
+     */
     public function offsetSet($offset, $value)
     {
         throw new \Exception('Read-only');
@@ -110,9 +112,11 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns minimum data value for a dataset.
+     *
      * @param int $dataset
+     *
      * @return
-*/
+     */
     public function GetMinValue($dataset = 0)
     {
         if (!isset($this->min_value[$dataset])) {
@@ -128,9 +132,11 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns maximum data value for a dataset.
+     *
      * @param int $dataset
+     *
      * @return
-*/
+     */
     public function GetMaxValue($dataset = 0)
     {
         if (!isset($this->max_value[$dataset])) {
@@ -146,9 +152,11 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the minimum key value.
+     *
      * @param int $dataset
+     *
      * @return
-*/
+     */
     public function GetMinKey($dataset = 0)
     {
         if (!isset($this->min_key[$dataset])) {
@@ -167,9 +175,11 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the maximum key value.
+     *
      * @param int $dataset
+     *
      * @return
-*/
+     */
     public function GetMaxKey($dataset = 0)
     {
         if (!isset($this->max_key[$dataset])) {
@@ -189,10 +199,12 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the key at a given index.
+     *
      * @param     $index
      * @param int $dataset
-     * @return int|string|void
-*/
+     *
+     * @return int|string|null
+     */
     public function GetKey($index, $dataset = 0)
     {
         if (!$this->AssociativeKeys()) {
@@ -209,7 +221,7 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
             }
         }
 
-        return;
+        return null;
     }
 
     /**
@@ -232,9 +244,11 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the number of data items.
+     *
      * @param int $dataset
+     *
      * @return int
-*/
+     */
     public function ItemsCount($dataset = 0)
     {
         if ($dataset < 0) {
@@ -246,11 +260,13 @@ class SVGGraphData implements \Countable, \ArrayAccess, \Iterator
 
     /**
      * Returns the min and max sum values.
+     *
      * @param int  $start
      * @param null $end
+     *
      * @return array
      * @throws \Exception
-*/
+     */
     public function GetMinMaxSumValues($start = 0, $end = null)
     {
         if ($start != 0 || (!is_null($end) && $end != 0)) {
