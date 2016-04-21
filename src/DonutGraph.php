@@ -2,6 +2,12 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class DonutGraph
+ *
+ * @property mixed inner_radius
+ * @property bool  reverse
+ */
 class DonutGraph extends PieGraph
 {
     /**
@@ -68,9 +74,9 @@ class DonutGraph extends PieGraph
             $x1_end    = $xc + (($x_end - $xc) * $ratio);
             $y1_start  = $yc + (($y_start - $yc) * $ratio);
             $y1_end    = $yc + (($y_end - $yc) * $ratio);
-            $isweep    = $sweep ? 0 : 1;
+            $isWeep    = $sweep ? 0 : 1;
             $attr['d'] = "M{$x1_end},{$y1_end}" .
-                         "A{$rx1} {$ry1} 0 $outer,$isweep $x1_start,$y1_start" .
+                         "A{$rx1} {$ry1} 0 $outer,$isWeep $x1_start,$y1_start" .
                          "L$x_start,$y_start " .
                          "A{$radius_x} {$radius_y} 0 $outer,$sweep $x_end,$y_end z";
         }
@@ -103,6 +109,7 @@ class DonutGraph extends PieGraph
 
     /**
      * Overridden to keep inner text in the middle.
+     *
      * @param $dataset
      * @param $index
      * @param $item
@@ -112,8 +119,9 @@ class DonutGraph extends PieGraph
      * @param $h
      * @param $label_w
      * @param $label_h
+     *
      * @return string
-*/
+     */
     public function DataLabelPosition(
         $dataset,
         $index,
@@ -144,11 +152,13 @@ class DonutGraph extends PieGraph
 
     /**
      * Returns the style options for the inner text label.
+     *
      * @param $dataset
      * @param $index
      * @param $item
+     *
      * @return array
-*/
+     */
     public function DataLabelStyle($dataset, $index, &$item)
     {
         $style = parent::DataLabelStyle($dataset, $index, $item);
