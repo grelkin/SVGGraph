@@ -48,18 +48,20 @@ class SVGGraphStructuredDataItem
 
     /**
      * Returns some extra data from item.
+     *
      * @param $field
-     * @return null|void
-*/
+     *
+     * @return null|mixed
+     */
     public function Data($field)
     {
         if (!isset($this->structure[$field])) {
-            return;
+            return null;
         }
         $item_field = $this->structure[$field];
         if (is_array($item_field)) {
             if (!isset($item_field[$this->dataset])) {
-                return;
+                return null;
             }
             $item_field = $item_field[$this->dataset];
         }
@@ -69,9 +71,11 @@ class SVGGraphStructuredDataItem
 
     /**
      * Returns a value from the item without translating structure.
+     *
      * @param $field
+     *
      * @return null
-*/
+     */
     public function RawData($field)
     {
         return isset($this->item[$field]) ? $this->item[$field] : null;

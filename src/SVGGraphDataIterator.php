@@ -54,7 +54,7 @@ class SVGGraphDataIterator implements \Iterator
      *
      * @param $index
      *
-     * @return SVGGraphDataItem|void
+     * @return SVGGraphDataItem|null
      */
     public function GetItemByIndex($index)
     {
@@ -64,20 +64,22 @@ class SVGGraphDataIterator implements \Iterator
             return new SVGGraphDataItem($k, $v);
         }
 
-        return;
+        return null;
     }
 
     /**
      * Returns an item by its key.
+     *
      * @param $key
-     * @return SVGGraphDataItem|void
-*/
+     *
+     * @return SVGGraphDataItem|null
+     */
     public function GetItemByKey($key)
     {
         if (isset($this->data[$this->dataset][$key])) {
             return new SVGGraphDataItem($key, $this->data[$this->dataset][$key]);
         }
 
-        return;
+        return null;
     }
 }

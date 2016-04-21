@@ -19,10 +19,12 @@ class SVGGraphDataItem
     /**
      * Returns NULL because standard data doesn't support extra fields.
      *
-     * @param $field
+     * @param string $field
+     *
+     * @return null
      */
     public function Data($field)
     {
-        return;
+        return null;
     }
 }

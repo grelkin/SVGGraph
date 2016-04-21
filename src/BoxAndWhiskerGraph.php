@@ -2,6 +2,13 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class BoxAndWhiskerGraph
+ *
+ * @property mixed whisker_width
+ * @property mixed median_stroke_width
+ * @property mixed whisker_dash
+ */
 class BoxAndWhiskerGraph extends PointGraph
 {
     protected $label_centre = true;
@@ -18,18 +25,18 @@ class BoxAndWhiskerGraph extends PointGraph
         $x_axis    = $this->x_axes[$this->main_x_axis];
         $box_style = array();
 
-        $bspace = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
-        $bnum   = 0;
+        $bSpace = max(0, ($this->x_axes[$this->main_x_axis]->Unit() - $bar_width) / 2);
+        $bNum   = 0;
         $this->ColourSetup($this->values->ItemsCount());
         $series = '';
         foreach ($this->values[0] as $item) {
-            $bar_pos = $this->GridPosition($item->key, $bnum);
+            $bar_pos = $this->GridPosition($item->key, $bNum);
 
             if (!is_null($item->value) && !is_null($bar_pos)) {
-                $box_style['fill'] = $this->GetColour($item, $bnum);
+                $box_style['fill'] = $this->GetColour($item, $bNum);
                 $this->SetStroke($box_style, $item);
                 $shape = $this->WhiskerBox(
-                    $bspace + $bar_pos,
+                    $bSpace + $bar_pos,
                     $bar_width,
                     $item->value,
                     $item->Data('top'),
@@ -39,13 +46,13 @@ class BoxAndWhiskerGraph extends PointGraph
                 );
 
                 // wrap the whisker box in a group
-                $g          = array();
-                $show_label = $this->AddDataLabel(
+                $g = array();
+                $this->AddDataLabel(
                     0,
-                    $bnum,
+                    $bNum,
                     $g,
                     $item,
-                    $bspace + $bar_pos,
+                    $bSpace + $bar_pos,
                     $this->GridY($item->Data('top')),
                     $bar_width,
                     $this->GridY($item->Data('bottom')) - $this->GridY($item->Data('top'))
@@ -66,16 +73,16 @@ class BoxAndWhiskerGraph extends PointGraph
                 }
                 $group = $this->Element('g', array_merge($g, $box_style), null, $shape);
                 $series .= $this->GetLink($item, $item->key, $group);
-                $this->box_styles[$bnum] = $box_style;
+                $this->box_styles[$bNum] = $box_style;
 
                 // add outliers as markers
                 $x = $bar_pos + $x_axis->Unit() / 2;
-                foreach ($this->GetOutliers($item) as $ovalue) {
-                    $y = $this->GridY($ovalue);
+                foreach ($this->GetOutliers($item) as $oValue) {
+                    $y = $this->GridY($oValue);
                     $this->AddMarker($x, $y, $item);
                 }
             }
-            ++$bnum;
+            ++$bNum;
         }
 
         if ($this->semantic_classes) {
@@ -257,7 +264,7 @@ class BoxAndWhiskerGraph extends PointGraph
     /**
      * Returns the list of outliers for an item.
      *
-     * @param $item
+     * @param SVGGraphDataItem|SVGGraphStructuredDataItem $item
      *
      * @return array
      */

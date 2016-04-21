@@ -56,7 +56,7 @@ class SVGGraphStructuredDataIterator implements \Iterator
      *
      * @param $index
      *
-     * @return SVGGraphStructuredDataItem|void
+     * @return SVGGraphStructuredDataItem|null
      */
     public function GetItemByIndex($index)
     {
@@ -70,14 +70,16 @@ class SVGGraphStructuredDataIterator implements \Iterator
             );
         }
 
-        return;
+        return null;
     }
 
     /**
      * Returns an item by key.
+     *
      * @param $key
-     * @return SVGGraphStructuredDataItem|void
-*/
+     *
+     * @return SVGGraphStructuredDataItem|null
+     */
     public function GetItemByKey($key)
     {
         if (is_null($this->key_field)) {
@@ -98,6 +100,6 @@ class SVGGraphStructuredDataIterator implements \Iterator
             }
         }
 
-        return;
+        return null;
     }
 }

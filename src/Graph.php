@@ -17,12 +17,17 @@ namespace GGS\SVGGraph;
  * @property string fill_under
  * @property string line_dash
  * @property string line_stroke_width
+ * @property mixed  bar_width
+ * @property mixed  bar_space
+ * @property mixed  bar_width_min
+ * @property mixed  show_label
+ * @property mixed  structure
  */
 abstract class Graph
 {
     protected $settings = array();
     /**
-     * @var SVGGraphData|SVGGraphStructuredData
+     * @var SVGGraphData|SVGGraphStructuredData|SVGGraphDataIterator[]|SVGGraphDataItem[][]|SVGGraphStructuredDataItem[][]|SVGGraphStructuredDataIterator[]
      */
     protected $values = array();
     protected $link_base = '';
