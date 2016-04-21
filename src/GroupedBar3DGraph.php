@@ -9,7 +9,7 @@ class GroupedBar3DGraph extends Bar3DGraph
         $body = $this->Grid() . $this->UnderShapes();
 
         $chunk_count = count($this->multi_graph);
-        list($chunk_width, $bspace, $chunk_unit_width) =
+        list($chunk_width, $bSpace, $chunk_unit_width) =
             GroupedBarGraph::BarPosition(
                 $this->bar_width,
                 $this->bar_width_min,
@@ -28,11 +28,11 @@ class GroupedBar3DGraph extends Bar3DGraph
         // make the top parallelogram, set it as a symbol for re-use
         $top = $this->BarTop();
 
-        $bnum = 0;
+        $bNum = 0;
 
         // get the translation for the whole bar
         // unit space is 1 deep * $chunk_count wide
-        list($tx, $ty) = $this->Project(0, 0, $bspace);
+        list($tx, $ty) = $this->Project(0, 0, $bSpace);
         $all_group = array();
         if ($tx || $ty) {
             $all_group['transform'] = "translate($tx,$ty)";
@@ -43,28 +43,28 @@ class GroupedBar3DGraph extends Bar3DGraph
 
         $bars  = '';
         $group = array();
-        foreach ($this->multi_graph as $itemlist) {
-            $k       = $itemlist[0]->key;
-            $bar_pos = $this->GridPosition($k, $bnum);
+        foreach ($this->multi_graph as $itemList) {
+            $k       = $itemList[0]->key;
+            $bar_pos = $this->GridPosition($k, $bNum);
             if (!is_null($bar_pos)) {
                 for ($j = 0; $j < $chunk_count; ++$j) {
-                    $bar['x'] = $bspace + $bar_pos + ($j * $chunk_unit_width);
-                    $item     = $itemlist[$j];
+                    $bar['x'] = $bSpace + $bar_pos + ($j * $chunk_unit_width);
+                    $item     = $itemList[$j];
 
                     if (!is_null($item->value)) {
                         $bar_sections  = $this->Bar3D(
                             $item,
                             $bar,
                             $top,
-                            $bnum,
+                            $bNum,
                             $j,
                             null,
                             $this->DatasetYAxis($j)
                         );
-                        $group['fill'] = $this->GetColour($item, $bnum, $j);
-                        $show_label    = $this->AddDataLabel(
+                        $group['fill'] = $this->GetColour($item, $bNum, $j);
+                        $this->AddDataLabel(
                             $j,
-                            $bnum,
+                            $bNum,
                             $group,
                             $item,
                             $bar['x'] + $tx,
@@ -89,7 +89,7 @@ class GroupedBar3DGraph extends Bar3DGraph
                     }
                 }
             }
-            ++$bnum;
+            ++$bNum;
         }
 
         if (count($all_group)) {
@@ -120,8 +120,10 @@ class GroupedBar3DGraph extends Bar3DGraph
 
     /**
      * Override AdjustAxes to change depth.
+     *
      * @param $x_len
      * @param $y_len
+     *
      * @return array
      * @throws \Exception
      */
