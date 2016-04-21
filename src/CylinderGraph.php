@@ -2,6 +2,12 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class CylinderGraph
+ *
+ * @property string   shade_gradient_id
+ * @property string[] depth_shade_gradient
+ */
 class CylinderGraph extends Bar3DGraph
 {
     protected $bar_styles = array();
@@ -78,19 +84,21 @@ class CylinderGraph extends Bar3DGraph
 
     /**
      * Calculates the a and b radii of the ellipse filling the parallelogram.
+     *
      * @param $angle
      * @param $length
+     *
      * @return array
-*/
+     */
     protected function FindEllipse($angle, $length)
     {
         $alpha = deg2rad($angle / 2);
         $x     = $length * cos($alpha) / 2;
         $y     = $length * sin($alpha) / 2;
-        $dydx  = -$y / $x;
+        $dYdX  = -$y / $x;
 
-        $bsq = pow($y, 2) - $x * $y * $dydx;
-        $asq = pow($x, 2) / (1 - $y / ($y - $x * $dydx));
+        $bsq = pow($y, 2) - $x * $y * $dYdX;
+        $asq = pow($x, 2) / (1 - $y / ($y - $x * $dYdX));
 
         $a = sqrt($asq);
         $b = sqrt($bsq);
@@ -119,6 +127,7 @@ class CylinderGraph extends Bar3DGraph
 
     /**
      * Returns the SVG code for a 3D cylinder.
+     *
      * @param      $item
      * @param      $bar
      * @param      $top
@@ -126,8 +135,9 @@ class CylinderGraph extends Bar3DGraph
      * @param null $dataset
      * @param null $start
      * @param null $axis
+     *
      * @return string
-*/
+     */
     protected function Bar3D(
         $item,
         &$bar,
@@ -145,7 +155,6 @@ class CylinderGraph extends Bar3DGraph
             return '';
         }
 
-        $side_x = $bar['x'] + $this->block_width;
         if (is_null($top)) {
             $cyl_top = '';
         } else {
