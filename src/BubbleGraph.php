@@ -4,6 +4,8 @@ namespace GGS\SVGGraph;
 
 /**
  * BubbleGraph - scatter graph with bubbles instead of markers.
+ *
+ * @property mixed bubble_scale
  */
 class BubbleGraph extends PointGraph
 {
@@ -17,12 +19,12 @@ class BubbleGraph extends PointGraph
         $body = $this->Grid() . $this->UnderShapes();
         $this->ColourSetup($this->values->ItemsCount());
 
-        $bnum   = 0;
+        $bNum   = 0;
         $y_axis = $this->y_axes[$this->main_y_axis];
         $series = '';
         foreach ($this->values[0] as $item) {
             $area      = $item->Data('area');
-            $point_pos = $this->GridPosition($item->key, $bnum);
+            $point_pos = $this->GridPosition($item->key, $bNum);
             if (!is_null($item->value) && !is_null($point_pos)) {
                 $x = $point_pos;
                 $y = $this->GridY($item->value);
@@ -32,19 +34,19 @@ class BubbleGraph extends PointGraph
                     if ($area < 0) {
                         // draw negative bubbles with a checked pattern
                         $pattern      = array(
-                            $this->GetColour($item, $bnum),
+                            $this->GetColour($item, $bNum),
                             'pattern' => 'check',
                             'size'    => 8,
                         );
                         $pid          = $this->AddPattern($pattern);
                         $circle_style = array('fill' => "url(#{$pid})");
                     } else {
-                        $circle_style = array('fill' => $this->GetColour($item, $bnum));
+                        $circle_style = array('fill' => $this->GetColour($item, $bNum));
                     }
                     $this->SetStroke($circle_style, $item);
-                    $show_label = $this->AddDataLabel(
+                    $this->AddDataLabel(
                         0,
-                        $bnum,
+                        $bNum,
                         $circle,
                         $item,
                         $x - $r,
@@ -72,7 +74,7 @@ class BubbleGraph extends PointGraph
                     $this->bubble_styles[] = $circle_style;
                 }
             }
-            ++$bnum;
+            ++$bNum;
         }
 
         if ($this->semantic_classes) {
