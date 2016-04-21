@@ -147,7 +147,8 @@ class SVGGraphStructuredData implements \Countable, \ArrayAccess, \Iterator
             for ($i = 0; $i < $this->datasets; ++$i) {
                 $this->iterators[$i] = new SVGGraphStructuredDataIterator(
                     $this->data,
-                    $i, $this->structure
+                    $i,
+                    $this->structure
                 );
             }
         }

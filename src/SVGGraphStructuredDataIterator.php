@@ -61,12 +61,13 @@ class SVGGraphStructuredDataIterator implements \Iterator
     public function GetItemByIndex($index)
     {
         if (isset($this->data[$index])) {
-            $item = $this->data[$index];
             $key  = is_null($this->key_field) ? $index : null;
 
             return new SVGGraphStructuredDataItem(
                 $this->data[$index],
-                $this->structure, $this->dataset, $key
+                $this->structure,
+                $this->dataset,
+                $key
             );
         }
 
