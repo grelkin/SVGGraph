@@ -2,6 +2,16 @@
 
 namespace GGS\SVGGraph;
 
+/**
+ * Class DataLabels
+ *
+ * @property mixed data_label_filter
+ * @property mixed semantic_classes
+ * @property mixed data_label_callback
+ * @property mixed units_before_label
+ * @property mixed units_label
+ * @property mixed encoding
+ */
 class DataLabels
 {
     protected $graph;
@@ -16,8 +26,14 @@ class DataLabels
     private $directions = array();
     private $last = array();
     private $max_labels = 1000;
+    /**
+     * @var SVGGraphCoords
+     */
     private $coords = null;
 
+    /**
+     * @param Graph $graph
+     */
     public function __construct(&$graph)
     {
         $this->graph        = &$graph;
@@ -290,40 +306,40 @@ class DataLabels
     /**
      * Draws a label.
      *
-     * @param $dataset
-     * @param $index
-     * @param $gobject
+     * @param                                                          $dataset
+     * @param                                                          $index
+     * @param string[]|SVGGraphDataItem[]|SVGGraphStructuredDataItem[] $gObject
      *
      * @return string
      */
-    protected function DrawLabel($dataset, $index, &$gobject)
+    protected function DrawLabel($dataset, $index, &$gObject)
     {
-        if (is_null($gobject['item']) && empty($gobject['content'])) {
+        if (is_null($gObject['item']) && empty($gObject['content'])) {
             return '';
         }
 
-        if (is_null($gobject['item'])) {
+        if (is_null($gObject['item'])) {
             // convert to string - numbers will confuse TextSize()
-            $content = (string)$gobject['content'];
+            $content = (string)$gObject['content'];
         } else {
             if (is_callable($this->data_label_callback)) {
                 $content = call_user_func(
                     $this->data_label_callback,
                     $dataset,
-                    $gobject['item']->key,
-                    $gobject['item']->value
+                    $gObject['item']->key,
+                    $gObject['item']->value
                 );
                 if (is_null($content)) {
                     $content = '';
                 }
             } else {
-                $content = $gobject['item']->Data('label');
+                $content = $gObject['item']->Data('label');
             }
             if (is_null($content)) {
-                $content = !is_null($gobject['content'])
-                    ? $gobject['content']
+                $content = !is_null($gObject['content'])
+                    ? $gObject['content']
                     :
-                    $this->units_before_label . Graph::NumString($gobject['item']->value) .
+                    $this->units_before_label . Graph::NumString($gObject['item']->value) .
                     $this->units_label;
             }
         }
@@ -331,11 +347,11 @@ class DataLabels
             return '';
         }
 
-        $style = $this->graph->DataLabelStyle($dataset, $index, $gobject['item']);
-        if (!is_null($gobject['item'])) {
-            $this->ItemStyles($style, $gobject['item']);
+        $style = $this->graph->DataLabelStyle($dataset, $index, $gObject['item']);
+        if (!is_null($gObject['item'])) {
+            $this->ItemStyles($style, $gObject['item']);
         } elseif ($dataset === '_user') {
-            $this->UserStyles($style, $gobject);
+            $this->UserStyles($style, $gObject);
         }
 
         $type      = $style['type'];
@@ -369,14 +385,14 @@ class DataLabels
         $pos = null;
         if ($dataset === '_user') {
             // user label, so convert coordinates
-            $pos          = isset($gobject['position']) ? $gobject['position'] : 'above';
-            $xy           = $this->coords->TransformCoords($gobject['x'], $gobject['y']);
-            $gobject['x'] = $xy[0];
-            $gobject['y'] = $xy[1];
+            $pos          = isset($gObject['position']) ? $gObject['position'] : 'above';
+            $xy           = $this->coords->TransformCoords($gObject['x'], $gObject['y']);
+            $gObject['x'] = $xy[0];
+            $gObject['y'] = $xy[1];
         } else {
             // try to get position from item
-            if (!is_null($gobject['item'])) {
-                $pos = $gobject['item']->Data('data_label_position');
+            if (!is_null($gObject['item'])) {
+                $pos = $gObject['item']->Data('data_label_position');
             }
 
             // find out from graph class where this label should go
@@ -384,11 +400,11 @@ class DataLabels
                 $pos = $this->graph->DataLabelPosition(
                     $dataset,
                     $index,
-                    $gobject['item'],
-                    $gobject['x'],
-                    $gobject['y'],
-                    $gobject['width'],
-                    $gobject['height'],
+                    $gObject['item'],
+                    $gObject['x'],
+                    $gObject['y'],
+                    $gObject['width'],
+                    $gObject['height'],
                     $label_wp,
                     $label_hp
                 );
@@ -396,12 +412,12 @@ class DataLabels
         }
 
         // convert position string to an actual location
-        list($x, $y, $anchor, $hpos, $vpos) = $res = Graph::RelativePosition(
+        list($x, $y, $anchor, $hPos, $vPos) = $res = Graph::RelativePosition(
             $pos,
-            $gobject['y'],
-            $gobject['x'],
-            $gobject['y'] + $gobject['height'],
-            $gobject['x'] + $gobject['width'],
+            $gObject['y'],
+            $gObject['x'],
+            $gObject['y'] + $gObject['height'],
+            $gObject['x'] + $gObject['width'],
             $label_w,
             $label_h,
             $space,
@@ -411,7 +427,7 @@ class DataLabels
         // if the position is outside, use the alternative colours
         $colour      = $style['colour'];
         $back_colour = $style['back_colour'];
-        if (strpos($hpos . $vpos, 'o') !== false) {
+        if (strpos($hPos . $vPos, 'o') !== false) {
             if (!empty($style['altcolour'])) {
                 $colour = $style['altcolour'];
             }
@@ -497,16 +513,16 @@ class DataLabels
             $style['tail_direction'] = $this->graph->DataLabelTailDirection(
                 $dataset,
                 $index,
-                $hpos,
-                $vpos
+                $hPos,
+                $vPos
             );
             $element                 = $this->BubbleLabel($x, $y, $label_w, $label_h, $style, $surround);
         } elseif ($type == 'line') {
             $style['tail_direction'] = $this->graph->DataLabelTailDirection(
                 $dataset,
                 $index,
-                $hpos,
-                $vpos
+                $hPos,
+                $vPos
             );
             $element                 = $this->LineLabel($x, $y, $label_w, $label_h, $style, $surround);
         }
@@ -542,15 +558,15 @@ class DataLabels
         $label_markup .= $this->graph->Text($content, $font_size, $text);
 
         $group = array();
-        if (isset($gobject['id']) && !is_null($gobject['id'])) {
-            $group['id'] = $gobject['id'];
+        if (isset($gObject['id']) && !is_null($gObject['id'])) {
+            $group['id'] = $gObject['id'];
         }
 
         // start off hidden?
-        if ($gobject['click'] == 'show') {
+        if ($gObject['click'] == 'show') {
             $group['opacity'] = 1;
         } // set opacity explicitly for calculations
-        elseif ($gobject['click'] == 'hide' || $gobject['fade']) {
+        elseif ($gObject['click'] == 'hide' || $gObject['fade']) {
             $group['opacity'] = 0;
         }
 
@@ -562,8 +578,8 @@ class DataLabels
     /**
      * Individual label styles from the structured data item.
      *
-     * @param $style
-     * @param $item
+     * @param                                             $style
+     * @param SVGGraphDataItem|SVGGraphStructuredDataItem $item
      */
     protected function ItemStyles(&$style, &$item)
     {
@@ -647,10 +663,10 @@ class DataLabels
     /**
      * Returns TRUE if the label should be shown.
      *
-     * @param $filter
-     * @param $dataset
-     * @param $label
-     * @param $index
+     * @param                                                          $filter
+     * @param                                                          $dataset
+     * @param string[]|SVGGraphDataItem[]|SVGGraphStructuredDataItem[] $label
+     * @param                                                          $index
      *
      * @return bool
      */

@@ -22,6 +22,8 @@ namespace GGS\SVGGraph;
  * @property mixed  bar_width_min
  * @property mixed  show_label
  * @property mixed  structure
+ * @property mixed  data_label_filter
+ * @property mixed  data_label_max_count
  */
 abstract class Graph
 {
